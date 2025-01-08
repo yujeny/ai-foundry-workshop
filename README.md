@@ -1,4 +1,3 @@
-```md
 <div align="center">
 
 # Azure AI Foundry Workshop
@@ -248,4 +247,3 @@ See the [LICENSE.txt](LICENSE.txt) file for more details.
 ### Trademarks
 
 This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft trademarks or logos must follow [Microsoft’s Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks). Third-party trademarks or logos are subject to those third-parties’ policies.
-```
