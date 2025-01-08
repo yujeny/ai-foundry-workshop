@@ -1,0 +1,168 @@
+site_name: Azure AI Foundry Workshop
+site_description: A practical 2-hour workshop on building an intelligent customer service agent with Azure AI Foundry
+site_url: https://azure-ai-foundry-workshop-iiycu8f1.devinapps.com
+site_author: Azure App Innovation GBB, Microsoft
+
+theme:
+  name: material
+  custom_dir: docs/assets/overrides
+  font:
+    text: Inter
+  palette:
+    - scheme: slate
+      primary: deep purple
+      accent: teal
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to light mode
+    - scheme: default
+      primary: deep purple
+      accent: teal
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to dark mode
+  features:
+    - header.autohide
+    - navigation.instant
+    - navigation.indexes
+    - navigation.top
+    - toc.follow
+    - navigation.footer
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+  icon:
+    repo: fontawesome/brands/github
+
+nav:
+  - Home: index.md
+  - Introduction:
+    - introduction/index.md
+    - Getting Started: introduction/overview.md
+    - AI Foundry: introduction/ai-foundry.md
+  - Setup (30min):
+    - Installation: sdk/installation.md
+    - Authentication: sdk/authentication.md
+    - Interactive Setup: building_agent/project_setup/project_setup.ipynb
+  - Building the Agent (45min):
+    - Project Setup: sdk/installation.md
+    - Working with AIProjectClient:
+      - Guide: sdk/aiprojectclient.md
+      - Notebook: building_agent/aiprojectclient/aiprojectclient.ipynb
+    - Available Models:
+      - Guide: models/listing.md
+      - Notebook: building_agent/available_models/available_models.ipynb
+    - Model Deployment:
+      - Guide: models/deploying.md
+      - Notebook: building_agent/model_deployment/model_deployment.ipynb
+    - Model Testing:
+      - Guide: models/testing.md
+      - Notebook: building_agent/model_testing/model_testing.ipynb
+  - Agent Development (45min):
+    - Introduction to Agents:
+      - Guide: agents/intro.md
+      - Notebook: building_agent/agent_introduction/agent_introduction.ipynb
+    - AI Agent Service:
+      - Guide: agents/service.md
+      - Notebook: building_agent/agent_service/agent_service.ipynb
+    - Agent Implementation:
+      - Guide: agents/implementation.md
+      - Notebook: building_agent/agent_implementation/agent_implementation.ipynb
+    - Agent Design:
+      - Guide: agents/design.md
+      - Notebook: building_agent/agent_design/agent_design.ipynb
+    - Testing & Deployment:
+      - Guide: agents/deploy-test.md
+      - Notebook: building_agent/agent_testing/agent_testing.ipynb
+  - Evaluation (45min):
+    - Introduction:
+      - Guide: evaluation/intro.md
+      - Notebook: building_agent/evaluation_intro/evaluation_intro.ipynb
+    - Agent Evaluation: evaluation/agent.md
+    - Performance Metrics:
+      - Guide: evaluation/setup.md
+      - Notebook: building_agent/performance_metrics/performance_metrics.ipynb
+    - Monitoring & Analysis:
+      - Guide: evaluation/monitoring.md
+      - Notebook: building_agent/monitoring_analysis/monitoring_analysis.ipynb
+  - Conclusion:
+    - Summary: conclusion.md
+    - Final Review: building_agent/conclusion/conclusion.ipynb
+
+markdown_extensions:
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - def_list
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - admonition
+  - pymdownx.keys
+  - pymdownx.inlinehilite
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.details
+  - pymdownx.snippets:
+      base_path: "."
+      check_paths: true
+      url_download: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - meta
+  - toc:
+      permalink: true
+      toc_depth: 4
+  - attr_list
+  - md_in_html
+
+plugins:
+  - search
+  - macros
+  - table-reader
+  - glightbox
+  - open-in-new-tab
+  - mkdocs-video
+  - minify:
+      minify_html: true
+  - mkdocs-jupyter:
+      include_source: true
+      execute: false
+      ignore_h1_titles: true
+      allow_errors: false
+      kernel_name: python3
+
+extra:
+  analytics:
+    provider: google
+    property: G-W6SKQMVB9X
+  generator: false
+  feedback:
+    title: Was this page helpful?
+    ratings:
+      - icon: material/emoticon-happy-outline
+        name: This page was helpful
+        data: 1
+        note: >-
+          Thanks for your feedback! - Azure App Innovation GBB
+      - icon: material/emoticon-sad-outline
+        name: This page could be improved
+        data: 0
+        note: >-
+          Thanks for your feedback! Help us improve this page by
+          using our feedback form.
+
+extra_css:
+  - assets/stylesheets/extra.css
+
+extra_javascript:
+  - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML
+
+docs_dir: docs
+site_dir: site
