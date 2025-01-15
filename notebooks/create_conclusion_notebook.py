@@ -48,7 +48,11 @@ Let's create a simple function to check your Azure AI Foundry setup and configur
 
     nb.cells.append(nbf.v4.new_code_cell("""import os
 from azure.identity import DefaultAzureCredential
-from azure.ai.resources import AIProjectClient
+from azure.ai.projects import AIProjectClient
+from azure.ai.inference import ChatCompletionsClient
+from azure.ai.evaluation import TextEvaluator
+from azure.ai.contentsafety import ContentSafetyClient
+import azure.monitor.opentelemetry._autoinstrument
 
 def verify_setup():
     '''Verify Azure AI Foundry setup and configuration'''
@@ -114,7 +118,10 @@ Now that you've completed the workshop, here are some suggested next steps:
     nb.cells.append(nbf.v4.new_markdown_cell("""## Additional Resources
 
 - [Azure AI Documentation](https://learn.microsoft.com/en-us/azure/ai-foundry/)
-- [AI Foundry SDK Reference](https://learn.microsoft.com/en-us/python/api/azure-ai-resources/)
+- [AI Projects SDK Reference](https://learn.microsoft.com/en-us/python/api/azure-ai-projects/)
+- [AI Inference SDK Reference](https://learn.microsoft.com/en-us/python/api/azure-ai-inference/)
+- [AI Evaluation SDK Reference](https://learn.microsoft.com/en-us/python/api/azure-ai-evaluation/)
+- [AI Content Safety SDK Reference](https://learn.microsoft.com/en-us/python/api/azure-ai-contentsafety/)
 - [Best Practices Guide](https://learn.microsoft.com/en-us/azure/ai-foundry/concepts/best-practices)
 - [Sample Projects](https://learn.microsoft.com/en-us/azure/ai-foundry/samples/)
 

@@ -20,13 +20,17 @@ This notebook will guide you through setting up your environment for the Azure A
 - Basic Python knowledge"""),
     
     new_code_cell("""# Install required packages
-!pip install azure-identity azure-ai-resources azure-ai-evaluation"""),
+!pip install azure-identity azure-ai-projects azure-ai-inference azure-ai-evaluation azure-ai-contentsafety azure-monitor-opentelemetry"""),
     
     new_markdown_cell("""## Azure Authentication Setup
 First, we'll verify our Azure credentials and setup."""),
     
     new_code_cell("""from azure.identity import DefaultAzureCredential
-from azure.ai.resources import AIProjectClient
+from azure.ai.projects import AIProjectClient
+from azure.ai.inference import ChatCompletionsClient
+from azure.ai.evaluation import TextEvaluator
+from azure.ai.contentsafety import ContentSafetyClient
+import azure.monitor.opentelemetry._autoinstrument
 import os
 
 # Initialize Azure credentials

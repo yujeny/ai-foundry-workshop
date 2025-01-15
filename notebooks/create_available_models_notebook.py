@@ -31,7 +31,7 @@ This notebook guides you through discovering and exploring available models in A
     # Environment setup
     cells.append(new_code_cell("""# Import required libraries
 from azure.identity import DefaultAzureCredential
-from azure.ai.resources import AIProjectClient
+from azure.ai.projects import AIProjectClient
 import os
 import pandas as pd
 from tabulate import tabulate

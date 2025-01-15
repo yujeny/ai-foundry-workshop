@@ -37,12 +37,16 @@ We'll focus on DefaultAzureCredential as it provides the most flexible approach.
     new_code_cell("""# First, let's check if we have the required packages
 try:
     from azure.identity import DefaultAzureCredential
-    from azure.ai.resources import AIProjectClient
+    from azure.ai.projects import AIProjectClient
+from azure.ai.inference import ChatCompletionsClient
+from azure.ai.evaluation import TextEvaluator
+from azure.ai.contentsafety import ContentSafetyClient
+import azure.monitor.opentelemetry._autoinstrument
     print("✓ Required packages are installed")
 except ImportError as e:
     print(f"× Missing package: {str(e)}")
     print("Install required packages with:")
-    print("pip install azure-identity azure-ai-resources")"""),
+    print("pip install azure-identity azure-ai-projects azure-ai-inference azure-ai-evaluation azure-ai-contentsafety azure-monitor-opentelemetry")"""),
     
     new_markdown_cell("""## Environment Variables
 
@@ -144,7 +148,7 @@ def diagnose_auth_issues():
     
     # Check package versions
     import pkg_resources
-    for package in ['azure-identity', 'azure-ai-resources']:
+    for package in ['azure-identity', 'azure-ai-projects', 'azure-ai-inference', 'azure-ai-evaluation', 'azure-ai-contentsafety']:
         try:
             version = pkg_resources.get_distribution(package).version
             print(f"{package} version: {version}")

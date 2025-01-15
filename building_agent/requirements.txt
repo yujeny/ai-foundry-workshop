@@ -1,7 +1,9 @@
 azure-identity
 azure-ai-projects
-azure-ai-resources
+azure-ai-inference
 azure-ai-evaluation
+azure-ai-contentsafety
+azure-monitor-opentelemetry
 azure-ai-inference[opentelemetry]
 jupyter
 notebook

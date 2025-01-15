@@ -26,8 +26,11 @@ This notebook provides a hands-on introduction to evaluating AI models and agent
     nb.cells.append(nbf.v4.new_code_cell("""# Import required libraries
 import os
 from azure.identity import DefaultAzureCredential
-from azure.ai.resources import AIProjectClient
-from azure.ai.evaluation import EvaluationClient
+from azure.ai.projects import AIProjectClient
+from azure.ai.inference import InferenceClient, ChatCompletionsClient
+from azure.ai.evaluation import EvaluationClient, TextEvaluator
+from azure.ai.contentsafety import ContentSafetyClient
+import azure.monitor.opentelemetry._autoinstrument
 
 # Initialize credentials and clients
 credential = DefaultAzureCredential()

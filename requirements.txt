@@ -1,7 +1,9 @@
 azure-identity
 azure-ai-projects
-azure-ai-resources
+azure-ai-inference
 azure-ai-evaluation
+azure-ai-contentsafety
+azure-monitor-opentelemetry
 azure-ai-inference[opentelemetry]
 jupyter
 python-dotenv
@@ -22,3 +24,7 @@ mkdocs-video
 mkdocs-table-reader-plugin
 mkdocs-minify-plugin
 mkdocs-jupyter
+semantic-kernel
+mkdocs-git-committers-plugin-2
+mkdocs-git-revision-date-localized-plugin
+mkdocs-git-revision-date-plugin

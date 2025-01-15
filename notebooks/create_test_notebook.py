@@ -10,7 +10,7 @@ This is a test notebook to verify the Jupyter environment.
 ## Testing Azure Packages
 ```python
 from azure.identity import DefaultAzureCredential
-from azure.ai.resources import AIProjectClient
+from azure.ai.projects import AIProjectClient
 from azure.ai.evaluation import EvaluationClient
 
 print('Azure packages imported successfully!')

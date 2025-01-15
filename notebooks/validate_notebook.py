@@ -18,7 +18,7 @@ def validate_notebook(notebook_path):
             'cell_count': len(nb.cells)
         }
         
-        required_imports = ['azure.identity', 'azure.ai.resources', 'azure.ai.evaluation']
+        required_imports = ['azure.identity', 'azure.ai.projects', 'azure.ai.inference', 'azure.ai.evaluation', 'azure.ai.contentsafety']
         import_found = set()
         
         # Analyze cells
