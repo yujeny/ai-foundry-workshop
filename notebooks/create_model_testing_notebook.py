@@ -32,7 +32,11 @@ This notebook guides you through testing your deployed customer service AI model
     # Environment setup
     cells.append(new_code_cell("""# Import required libraries
 from azure.identity import DefaultAzureCredential
-from azure.ai.resources import AIProjectClient
+from azure.ai.projects import AIProjectClient
+from azure.ai.inference import ChatCompletionsClient
+from azure.ai.evaluation import TextEvaluator
+from azure.ai.contentsafety import ContentSafetyClient
+import azure.monitor.opentelemetry._autoinstrument
 import os
 import json
 import time
@@ -123,19 +127,19 @@ Let's start with basic functionality tests:"""))
 # Example test cases
 test_cases = [
     {
-        "name": "Basic greeting",
-        "input": "Hello, how can you help me today?",
-        "expected": {"type": "greeting"}
+        "name": "BMI calculation",
+        "input": "Calculate BMI for someone 5'9\" and 160 pounds",
+        "expected": {"type": "health_calculation"}
     },
     {
-        "name": "Product inquiry",
-        "input": "What's the price of your basic plan?",
-        "expected": {"type": "product_info"}
+        "name": "Meal planning",
+        "input": "Create a meal plan for someone with diabetes",
+        "expected": {"type": "dietary_advice"}
     },
     {
-        "name": "Support request",
-        "input": "I'm having trouble logging in",
-        "expected": {"type": "support"}
+        "name": "Dietary restrictions",
+        "input": "What foods should I avoid with celiac disease?",
+        "expected": {"type": "health_guidance"}
     }
 ]
 
@@ -321,21 +325,21 @@ Test the model's response format and content:"""))
     try:
         validation_test_cases = [
             {
-                "name": "Response format",
-                "input": "What are your business hours?",
+                "name": "Health calculation format",
+                "input": "Calculate BMI for someone 5'9\" and 160 pounds",
                 "validations": [
                     "response_type",
-                    "confidence_score",
-                    "response_text"
+                    "calculation_result",
+                    "health_guidance"
                 ]
             },
             {
-                "name": "Response content",
-                "input": "I need technical support",
+                "name": "Dietary advice content",
+                "input": "Create a meal plan for diabetes",
                 "validations": [
-                    "relevant_keywords",
-                    "sentiment_analysis",
-                    "action_items"
+                    "nutritional_info",
+                    "medical_disclaimer",
+                    "meal_components"
                 ]
             }
         ]
@@ -378,20 +382,21 @@ def validate_field(response, field_type):
     try:
         if field_type == "response_type":
             return isinstance(response.get("type"), str)
-        elif field_type == "confidence_score":
-            score = response.get("confidence")
-            return isinstance(score, (int, float)) and 0 <= score <= 1
-        elif field_type == "response_text":
-            return isinstance(response.get("text"), str)
-        elif field_type == "relevant_keywords":
-            keywords = response.get("keywords", [])
-            return isinstance(keywords, list) and len(keywords) > 0
-        elif field_type == "sentiment_analysis":
-            sentiment = response.get("sentiment")
-            return isinstance(sentiment, (str, float))
-        elif field_type == "action_items":
-            actions = response.get("actions", [])
-            return isinstance(actions, list)
+        elif field_type == "calculation_result":
+            result = response.get("bmi")
+            return isinstance(result, (int, float)) and 0 <= result <= 100
+        elif field_type == "health_guidance":
+            guidance = response.get("guidance")
+            return isinstance(guidance, str) and len(guidance) > 0
+        elif field_type == "nutritional_info":
+            info = response.get("nutrition", {})
+            return isinstance(info, dict) and len(info) > 0
+        elif field_type == "medical_disclaimer":
+            disclaimer = response.get("disclaimer")
+            return isinstance(disclaimer, str) and "consult" in disclaimer.lower()
+        elif field_type == "meal_components":
+            meals = response.get("meals", [])
+            return isinstance(meals, list) and len(meals) > 0
         return False
     except Exception:
         return False

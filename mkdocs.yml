@@ -1,6 +1,6 @@
 site_name: Azure AI Foundry Workshop
-site_description: A practical 2-hour workshop on building an intelligent customer service agent with Azure AI Foundry
-site_url: https://azure-ai-foundry-workshop-iiycu8f1.devinapps.com
+site_description: A practical 2-hour workshop on building intelligent health and dietary advice agents with Azure AI Foundry
+site_url: https://workshop.aifoundry.app
 site_author: Azure App Innovation GBB, Microsoft
 
 theme:
@@ -36,6 +36,32 @@ theme:
 
 nav:
   - Home: index.md
+  - SDK Tutorials:
+    - Documentation:
+      - Projects: sdk/projects.md
+      - Inference: sdk/inference.md
+      - Evaluation: sdk/evaluation.md
+      - Content Safety: sdk/contentsafety.md
+      - Monitoring: sdk/monitoring.md
+      - Installation: sdk/installation.md
+      - Authentication: sdk/authentication.md
+    - Notebooks:
+      - Projects: building_agent/sdk_projects_tutorial/sdk_projects_tutorial.ipynb
+      - Inference: building_agent/sdk_inference_tutorial/sdk_inference_tutorial.ipynb
+      - Evaluation: building_agent/sdk_evaluation_tutorial/sdk_evaluation_tutorial.ipynb
+      - Content Safety: building_agent/sdk_contentsafety_tutorial/sdk_contentsafety_tutorial.ipynb
+      - Monitoring: building_agent/sdk_monitoring_tutorial/sdk_monitoring_tutorial.ipynb
+      - Identity: building_agent/sdk_identity_tutorial/sdk_identity_tutorial.ipynb
+  - Agent Tutorials:
+    - Basic Agent:
+      - Guide: agents/health_advisor.md
+      - Notebook: building_agent/agent_basics_tutorial.ipynb
+    - Code Interpreter:
+      - Guide: models/dietary_planning.md
+      - Notebook: building_agent/agent_code_interpreter_tutorial.ipynb
+    - File Search:
+      - Guide: agents/health_advisor.md
+      - Notebook: building_agent/agent_file_search_tutorial.ipynb
   - Introduction:
     - introduction/index.md
     - Getting Started: introduction/overview.md
@@ -59,21 +85,17 @@ nav:
       - Guide: models/testing.md
       - Notebook: building_agent/model_testing/model_testing.ipynb
   - Agent Development (45min):
-    - Introduction to Agents:
-      - Guide: agents/intro.md
-      - Notebook: building_agent/agent_introduction/agent_introduction.ipynb
-    - AI Agent Service:
-      - Guide: agents/service.md
-      - Notebook: building_agent/agent_service/agent_service.ipynb
-    - Agent Implementation:
-      - Guide: agents/implementation.md
-      - Notebook: building_agent/agent_implementation/agent_implementation.ipynb
-    - Agent Design:
-      - Guide: agents/design.md
-      - Notebook: building_agent/agent_design/agent_design.ipynb
+    - Health Advisor Agent:
+      - Guide: agents/health_advisor.md
+      - Basic Agent: building_agent/agent_basics_tutorial/agent_basics_tutorial.ipynb
+      - Code Interpreter: building_agent/agent_code_interpreter_tutorial/agent_code_interpreter_tutorial.ipynb
+      - File Search: building_agent/agent_file_search_tutorial/agent_file_search_tutorial.ipynb
+    - Dietary Planning:
+      - Guide: models/dietary_planning.md
+      - Implementation: building_agent/agent_implementation/implementation.ipynb
     - Testing & Deployment:
       - Guide: agents/deploy-test.md
-      - Notebook: building_agent/agent_testing/agent_testing.ipynb
+      - Testing: building_agent/agent_testing/testing.ipynb
   - Evaluation (45min):
     - Introduction:
       - Guide: evaluation/intro.md
@@ -124,8 +146,6 @@ markdown_extensions:
 
 plugins:
   - search
-  - macros
-  - table-reader
   - glightbox
   - open-in-new-tab
   - mkdocs-video
@@ -137,6 +157,13 @@ plugins:
       ignore_h1_titles: true
       allow_errors: false
       kernel_name: python3
+  - git-revision-date-localized
+  - git-revision-date
+  - git-committers:
+      repository: Azure/ai-foundry-workshop
+      branch: main
+  - macros
+  - table-reader
 
 extra:
   analytics:

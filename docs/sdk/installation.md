@@ -40,8 +40,11 @@ source .venv/bin/activate
 
 ```bash
 # Install core Azure AI Foundry packages
-pip install azure-ai-resources
+pip install azure-ai-projects
+pip install azure-ai-inference
 pip install azure-ai-evaluation
+pip install azure-ai-contentsafety
+pip install azure-monitor-opentelemetry
 pip install azure-identity
 
 # Optional but recommended packages

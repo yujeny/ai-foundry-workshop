@@ -41,7 +41,11 @@ This notebook guides you through setting up an AI project in Azure AI Foundry. Y
     # Add import cell
     cells.append(new_code_cell("""# Import required libraries
 from azure.identity import DefaultAzureCredential
-from azure.ai.resources import AIProjectClient
+from azure.ai.projects import AIProjectClient
+from azure.ai.inference import InferenceClient, ChatCompletionsClient
+from azure.ai.evaluation import EvaluationClient, TextEvaluator
+from azure.ai.contentsafety import ContentSafetyClient
+import azure.monitor.opentelemetry._autoinstrument
 import os
 import json
 

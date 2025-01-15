@@ -28,7 +28,7 @@ This notebook demonstrates how to set up monitoring and analyze evaluation resul
     # Setup and Imports
     setup_code = """import os
 from azure.identity import DefaultAzureCredential
-from azure.ai.resources import AIProjectClient
+from azure.ai.projects import AIProjectClient
 from azure.ai.evaluation import EvaluationClient
 import pandas as pd
 import matplotlib.pyplot as plt

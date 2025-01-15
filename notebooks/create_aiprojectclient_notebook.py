@@ -30,7 +30,11 @@ This notebook demonstrates how to use the AIProjectClient to manage AI projects 
     # Environment setup
     cells.append(new_code_cell("""# Import required libraries
 from azure.identity import DefaultAzureCredential
-from azure.ai.resources import AIProjectClient
+from azure.ai.projects import AIProjectClient
+from azure.ai.inference import ChatCompletionsClient
+from azure.ai.evaluation import TextEvaluator
+from azure.ai.contentsafety import ContentSafetyClient
+import azure.monitor.opentelemetry._autoinstrument
 import os
 import json
 from datetime import datetime
@@ -129,14 +133,16 @@ Let's explore some common operations you might perform on projects:"""))
     cells.append(new_code_cell("""def project_operations():
     \"\"\"Demonstrate common project operations.\"\"\"
     try:
-        # Create a new project
-        project_name = f"demo-project-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
+        # Create a new health advisor project
+        project_name = f"health-advisor-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
         new_project = client.projects.create(
             name=project_name,
-            description="Demo project for AIProjectClient operations",
+            description="Health and dietary advice AI project",
             tags={
                 "environment": "development",
-                "purpose": "demo",
+                "purpose": "health-advisor",
+                "domain": "healthcare",
+                "features": "bmi-calculator,meal-planning,diet-restrictions",
                 "created-by": "workshop"
             }
         )
@@ -180,9 +186,9 @@ Let's look at some common errors and how to handle them:"""))
     cells.append(new_code_cell("""def demonstrate_error_handling():
     \"\"\"Show common errors and how to handle them.\"\"\"
     try:
-        # Try to get a non-existent project
+        # Try to get a non-existent health advisor project
         print("Attempting to get non-existent project...")
-        client.projects.get(project_name="non-existent-project")
+        client.projects.get(project_name="health-advisor-non-existent")
     except Exception as e:
         print("✓ Successfully caught error:")
         print(f"  {str(e)}")
@@ -213,9 +219,9 @@ If you created any demo projects, you can clean them up:"""))
         # List all projects
         projects = list(client.projects.list())
         
-        # Find and delete demo projects
+        # Find and delete health advisor projects
         for project in projects:
-            if project.name.startswith("demo-project-"):
+            if project.name.startswith("health-advisor-"):
                 print(f"Cleaning up project: {project.name}")
                 client.projects.delete(project_name=project.name)
                 print(f"✓ Deleted project: {project.name}")

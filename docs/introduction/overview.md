@@ -19,7 +19,7 @@ Welcome to the Customer Service AI Agent workshop! Let's get your environment re
    python --version
    
    # Install required packages
-   pip install azure-identity azure-ai-resources azure-ai-evaluation
+   pip install azure-identity azure-ai-projects azure-ai-inference azure-ai-evaluation azure-ai-contentsafety azure-monitor-opentelemetry
    ```
 
 ## Project Setup (10 minutes)

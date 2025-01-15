@@ -10,12 +10,13 @@
 
 ## 🤖 Overview
 
-A hands-on workshop that guides you through building an intelligent customer service agent using Azure AI Foundry's SDK, Agents Service, and Evaluations. You will:
+A hands-on workshop that guides you through building intelligent AI agents using Azure AI Foundry's SDK, with examples ranging from customer service to health and dietary advice. You will:
 - Learn Azure AI Foundry fundamentals
 - Set up authentication and project configuration
 - Deploy and test AI models
-- Build a customer service AI agent
-- Evaluate agent performance
+- Build AI agents (customer service and health advisor examples)
+- Implement health calculations and dietary planning
+- Evaluate agent performance with safety checks
 
 > **Duration**: 2-4 hours  
 > **Focus**: Hands-on exercises, interactive notebooks, practical examples
@@ -38,6 +39,10 @@ A hands-on workshop that guides you through building an intelligent customer ser
 
 3. **Install dependencies**:
    ```bash
+   # Install core Azure AI SDKs
+   pip install azure-identity azure-ai-projects azure-ai-inference azure-ai-evaluation azure-ai-contentsafety azure-monitor-opentelemetry
+
+   # Install additional requirements
    pip install -r requirements.txt
    ```
 
@@ -120,7 +125,13 @@ az account set --subscription <YOUR_SUBSCRIPTION_ID>
 ### 2. Building Agents
 - Agent design principles
 - Implementation strategies
+  - Customer Service Agent
+  - Health Advisor Agent
+    - BMI calculations
+    - Dietary planning
+    - Nutritional guidance
 - Testing and deployment
+- Content safety checks
 - Best practices
 
 ### 3. Model Deployment
