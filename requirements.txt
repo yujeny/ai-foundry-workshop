@@ -1,8 +1,10 @@
 azure-identity
+azure-ai-projects
 azure-ai-resources
 azure-ai-evaluation
 azure-ai-inference[opentelemetry]
 jupyter
+python-dotenv
 notebook
 ipykernel
 pandas
