@@ -5,6 +5,9 @@ azure-ai-evaluation
 azure-ai-contentsafety
 azure-monitor-opentelemetry
 azure-ai-inference[opentelemetry]
+azure-search-documents
+azure-core-tracing-opentelemetry
+opentelemetry-exporter-otlp
 jupyter
 notebook
 ipykernel
