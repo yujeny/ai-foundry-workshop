@@ -113,3 +113,8 @@ bld/
 
 appsettings.json
 sample/frontend/.env
+
+.cache/
+.DS_Store
+
+*.lock
