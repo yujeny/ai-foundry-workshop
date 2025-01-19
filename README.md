@@ -152,24 +152,43 @@ az account set --subscription <YOUR_SUBSCRIPTION_ID>
 
 ```
 azure-ai-foundry-workshop/
-├── introduction/
-│   ├── 0-authentication.ipynb
-│   ├── 1-project_setup.ipynb
-│   └── 2-quick_start.ipynb
-├── building_agent/
-│   ├── design/
-│   ├── implementation/
-│   └── testing/
-├── model_deployment/
-│   ├── setup/
-│   └── configuration/
-├── evaluation/
-│   ├── metrics/
-│   └── analysis/
+├── 1-introduction/
+│   ├── 1-authentication/
+│   ├── 2-environment/
+│   └── 3-quick_startup/
+├── 2-notebooks/
+│   ├── sdk_tutorials/
+│   │   ├── sdk_projects_tutorial/
+│   │   ├── sdk_inference_tutorial/
+│   │   ├── sdk_evaluation_tutorial/
+│   │   ├── sdk_contentsafety_tutorial/
+│   │   ├── sdk_monitoring_tutorial/
+│   │   └── sdk_identity_tutorial/
+│   ├── agent_tutorials/
+│   │   ├── agent_basics_tutorial/
+│   │   ├── agent_code_interpreter_tutorial/
+│   │   └── agent_file_search_tutorial/
+│   ├── project_setup/
+│   ├── model_management/
+│   │   ├── available_models/
+│   │   ├── model_deployment/
+│   │   └── model_testing/
+│   └── evaluation/
+│       ├── monitoring_analysis/
+│       └── performance_metrics/
+├── 3-e2e-health-advisor/
+│   ├── backend/
+│   ├── deploy/
+│   └── frontend/
 ├── docs/
-│   └── guides/
-├── requirements.txt
-└── README.md
+│   ├── agents/
+│   ├── evaluation/
+│   ├── introduction/
+│   ├── models/
+│   └── sdk/
+├── .env
+├── .env.local
+└── requirements.txt
 ```
 
 ---
