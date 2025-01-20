@@ -1,8 +1,8 @@
 # Workshop Wrap-Up
 
-Congratulations! You've built a functional customer service AI agent using Azure AI Foundry. Let's review what you've accomplished in the last 2 hours.
+Congratulations! You've built a functional health and fitness AI advisor using Azure AI Foundry. Let's review what you've accomplished in the last 2 hours. 🎉
 
-## Interactive Review
+## Interactive Review 📊
 To verify your setup and review key concepts, we've prepared an interactive notebook:
 
 [Launch Conclusion Workshop](2-notebooks/3-quality_attributes/1-Observability.ipynb)
@@ -14,11 +14,11 @@ This notebook will help you:
 
 ## What You've Built
 
-A complete customer service solution that:
-1. Uses GPT model for natural language understanding
-2. Handles common customer inquiries
-3. Provides accurate, helpful responses
-4. Monitors its own performance
+A complete health advisory solution that: 🏥
+1. Uses GPT model for personalized health guidance
+2. Handles fitness and nutrition inquiries
+3. Provides accurate, helpful responses with medical disclaimers
+4. Monitors performance and safety metrics
 
 ## What You've Learned
 
@@ -52,4 +52,4 @@ A complete customer service solution that:
    - [AI Foundry Documentation](https://learn.microsoft.com/azure/ai-foundry/)
    - [Community Examples](https://github.com/topics/azure-ai-foundry)
 
-Thanks for participating! You now have a foundation for building AI-powered customer service solutions with Azure AI Foundry.
+Thanks for participating! You now have a foundation for building AI-powered health and fitness solutions with Azure AI Foundry.

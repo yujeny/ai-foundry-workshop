@@ -52,16 +52,15 @@ A hands-on workshop that guides you through building intelligent AI agents using
    ```
 
 5. **Follow the Learning Path**:
-   1. **Introduction** (`introduction/`)
-      - `0-authentication.ipynb`: Set up your Azure credentials
-      - `1-project_setup.ipynb`: Configure your AI Foundry project
-      - `2-quick_start.ipynb`: Learn basic operations
+    1. **Introduction** (`docs/1-introduction/`)
+       - `1-authentication.ipynb`: Set up your Azure credentials
+       - `2-environment_setup.ipynb`: Configure your environment
+       - `3-quick_start.ipynb`: Learn basic operations
 
-   2. **Main Workshop** (after completing introduction)
-      - Building Agents
-      - Model Deployment
-      - Evaluation
-      - Advanced Features
+    2. **Main Workshop** (`docs/2-notebooks/`)
+       - Chat Completion & RAG (`1-chat_completion/`)
+       - Agent Development (`2-agent_service/`)
+       - Quality Attributes (`3-quality_attributes/`)
 
 ---
 
@@ -116,35 +115,31 @@ az account set --subscription <YOUR_SUBSCRIPTION_ID>
 
 ## 📔 Workshop Content
 
-### 1. Introduction
-- Authentication setup
-- Project configuration
-- Quick start guide
-- Basic concepts
+### 1. Introduction (`docs/1-introduction/`)
+- Azure authentication and setup
+- Environment configuration
+- Quick start with AI Foundry
+- Core concepts and SDKs
 
-### 2. Building Agents
-- Agent design principles
-- Implementation strategies
-  - Customer Service Agent
-  - Health Advisor Agent
-    - BMI calculations
-    - Dietary planning
-    - Nutritional guidance
-- Testing and deployment
-- Content safety checks
-- Best practices
+### 2. Chat Completion & RAG (`docs/2-notebooks/1-chat_completion/`)
+- Basic chat completion
+- Embeddings and vector search
+- RAG for health knowledge
+- Advanced models (Phi-4)
 
-### 3. Model Deployment
-- Available models
-- Deployment options
-- Configuration
-- Performance tuning
+### 3. Agent Development (`docs/2-notebooks/2-agent_service/`)
+- Health Advisor Agent basics
+- Code interpreter for health metrics
+- File search capabilities
+- Bing grounding for medical info
+- AI Search integration
+- Azure Functions deployment
 
-### 4. Evaluation
-- Metrics and monitoring
-- Performance analysis
-- Optimization techniques
-- Continuous improvement
+### 4. Quality Attributes (`docs/2-notebooks/3-quality_attributes/`)
+- Observability setup
+- Performance monitoring
+- Agent evaluation
+- Health advice safety checks
 
 ---
 
@@ -152,38 +147,29 @@ az account set --subscription <YOUR_SUBSCRIPTION_ID>
 
 ```
 azure-ai-foundry-workshop/
-├── 1-introduction/
-│   ├── 1-authentication/
-│   ├── 2-environment/
-│   └── 3-quick_startup/
-├── 2-notebooks/
-│   ├── sdk_tutorials/
-│   │   ├── sdk_projects_tutorial/
-│   │   ├── sdk_inference_tutorial/
-│   │   ├── sdk_evaluation_tutorial/
-│   │   ├── sdk_contentsafety_tutorial/
-│   │   ├── sdk_monitoring_tutorial/
-│   │   └── sdk_identity_tutorial/
-│   ├── agent_tutorials/
-│   │   ├── agent_basics_tutorial/
-│   │   ├── agent_code_interpreter_tutorial/
-│   │   └── agent_file_search_tutorial/
-│   ├── project_setup/
-│   ├── model_management/
-│   │   ├── available_models/
-│   │   ├── model_deployment/
-│   │   └── model_testing/
-│   └── evaluation/
-│       ├── monitoring_analysis/
-│       └── performance_metrics/
-├── 3-e2e-health-advisor/
-│   ├── backend/
-│   ├── deploy/
-│   └── frontend/
 ├── docs/
+│   ├── 1-introduction/
+│   │   ├── 1-authentication.ipynb
+│   │   ├── 2-environment_setup.ipynb
+│   │   └── 3-quick_start.ipynb
+│   ├── 2-notebooks/
+│   │   ├── 1-chat_completion/
+│   │   │   ├── 1-basic-chat-completion.ipynb
+│   │   │   ├── 2-embeddings.ipynb
+│   │   │   ├── 3-basic-rag.ipynb
+│   │   │   └── 4-phi-4.ipynb
+│   │   ├── 2-agent_service/
+│   │   │   ├── 1-basics.ipynb
+│   │   │   ├── 2-code_interpreter.ipynb
+│   │   │   ├── 3-file-search.ipynb
+│   │   │   ├── 4-bing_grounding.ipynb
+│   │   │   ├── 5-agents-aisearch.ipynb
+│   │   │   └── 6-agents-az-functions.ipynb
+│   │   └── 3-quality_attributes/
+│   │       ├── 1-Observability.ipynb
+│   │       └── 2-evaluation.ipynb
 │   ├── agents/
 │   ├── evaluation/
-│   ├── introduction/
 │   ├── models/
 │   └── sdk/
 ├── .env

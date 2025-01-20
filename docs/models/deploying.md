@@ -1,6 +1,6 @@
-# 🚀 Deploying Your Customer Service Model
+# 🚀 Deploying Your Health Advisor Model
 
-Let's deploy a GPT model optimized for customer service interactions. Get your health advisor ready to help users achieve their fitness goals! 🏃‍♀️ 💪 This will take about 15 minutes.
+Let's deploy a GPT model optimized for health and fitness guidance. Get your health advisor ready to help users achieve their fitness goals! 🏃‍♀️ 💪 This will take about 15 minutes.
 
 ## Quick Model Deployment
 
@@ -10,8 +10,8 @@ from azure.identity import DefaultAzureCredential
 from azure.ai.resources import AIProjectClient
 import os
 
-def deploy_customer_service_model():
-    """Deploy a GPT model for customer service."""
+def deploy_health_advisor_model():
+    """Deploy a GPT model for health and fitness guidance."""
     try:
         # Initialize client
         credential = DefaultAzureCredential()
@@ -41,7 +41,7 @@ def deploy_customer_service_model():
         # Create deployment
         deployment = client.models.deploy(
             model_name=deployment_config["model"]["name"],
-            deployment_name="customer-service-v1",
+            deployment_name="health-advisor-v1",
             configuration=deployment_config
         )
         

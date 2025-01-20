@@ -1,6 +1,6 @@
-# Testing Your Customer Service Model
+# Testing Your Health Advisor Model 🧪
 
-Let's verify that your deployed model works correctly for customer service scenarios. This will take about 15 minutes.
+Let's verify that your deployed model works correctly for health and fitness scenarios. This will take about 15 minutes. Remember to validate medical disclaimers and safety checks! ⚕️
 
 ## Quick Test
 
@@ -9,8 +9,8 @@ from azure.identity import DefaultAzureCredential
 from azure.ai.resources import AIProjectClient
 import os
 
-def test_customer_service_model():
-    """Test the deployed customer service model."""
+def test_health_advisor_model():
+    """Test the deployed health advisor model."""
     try:
         # Initialize client
         credential = DefaultAzureCredential()
@@ -40,7 +40,7 @@ def test_customer_service_model():
         results = []
         for test in test_cases:
             response = client.models.generate(
-                deployment_name="customer-service-v1",
+                deployment_name="health-advisor-v1",
                 prompt=test["input"],
                 max_tokens=100
             )

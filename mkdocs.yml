@@ -56,13 +56,13 @@ nav:
     - Introduction: agents/intro.md
     - Basic Agent:
       - Guide: agents/health_advisor.md
-      - Notebook: ../2-notebooks/2-agent_service/1-basics.ipynb
+      - Notebook: docs/2-notebooks/2-agent_service/1-basics.ipynb
     - Code Interpreter:
       - Guide: models/dietary_planning.md
-      - Notebook: ../2-notebooks/2-agent_service/2-code_interpreter.ipynb
+      - Notebook: docs/2-notebooks/2-agent_service/2-code_interpreter.ipynb
     - File Search:
       - Guide: agents/health_advisor.md
-      - Notebook: ../2-notebooks/2-agent_service/3-file-search.ipynb
+      - Notebook: docs/2-notebooks/2-agent_service/3-file-search.ipynb
     - Design Patterns: agents/design.md
     - Implementation: agents/implementation.md
     - Service Integration: agents/service.md
@@ -96,21 +96,21 @@ nav:
       - File Search: 2-notebooks/2-agent_service/3-file-search.ipynb
     - Dietary Planning:
       - Guide: models/dietary_planning.md
-      - Implementation: ../2-notebooks/2-agent_service/1-basics.ipynb
+      - Implementation: 2-notebooks/2-agent_service/1-basics.ipynb
     - Testing & Deployment:
       - Guide: agents/deploy-test.md
-      - Testing: ../2-notebooks/3-quality_attributes/2-evaluation.ipynb
+      - Testing: 2-notebooks/3-quality_attributes/2-evaluation.ipynb
   - Evaluation (45min):
     - Introduction:
       - Guide: evaluation/intro.md
-      - Notebook: ../2-notebooks/3-quality_attributes/2-evaluation.ipynb
+      - Notebook: 2-notebooks/3-quality_attributes/2-evaluation.ipynb
     - Agent Evaluation: evaluation/agent.md
     - Performance Metrics:
       - Guide: evaluation/setup.md
-      - Notebook: ../2-notebooks/3-quality_attributes/2-evaluation.ipynb
+      - Notebook: 2-notebooks/3-quality_attributes/2-evaluation.ipynb
     - Monitoring & Analysis:
       - Guide: evaluation/monitoring.md
-      - Notebook: ../2-notebooks/3-quality_attributes/1-Observability.ipynb
+      - Notebook: 2-notebooks/3-quality_attributes/1-Observability.ipynb
   - Conclusion:
     - Summary: conclusion.md
     - Final Review: 2-notebooks/3-quality_attributes/1-Observability.ipynb

@@ -1,6 +1,9 @@
-# Building Your Customer Service Agent
+# Building Your Health Advisor Agent 🏥
 
-Let's create a customer service agent that can handle common support scenarios. This will take about 30 minutes.
+Let's create a health advisor agent that can provide personalized fitness and nutrition guidance. This will take about 30 minutes.
+
+!!! warning "⚠️ Important Medical Disclaimer ⚠️"
+    The health information provided by this guide is for general educational and entertainment purposes only and is not intended as a substitute for professional medical advice, diagnosis, or treatment.
 
 ## Quick Implementation
 
@@ -11,9 +14,9 @@ from azure.ai.inference import InferenceClient
 import asyncio
 import os
 
-class CustomerServiceAgent:
+class HealthAdvisorAgent:
     def __init__(self):
-        """Initialize the customer service agent."""
+        """Initialize the health advisor agent."""
         self.client = None
         self.inference_client = None
         self.product_docs = {
@@ -51,8 +54,8 @@ class CustomerServiceAgent:
         try:
             # Create context
             context = f"""
-            You are a helpful customer service agent. 
-            Available product documentation:
+            You are a helpful health and fitness advisor.
+            Available health resources:
             {self.product_docs}
             
             User inquiry: {user_input}
@@ -62,7 +65,7 @@ class CustomerServiceAgent:
             
             # Generate response using Azure AI inference
             response = await self.inference_client.chat_completion(
-                deployment_name="customer-service-v1",
+                deployment_name="health-advisor-v1",
                 messages=[
                     {"role": "system", "content": context},
                     {"role": "user", "content": user_input}
@@ -162,8 +165,8 @@ For hands-on practice with implementing AI agents in Azure AI Foundry, try our i
 [Launch Agent Implementation Workshop](../2-notebooks/2-agent_service/1-basics.ipynb)
 
 This notebook provides:
-- Complete customer service agent implementation
-- Error handling and best practices
+- Complete health advisor agent implementation
+- Error handling and best practices with medical disclaimers
 - Context management examples
 - Testing and validation
 - Enhancement exercises

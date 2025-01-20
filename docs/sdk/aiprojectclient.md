@@ -325,9 +325,9 @@ def manage_agent_lifecycle(agent_name: str):
         # Create new agent
         agent = client.agents.create(
             name=agent_name,
-            description="Customer service agent",
+            description="Health and fitness advisor",
             model_name="gpt-4",
-            deployment_name="customer-service-v1",
+            deployment_name="health-advisor-v1",
             configuration={
                 "max_tokens": 1000,
                 "temperature": 0.7,
@@ -342,7 +342,7 @@ def manage_agent_lifecycle(agent_name: str):
                 "context_window": 4000,
                 "response_format": "markdown",
                 "custom_data": {
-                    "knowledge_base": "customer-service-kb"
+                    "knowledge_base": "health-advisor-kb"
                 }
             }
         )
@@ -382,7 +382,7 @@ def setup_agent_integrations(agent_name: str):
                 "type": "cognitive-search",
                 "endpoint": os.getenv("SEARCH_ENDPOINT"),
                 "key": os.getenv("SEARCH_KEY"),
-                "index_name": "customer-kb"
+                "index_name": "health-advisor-kb"
             },
             "storage": {
                 "type": "blob-storage",

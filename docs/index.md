@@ -1,15 +1,15 @@
-# Building a Customer Service AI Agent with Azure AI Foundry
+# Building a Health & Fitness AI Advisor with Azure AI Foundry 🏃‍♂️
 
-Welcome to this hands-on, 2-hour workshop where you'll build a practical customer service AI agent using Azure AI Foundry! You'll learn how to deploy an AI model, create an intelligent agent, and evaluate its performance - all through a real-world use case.
+Welcome to this hands-on, 2-hour workshop where you'll build a practical health and fitness AI advisor using Azure AI Foundry! You'll learn how to deploy an AI model, create an intelligent agent, and evaluate its performance - all through an engaging health-focused use case. 💪
 
-## The Use Case: Smart Customer Support
+## The Use Case: Smart Health Advisory
 
 You'll build an AI agent that can:
-- Answer common product questions
-- Handle customer inquiries
-- Access product documentation
-- Learn from customer interactions
-- Provide consistent, accurate responses
+- Provide personalized fitness guidance
+- Handle nutrition and exercise inquiries
+- Access health and wellness resources
+- Learn from user interactions
+- Provide safe, accurate health advice with disclaimers
 
 ## Workshop Timeline (2 hours)
 
@@ -19,9 +19,9 @@ You'll build an AI agent that can:
    - Basic configuration and testing
 
 2. **Agent Development (45 min)**
-   - Create customer service agent
-   - Implement response handling
-   - Add product knowledge base
+   - Create health advisor agent
+   - Implement health guidance system
+   - Add health knowledge base
 
 3. **Evaluation and Monitoring (45 min)**
    - Set up key metrics

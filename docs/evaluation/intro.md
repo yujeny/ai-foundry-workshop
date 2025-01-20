@@ -110,12 +110,12 @@ Learn about comprehensive evaluation of AI models and agents using Azure AI Eval
 
 To get hands-on experience with Azure AI Evaluation, we've prepared an interactive Jupyter notebook that will guide you through:
 - Setting up evaluation metrics
-- Running evaluations on your customer service agent
-- Analyzing and interpreting results
+- Running evaluations on your health advisor agent
+- Analyzing and interpreting results with safety checks
 - Implementing best practices for evaluation
 
 [Launch Interactive Evaluation Workshop](../2-notebooks/3-quality_attributes/2-evaluation.ipynb)
 
-This notebook provides a practical implementation of the concepts covered in this introduction. You'll work directly with the Azure AI Evaluation SDK to assess and improve your customer service agent's performance.
+This notebook provides a practical implementation of the concepts covered in this introduction. You'll work directly with the Azure AI Evaluation SDK to assess and improve your health advisor agent's performance and safety measures.
 
 Next: [Setting Up Evaluation](setup.md)
