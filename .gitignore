@@ -31,7 +31,15 @@ var/
 *.manifest
 *.spec
 
-# Installer logs
+# Installer logs and lock files
+pip-log.txt
+pip-delete-this-directory.txt
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
+.pnpm-store/
+.yarn/
+.yarnrc.yml
 pip-log.txt
 pip-delete-this-directory.txt
 

@@ -41,6 +41,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
+  const [error, setError] = useState<string | null>(null);
 
   // Prevent hydration mismatch by only rendering theme-dependent content after mount
   useEffect(() => {
@@ -50,18 +51,16 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [candidatesRes, trialsRes] = await Promise.all([
-          fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/molecular-design/candidates`),
-          fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/clinical-trials/monitor`)
-        ]);
-        
-        const candidates = await candidatesRes.json();
-        const trials = await trialsRes.json();
-        
-        setDrugCandidates(candidates);
-        setTrials(trials);
+        const response = await fetch('http://localhost:8000/api/drugs'); // Adjust URL to match your backend
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setDrugCandidates(data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error('Error fetching data:', error);
+        // Handle error appropriately in the UI
+        setError('Failed to fetch drug data');
       } finally {
         setLoading(false);
       }
