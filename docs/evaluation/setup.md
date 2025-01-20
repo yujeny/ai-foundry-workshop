@@ -1,6 +1,6 @@
-# Evaluating Your Customer Service Agent
+# Evaluating Your Health Advisor Agent 📊
 
-Let's set up basic evaluation metrics to monitor your agent's performance. This will take about 15 minutes.
+Let's set up comprehensive evaluation metrics to monitor your health advisor's performance and safety. This will take about 15 minutes. We'll ensure proper medical disclaimers and accurate health information! 🏥
 
 ## Evaluation Pipeline Overview
 
@@ -56,7 +56,7 @@ class AgentEvaluator:
             raise
     
     def configure_metrics(self):
-        """Set up key customer service metrics."""
+        """Set up key health advisor metrics."""
         try:
             metrics_config = {
                 "response_quality": {
@@ -651,6 +651,6 @@ To get hands-on experience with performance metrics and evaluation setup, we've 
 
 [Launch Performance Metrics Workshop](../2-notebooks/3-quality_attributes/2-evaluation.ipynb)
 
-This notebook provides a practical implementation of performance metrics evaluation. You'll work directly with the Azure AI Evaluation SDK to measure and optimize your customer service agent's performance.
+This notebook provides a practical implementation of performance metrics evaluation. You'll work directly with the Azure AI Evaluation SDK to measure and optimize your health advisor agent's performance and safety measures.
 
 Next: [Evaluating Agents](agent.md)

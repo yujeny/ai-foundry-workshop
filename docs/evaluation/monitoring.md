@@ -90,6 +90,6 @@ To get hands-on experience with monitoring and analysis, we've prepared an inter
 
 [Launch Monitoring Workshop](../2-notebooks/3-quality_attributes/1-Observability.ipynb)
 
-This notebook provides a practical implementation of monitoring and analysis tools. You'll work directly with the Azure AI Evaluation SDK to track and optimize your customer service agent's performance in real-time.
+This notebook provides a practical implementation of monitoring and analysis tools. You'll work directly with the Azure AI Evaluation SDK to track and optimize your health advisor's performance and safety measures in real-time. 📊
 
 Next: [Conclusion](../conclusion.md)

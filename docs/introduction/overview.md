@@ -1,8 +1,8 @@
 # Quick Setup Guide
 
-Welcome to the Customer Service AI Agent workshop! Let's get your environment ready for development.
+Welcome to the Health & Fitness AI Advisor workshop! 🏃‍♂️ Let's get your environment ready for development.
 
-## Prerequisites Check (5 minutes)
+## Prerequisites Check (5 minutes) ⚡
 
 1. **Azure Account Setup**
    ```bash
@@ -39,8 +39,8 @@ Welcome to the Customer Service AI Agent workshop! Let's get your environment re
    
    # Create project
    project = client.projects.create(
-       name="customer-service-agent",
-       description="AI-powered customer service agent"
+       name="health-advisor-agent",
+       description="AI-powered health and fitness advisor"
    )
    ```
 
@@ -74,8 +74,8 @@ This notebook will guide you through:
 ## What's Next?
 
 In this workshop, you'll:
-1. Deploy a GPT model for customer service
-2. Create an intelligent support agent
-3. Evaluate and monitor performance
+1. Deploy a GPT model for health advice
+2. Create an intelligent fitness advisor
+3. Evaluate and monitor performance with medical safety checks
 
 Let's start by [accessing AI Foundry](ai-foundry.md) to deploy our model!
