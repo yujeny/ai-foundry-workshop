@@ -5,9 +5,16 @@ from database import get_db
 from models.tables import ClinicalTrialTable, PatientDataTable
 from models.clinical_trial import ClinicalTrial, TrialPhase, TrialStatus
 from datetime import datetime
-# Temporarily disable OpenTelemetry
+import logging
+
+# OpenTelemetry imports temporarily disabled
 # from opentelemetry import trace
-# tracer = trace.get_tracer(__name__)
+# from opentelemetry.trace import Status, StatusCode
+# from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+# from azure.core.tracing.ext.opentelemetry_span import OpenTelemetrySpan
+
+# Configure logging
+logger = logging.getLogger(__name__)
 
 router = APIRouter(tags=["clinical-trials"])
 
@@ -16,9 +23,6 @@ async def monitor_trials(
     trial_id: Optional[str] = None,
     db: Session = Depends(get_db)
 ):
-    # Temporarily disable OpenTelemetry tracing
-    # with tracer.start_as_current_span("clinical_trials.monitor") as span:
-    #     span.set_attribute("trial_id", trial_id)
     """
     Real-time monitoring of:
     - trial parameters
@@ -26,6 +30,8 @@ async def monitor_trials(
     - patient responses
     - adaptive trial adjustments
     """
+    # Monitoring logic starts here
+    logger.info(f"Monitoring trial: {trial_id if trial_id else 'all'}")
     trial = db.query(ClinicalTrialTable).filter(ClinicalTrialTable.trial_id == trial_id).first()
     if not trial:
         raise HTTPException(status_code=404, detail="Trial not found")
@@ -66,11 +72,9 @@ async def predict_patient_response(
     patient_id: str,
     db: Session = Depends(get_db)
 ):
-    # Temporarily disable OpenTelemetry tracing
-    # with tracer.start_as_current_span("clinical_trials.predict_response") as span:
-    #     span.set_attribute("trial_id", trial_id)
-    #     span.set_attribute("patient_id", patient_id)
     """Predict individual patient response based on biomarkers and demographics"""
+    # Patient response prediction starts here
+    logger.info(f"Predicting response for patient {patient_id} in trial {trial_id}")
     patient = db.query(PatientDataTable).filter(PatientDataTable.patient_id == patient_id).first()
     if not patient:
         raise HTTPException(status_code=404, detail="Patient not found")

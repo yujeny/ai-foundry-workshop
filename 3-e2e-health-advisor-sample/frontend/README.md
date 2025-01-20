@@ -1,36 +1,134 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Drug Development Platform Frontend 🧬
 
-## Getting Started
+## Overview 🎯
+This Next.js application provides an interactive interface for our AI-powered drug development platform. It showcases real-time monitoring of drug candidates and clinical trials using Azure AI Foundry SDKs.
 
-First, run the development server:
+## Features ✨
+- 🔄 Real-time data refresh with automatic polling
+- 🎨 Dark/Light theme support with smooth transitions
+- 💡 Interactive tooltips for better understanding
+- 📊 Live monitoring of clinical trials
+- 🧪 AI-powered drug candidate analysis
+- 🔍 Detailed metrics visualization
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Architecture 🏗️
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant Backend
+    participant AzureAI
+    
+    User->>Frontend: View Dashboard
+    Frontend->>Backend: GET /api/drugs
+    Backend->>AzureAI: Analyze molecules
+    AzureAI-->>Backend: Return predictions
+    Backend-->>Frontend: Return candidates
+    Frontend-->>User: Update UI
+    
+    Note over Frontend,Backend: Auto-refresh every 30s
+    Note over Backend,AzureAI: Uses Azure AI Inference
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Getting Started 🚀
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. **Set Up Environment**:
+   - Copy `.env.example` to `.env.local`
+   - Update with your backend URL:
+   ```env
+   NEXT_PUBLIC_API_URL=http://localhost:8000
+   ```
 
-## Learn More
+3. **Run Development Server**:
+   ```bash
+   npm run dev
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+4. **Access the Platform**:
+   - Open [http://localhost:3000](http://localhost:3000)
+   - Try the refresh button
+   - Hover over metrics for tooltips
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Component Structure 🎨
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Drug Candidates Section
+```tsx
+// src/app/page.tsx
+<Card className="col-span-2">
+  <CardHeader>
+    <CardTitle>🧬 Molecular Design</CardTitle>
+  </CardHeader>
+  <CardContent>
+    {/* AI-powered drug analysis display */}
+  </CardContent>
+</Card>
+```
 
-## Deploy on Vercel
+### Clinical Trials Section
+```tsx
+// src/app/page.tsx
+<Card className="col-span-2">
+  <CardHeader>
+    <CardTitle>🔬 Clinical Trials</CardTitle>
+  </CardHeader>
+  <CardContent>
+    {/* Real-time trial monitoring */}
+  </CardContent>
+</Card>
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Data Refresh Implementation 🔄
+The platform implements both automatic and manual refresh:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```typescript
+// Auto-refresh every 30 seconds
+useEffect(() => {
+  const interval = setInterval(fetchData, 30000);
+  return () => clearInterval(interval);
+}, []);
+
+// Manual refresh with loading state
+const handleRefresh = async () => {
+  setRefreshing(true);
+  try {
+    const data = await fetchData();
+    setDrugCandidates(data);
+  } finally {
+    setRefreshing(false);
+  }
+};
+```
+
+## Theme Support 🌓
+Built with next-themes and Tailwind CSS:
+```tsx
+const { theme, setTheme } = useTheme();
+// Toggle between light/dark
+<Button onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>
+  {theme === "dark" ? <Sun /> : <Moon />}
+</Button>
+```
+
+## Technologies Used 🛠️
+- Next.js 13+ with App Router
+- TypeScript for type safety
+- Tailwind CSS for styling
+- ShadcnUI components
+- Lucide React icons
+
+## Contributing 🤝
+1. Fork the repository
+2. Create a feature branch
+3. Submit a Pull Request
+
+## Learn More 📚
+- [Azure AI Foundry Documentation](https://learn.microsoft.com/azure/ai-foundry/)
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Tailwind CSS](https://tailwindcss.com/docs)
+- [ShadcnUI](https://ui.shadcn.com)

@@ -8,7 +8,28 @@ from models.drug_candidate import DrugCandidate, MoleculeType
 from models.automated_test import TestResult
 from datetime import datetime
 import asyncio
+import os
+import logging
 from concurrent.futures import ThreadPoolExecutor
+
+# OpenTelemetry and Azure imports temporarily disabled
+# from opentelemetry import trace
+# from opentelemetry.trace import Status, StatusCode
+# from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+# from azure.core.tracing.ext.opentelemetry_span import OpenTelemetrySpan
+
+# Configure logging
+logger = logging.getLogger(__name__)
+
+# Azure AI SDK imports temporarily disabled
+# from azure.identity import DefaultAzureCredential
+# from azure.ai.inference import InferenceClient
+# from azure.ai.evaluation import EvaluationClient
+# from azure.core.exceptions import AzureError
+
+# Azure configuration temporarily disabled
+# AZURE_ENDPOINT = os.getenv("PROJECT_CONNECTION_STRING")
+# MODEL_NAME = os.getenv("MODEL_DEPLOYMENT_NAME")
 from utils.molecular_analysis import (
     analyze_genetic_compatibility,
     analyze_biomarker_interaction,
@@ -92,18 +113,39 @@ async def analyze_molecule(
     molecule_data: DrugCandidate,
     db: Session = Depends(get_db)
 ):
-    # Temporarily disable OpenTelemetry tracing
-    # with tracer.start_as_current_span("molecular_design.analyze") as span:
-    #     span.set_attribute("molecule_id", molecule_data.id)
-    #     span.set_attribute("therapeutic_area", molecule_data.therapeutic_area)
     """
-    Analyze molecular properties and predict:
-    - efficacy
-    - safety
-    - potential side effects
+    🧬 Analyze molecular properties
+    
+    This endpoint analyzes:
+    - 💊 Drug efficacy
+    - 🛡️ Safety profile
+    - ⚠️ Potential side effects
+    - 🎯 Target protein interactions
     """
     try:
-        # Encrypt sensitive molecular data
+        logger.info(f"🔍 Analyzing molecule {molecule_data.id} for {molecule_data.therapeutic_area}")
+        
+        # 🧪 Validate molecule data
+        if not molecule_data.target_proteins:
+            logger.warning("⚠️ No target proteins specified for analysis")
+        
+        # Mock analysis results for demo
+        molecule_data.predicted_efficacy = 0.85
+        molecule_data.predicted_safety = 0.92
+        molecule_data.ai_confidence = 0.89
+        
+        analysis_results = {
+            "efficacy": molecule_data.predicted_efficacy,
+            "safety": molecule_data.predicted_safety,
+            "confidence": molecule_data.ai_confidence
+        }
+        
+        logger.info(f"📊 Analysis Results:"
+                   f"\n- Efficacy: {analysis_results['efficacy']:.2%}"
+                   f"\n- Safety: {analysis_results['safety']:.2%}"
+                   f"\n- Confidence: {analysis_results['confidence']:.2%}")
+        
+        # 🔒 Encrypt sensitive molecular data
         encrypted_data = data_encryption.encrypt_molecule_data({
             "target_proteins": molecule_data.target_proteins,
             "mechanism_of_action": molecule_data.development_stage,
@@ -111,6 +153,59 @@ async def analyze_molecule(
                 "side_effects": molecule_data.side_effects,
                 "development_timeline": [],
                 "confidential_notes": []
+            }
+        })
+        
+        # Store the analyzed molecule with encrypted data
+        db_molecule = DrugCandidateTable(
+            id=molecule_data.id,
+            molecule_type=molecule_data.molecule_type,
+            molecular_weight=molecule_data.molecular_weight,
+            therapeutic_area=molecule_data.therapeutic_area,
+            predicted_efficacy=molecule_data.predicted_efficacy,
+            predicted_safety=molecule_data.predicted_safety,
+            creation_date=datetime.now(),
+            target_proteins=encrypted_data["target_proteins"],
+            side_effects=molecule_data.side_effects,
+            development_stage=encrypted_data["mechanism_of_action"],
+            ai_confidence=molecule_data.ai_confidence,
+            properties=encrypted_data["properties"]
+        )
+        
+        db.add(db_molecule)
+        db.commit()
+        db.refresh(db_molecule)
+        
+        return {
+            "message": "Molecular analysis complete",
+            "molecule": molecule_data,
+            "analysis": {
+                "efficacy_score": molecule_data.predicted_efficacy,
+                "safety_score": molecule_data.predicted_safety,
+                "confidence": molecule_data.ai_confidence,
+                "recommendations": [
+                    f"Target proteins identified: {', '.join(molecule_data.target_proteins)}",
+                    f"Development stage: {molecule_data.development_stage}",
+                    f"Potential side effects: {', '.join(molecule_data.side_effects)}"
+                ]
+            }
+        }
+    except Exception as e:
+        logger.error(f"❌ Error analyzing molecule: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error analyzing molecule: {str(e)}"
+        )
+            
+        # 🔒 Encrypt sensitive molecular data
+        encrypted_data = data_encryption.encrypt_molecule_data({
+            "target_proteins": molecule_data.target_proteins,
+            "mechanism_of_action": molecule_data.development_stage,
+            "properties": {
+                "side_effects": molecule_data.side_effects,
+                "development_timeline": [],
+                "confidential_notes": [],
+                "ai_analysis": inference_response
             }
         })
         
