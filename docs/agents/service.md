@@ -109,7 +109,7 @@ Azure AI Agent Service provides a comprehensive platform for building, deploying
 
 For hands-on practice with the Azure AI Agent Service, try our interactive notebook:
 
-[Launch Agent Service Workshop](../building_agent/agent_service/agent_service.ipynb)
+[Launch Agent Service Workshop](../2-notebooks/2-agent_service/5-agents-aisearch.ipynb)
 
 This notebook provides:
 - Understanding of service features and components

@@ -136,7 +136,7 @@ Learn how to design effective AI agents in Azure AI Foundry using best practices
 
 For hands-on practice with agent design patterns in Azure AI Foundry, try our interactive notebook:
 
-[Launch Agent Design Workshop](../building_agent/agent_design/agent_design.ipynb)
+[Launch Agent Design Workshop](../2-notebooks/2-agent_service/2-code_interpreter.ipynb)
 
 This notebook provides:
 - Complete agent design pattern implementations

@@ -199,7 +199,7 @@ def get_ai_client_managed_identity():
 
 For hands-on practice with authentication setup and troubleshooting, try our interactive notebook:
 
-[Launch Authentication Workshop](../building_agent/project_setup/project_setup.ipynb)
+[Launch Authentication Workshop](../1-introduction/1-authentication.ipynb)
 
 This notebook provides:
 - Practical authentication setup examples
@@ -212,7 +212,7 @@ This notebook provides:
 
 For hands-on practice with authentication setup and troubleshooting, try our interactive notebook:
 
-[Launch Project Setup Workshop](../building_agent/project_setup/project_setup.ipynb)
+[Launch Project Setup Workshop](../1-introduction/2-environment_setup.ipynb)
 
 This notebook provides:
 - Practical authentication setup examples

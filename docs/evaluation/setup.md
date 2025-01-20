@@ -2,6 +2,38 @@
 
 Let's set up basic evaluation metrics to monitor your agent's performance. This will take about 15 minutes.
 
+## Evaluation Pipeline Overview
+
+```mermaid
+flowchart TD
+    A[Data Collection] --> B[Evaluation Setup]
+    B --> C[Metrics Configuration]
+    C --> D[Pipeline Execution]
+    
+    subgraph Setup
+    B --> B1[Resource Config]
+    B --> B2[Security Setup]
+    B --> B3[Monitoring Tools]
+    end
+    
+    subgraph Metrics
+    C --> C1[Response Quality]
+    C --> C2[Performance]
+    C --> C3[Customer Satisfaction]
+    end
+    
+    subgraph Execution
+    D --> D1[Run Evaluations]
+    D --> D2[Generate Reports]
+    D --> D3[Monitor Results]
+    end
+    
+    D3 --> |Feedback Loop| A
+    
+    style A fill:#f9f,stroke:#333,stroke-width:4px
+    style D fill:#bbf,stroke:#333,stroke-width:4px
+```
+
 ## Quick Setup
 
 ```python
@@ -617,7 +649,7 @@ To get hands-on experience with performance metrics and evaluation setup, we've 
 - Analyzing and visualizing results
 - Implementing optimization recommendations
 
-[Launch Performance Metrics Workshop](../building_agent/performance_metrics/performance_metrics.ipynb)
+[Launch Performance Metrics Workshop](../2-notebooks/3-quality_attributes/2-evaluation.ipynb)
 
 This notebook provides a practical implementation of performance metrics evaluation. You'll work directly with the Azure AI Evaluation SDK to measure and optimize your customer service agent's performance.
 

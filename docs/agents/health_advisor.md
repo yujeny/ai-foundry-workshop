@@ -1,9 +1,38 @@
-# Health Advisor Agent Example
+# 🍏 Fun & Fit Health Advisor Agent Example 🍎
 
-This guide demonstrates how to create a health advisor agent using Azure AI Foundry SDKs. The agent provides dietary advice, BMI calculations, and nutritional guidance while ensuring content safety.
+This guide demonstrates how to create an engaging health advisor agent using Azure AI Foundry SDKs. The agent provides dietary advice, BMI calculations, and nutritional guidance while ensuring content safety.
+
+!!! warning "⚠️ Important Medical Disclaimer ⚠️"
+    **The health information provided by this guide is for general educational and entertainment purposes only and is not intended as a substitute for professional medical advice, diagnosis, or treatment.** Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition. Never disregard professional medical advice or delay seeking it because of something you read or receive from this guide.
+
+## Overview
+
+This guide is based on the [Fun & Fit Health Advisor Tutorial](../2-notebooks/2-agent_service/1-basics.ipynb) notebook. We'll create an engaging health advisor agent that provides general wellness advice while maintaining appropriate medical disclaimers.
+
+### Process Flow
+```mermaid
+sequenceDiagram
+    participant User
+    participant Agent as Health Advisor Agent
+    participant Safety as Content Safety
+    
+    User->>Agent: Ask health question
+    Agent->>Safety: Check content safety
+    Safety-->>Agent: Content approved
+    Agent->>Agent: Process with disclaimers
+    Agent-->>User: Health advice + disclaimers
+    
+    note over Agent: Always includes:<br/>1. Medical disclaimers<br/>2. Professional consultation reminder
+```
 
 ## Prerequisites
 
+First, install the required packages:
+```bash
+pip install azure-identity azure-ai-projects azure-ai-inference azure-ai-evaluation azure-ai-contentsafety opentelemetry-sdk azure-core-tracing-opentelemetry
+```
+
+Then import the necessary libraries:
 ```python
 from azure.identity import DefaultAzureCredential
 from azure.ai.projects import AIProjectClient
@@ -13,6 +42,8 @@ from azure.ai.contentsafety import ContentSafetyClient
 import azure.monitor.opentelemetry._autoinstrument
 ```
 
+For a complete working example, see the [Fun & Fit Health Advisor Tutorial](../2-notebooks/2-agent_service/1-basics.ipynb) notebook.
+
 ## Creating the Health Advisor Agent
 
 The health advisor agent combines multiple Azure AI capabilities:
@@ -21,86 +52,80 @@ The health advisor agent combines multiple Azure AI capabilities:
 - Nutritional guidance with proper disclaimers
 - Dietary restriction handling
 
-### Basic Implementation
+### Creating a Fun & Fit Health Advisor 🏋️
+
+Let's create an agent specialized in general health and wellness, with explicit disclaimers and safety measures:
 
 ```python
-class HealthAdvisorAgent:
-    def __init__(self):
-        credential = DefaultAzureCredential()
-        self.client = AIProjectClient(
-            subscription_id=os.getenv("AZURE_SUBSCRIPTION_ID"),
-            resource_group=os.getenv("AZURE_RESOURCE_GROUP"),
-            credential=credential
-        )
-        self.inference_client = ChatCompletionsClient(
-            endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
-            credential=credential
-        )
-        self.safety_client = ContentSafetyClient(
-            endpoint=os.getenv("AZURE_CONTENTSAFETY_ENDPOINT"),
-            credential=credential
-        )
+def create_health_advisor_agent():
+    """Create a health advisor agent with disclaimers and basic instructions."""
+    try:
+        # Get the model name from environment variables
+        model_name = os.environ.get("MODEL_DEPLOYMENT_NAME", "gpt-4o-mini")
 
-    async def process_request(self, user_input: str) -> str:
-        # Content safety check
-        safety_result = await self.safety_client.analyze_text(
-            text=user_input,
-            categories=["Hate", "SelfHarm", "Violence"]
+        # Create a new agent using the AIProjectClient
+        agent = project_client.agents.create_agent(
+            model=model_name,
+            name="fun-fit-health-advisor",
+            instructions="""
+            You are a friendly AI Health Advisor.
+            You provide general health, fitness, and nutrition information, but always:
+            1. Include medical disclaimers
+            2. Encourage consulting healthcare professionals
+            3. Provide general, non-diagnostic advice around wellness, diet, and fitness
+            4. Clearly remind them you're not a doctor
+            5. Encourage safe and balanced approaches to exercise and nutrition
+            """
         )
-        
-        if any(category.severity > 2 for category in safety_result.categories):
-            return "I apologize, but I cannot provide advice on that topic. Please consult a healthcare professional."
-        
-        # Process health-related query
-        response = await self.inference_client.complete(
-            deployment_name="health-advisor-v1",
-            messages=[
-                {"role": "system", "content": """You are a knowledgeable health advisor. Important guidelines:
-                1. Always include appropriate health disclaimers
-                2. Recommend consulting healthcare professionals for medical advice
-                3. Be specific about food allergies and restrictions
-                4. Provide evidence-based nutritional guidance
-                5. Clearly explain BMI calculations and interpretations"""},
-                {"role": "user", "content": user_input}
-            ],
-            temperature=0.7,
-            max_tokens=300
-        )
-        
-        return response.choices[0].message.content
+        print(f"🎉 Created health advisor agent, ID: {agent.id}")
+        return agent
+    except Exception as e:
+        print(f"❌ Error creating agent: {str(e)}")
+        return None
 ```
 
-### BMI Calculator Implementation
+### BMI Calculation Example 📊
+
+Here's how to use the health advisor agent to calculate and interpret BMI with appropriate disclaimers:
 
 ```python
-def setup_bmi_calculator():
-    return {
-        "type": "function",
-        "function": {
-            "name": "calculate_bmi",
-            "description": "Calculate BMI given height and weight",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "height_inches": {"type": "number"},
-                    "weight_pounds": {"type": "number"}
-                }
-            }
-        }
-    }
+def calculate_bmi_with_agent(agent, height_inches, weight_pounds):
+    """Calculate BMI using the code interpreter agent."""
+    try:
+        # Create a new conversation thread
+        thread = project_client.agents.create_thread()
+        print(f"📝 Created thread for BMI calculation, ID: {thread.id}")
 
-# Usage example
-agent = HealthAdvisorAgent()
-bmi_calculator = setup_bmi_calculator()
+        # Construct user message requesting BMI calculation
+        user_text = (
+            f"Calculate BMI for \n"
+            f"Height: {height_inches} inches\n"
+            f"Weight: {weight_pounds} pounds\n"
+            "Please: \n"
+            "1. Show calculation \n"
+            "2. Interpret the result \n"
+            "3. Include disclaimers \n"
+        )
 
-response = await agent.inference_client.complete(
-    deployment_name="health-advisor-v1",
-    messages=[
-        {"role": "system", "content": "You are a health advisor."},
-        {"role": "user", "content": "Calculate BMI for someone 5'9\" and 198 pounds"}
-    ],
-    tools=[bmi_calculator]
-)
+        # Send the request to the agent
+        msg = project_client.agents.create_message(
+            thread_id=thread.id,
+            role="user",
+            content=user_text
+        )
+
+        # Process the request and get response
+        run = project_client.agents.create_and_process_run(
+            thread_id=thread.id,
+            assistant_id=agent.id
+        )
+        return thread, run
+    except Exception as e:
+        print(f"❌ Error during BMI calculation: {e}")
+        return None, None
+
+# Example usage
+bmi_thread, bmi_run = calculate_bmi_with_agent(health_agent, 70, 180)  # 5'10" and 180 lbs
 ```
 
 ## Safety and Evaluation

@@ -103,7 +103,7 @@ AI agents are intelligent software components that can:
 
 For hands-on practice with AI agents in Azure AI Foundry, try our interactive notebook:
 
-[Launch Agent Introduction Workshop](../building_agent/agent_introduction/agent_introduction.ipynb)
+[Launch Agent Introduction Workshop](../2-notebooks/2-agent_service/1-basics.ipynb)
 
 This notebook provides:
 - Understanding of AI agent concepts

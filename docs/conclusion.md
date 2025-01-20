@@ -5,7 +5,7 @@ Congratulations! You've built a functional customer service AI agent using Azure
 ## Interactive Review
 To verify your setup and review key concepts, we've prepared an interactive notebook:
 
-[Launch Conclusion Workshop](building_agent/conclusion/conclusion.ipynb)
+[Launch Conclusion Workshop](2-notebooks/3-quality_attributes/1-Observability.ipynb)
 
 This notebook will help you:
 - Verify your Azure AI Foundry configuration

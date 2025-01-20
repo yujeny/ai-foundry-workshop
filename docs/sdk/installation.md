@@ -40,15 +40,23 @@ source .venv/bin/activate
 
 ```bash
 # Install core Azure AI Foundry packages
-pip install azure-ai-projects
-pip install azure-ai-inference
-pip install azure-ai-evaluation
-pip install azure-ai-contentsafety
-pip install azure-monitor-opentelemetry
-pip install azure-identity
+```bash
+# Core AI Foundry SDKs
+pip install azure-ai-projects     # For project management
+pip install azure-ai-inference    # For model inference
+pip install azure-ai-evaluation   # For model evaluation
+pip install azure-ai-contentsafety  # For content safety checks
+
+# Telemetry and monitoring
+pip install opentelemetry-sdk    # Base OpenTelemetry SDK
+pip install azure-core-tracing-opentelemetry  # Azure OpenTelemetry integration
+pip install azure-monitor-opentelemetry  # Azure Monitor integration
+
+# Authentication
+pip install azure-identity       # For Azure authentication
 
 # Optional but recommended packages
-pip install azure-storage-blob  # For data storage
+pip install azure-storage-blob   # For data storage
 pip install azure-keyvault-secrets  # For secure credential management
 ```
 

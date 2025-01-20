@@ -456,7 +456,7 @@ def setup_agent_integrations(agent_name: str):
 
 For hands-on practice with AIProjectClient, try our interactive notebook:
 
-[Launch AIProjectClient Workshop](../building_agent/aiprojectclient/aiprojectclient.ipynb)
+[Launch AIProjectClient Workshop](../1-introduction/3-quick_start.ipynb)
 
 This notebook provides:
 - Practical examples of AIProjectClient usage

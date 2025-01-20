@@ -76,7 +76,7 @@ Azure AI Foundry is the web-based portal that serves as your central hub for AI 
 ## Interactive Tutorial
 To get hands-on experience with Azure AI Foundry, try our interactive Quick Start notebook:
 
-[Launch Quick Start Tutorial](../building_agent/project_setup/project_setup.ipynb)
+[Launch Quick Start Tutorial](../1-introduction/2-environment_setup.ipynb)
 
 This notebook will guide you through:
 - Initializing the AI Project client

@@ -1,6 +1,6 @@
-# Listing Available Models
+# 📋 Listing Available Models 🤖
 
-Learn how to discover, explore, and select models in Azure AI Foundry for your specific use cases.
+Learn how to discover, explore, and select models in Azure AI Foundry for your specific use cases. Find the perfect AI companion for your health and fitness journey! 🏋️‍♀️ 🎯
 
 ## Model Discovery
 
@@ -152,7 +152,7 @@ if __name__ == "__main__":
 
 For hands-on practice with exploring available models in Azure AI Foundry, try our interactive notebook:
 
-[Launch Available Models Workshop](../building_agent/available_models/available_models.ipynb)
+[Launch Available Models Workshop](../2-notebooks/1-chat_completion/4-phi-4.ipynb)
 
 This notebook provides:
 - Comprehensive model listing and filtering

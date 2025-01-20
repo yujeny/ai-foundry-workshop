@@ -1,6 +1,34 @@
-# Azure AI Inference SDK Tutorial
+# 🤖 Azure AI Inference SDK Tutorial
 
-This tutorial demonstrates how to use the Azure AI Inference SDK for generating health and dietary advice.
+This tutorial demonstrates how to use the Azure AI Inference SDK for generating health and dietary advice. Let's build some intelligent health recommendations! 🏃‍♂️ 🥗
+
+## Process Flow
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Inference as AI Inference
+    participant Safety as Content Safety
+    participant Model as AI Model
+    
+    Client->>Inference: Initialize client
+    activate Inference
+    
+    rect rgb(200, 220, 255)
+        note right of Inference: Health Advice Request
+        Client->>Inference: Request completion
+        Inference->>Safety: Check content
+        Safety-->>Inference: Content approved
+        Inference->>Model: Generate response
+        Model-->>Inference: Raw completion
+        Inference->>Inference: Add health disclaimers
+        Inference-->>Client: Safe health advice
+    end
+    
+    deactivate Inference
+    
+    note over Client,Model: All health-related responses<br/>include appropriate disclaimers
+```
 
 ## Prerequisites
 ```python
@@ -32,7 +60,7 @@ print(response.choices[0].message.content)
 ```
 
 ## Next Steps
-- Try the [Inference Tutorial Notebook](../building_agent/sdk_inference_tutorial/sdk_inference_tutorial.ipynb)
+- Try the [Inference Tutorial Notebook](../2-notebooks/1-chat_completion/2-embeddings.ipynb)
 - Learn about [Azure AI Evaluation](evaluation.md)
 - Explore [Azure Monitor](monitoring.md)
 

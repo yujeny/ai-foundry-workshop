@@ -1,6 +1,6 @@
-# Introduction to Azure AI Evaluation
+# 📊 Introduction to Azure AI Evaluation 📈
 
-Learn about comprehensive evaluation of AI models and agents using Azure AI Evaluation, ensuring optimal performance and reliability.
+Learn about comprehensive evaluation of AI models and agents using Azure AI Evaluation, ensuring optimal performance and reliability. Let's measure your health advisor's fitness! 💪 🎯
 
 ## Understanding AI Evaluation
 
@@ -114,7 +114,7 @@ To get hands-on experience with Azure AI Evaluation, we've prepared an interacti
 - Analyzing and interpreting results
 - Implementing best practices for evaluation
 
-[Launch Interactive Evaluation Workshop](../building_agent/evaluation_intro/evaluation_intro.ipynb)
+[Launch Interactive Evaluation Workshop](../2-notebooks/3-quality_attributes/2-evaluation.ipynb)
 
 This notebook provides a practical implementation of the concepts covered in this introduction. You'll work directly with the Azure AI Evaluation SDK to assess and improve your customer service agent's performance.
 

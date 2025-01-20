@@ -92,7 +92,7 @@ if __name__ == "__main__":
 
 For hands-on practice with model testing in Azure AI Foundry, try our interactive notebook:
 
-[Launch Model Testing Workshop](../building_agent/model_testing/model_testing.ipynb)
+[Launch Model Testing Workshop](../2-notebooks/2-agent_service/4-bing_grounding.ipynb)
 
 This notebook provides:
 - Basic model testing examples
