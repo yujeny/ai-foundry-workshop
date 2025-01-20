@@ -159,7 +159,7 @@ if __name__ == "__main__":
 
 For hands-on practice with implementing AI agents in Azure AI Foundry, try our interactive notebook:
 
-[Launch Agent Implementation Workshop](../building_agent/agent_implementation/agent_implementation.ipynb)
+[Launch Agent Implementation Workshop](../2-notebooks/2-agent_service/1-basics.ipynb)
 
 This notebook provides:
 - Complete customer service agent implementation

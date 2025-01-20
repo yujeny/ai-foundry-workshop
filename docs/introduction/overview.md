@@ -63,7 +63,7 @@ export AZURE_RESOURCE_GROUP="your-resource-group"
 
 For a hands-on environment setup experience, you can use our interactive Jupyter notebook:
 
-[Launch Environment Setup Notebook](../building_agent/project_setup/project_setup.ipynb)
+[Launch Environment Setup Notebook](../1-introduction/2-environment_setup.ipynb)
 
 This notebook will guide you through:
 - Installing required packages

@@ -46,22 +46,26 @@ nav:
       - Installation: sdk/installation.md
       - Authentication: sdk/authentication.md
     - Notebooks:
-      - Projects: https://github.dev/Azure/ai-foundry-workshop/blob/main/building_agent/sdk_projects_tutorial/sdk_projects_tutorial.ipynb
-      - Inference: https://github.dev/Azure/ai-foundry-workshop/blob/main/building_agent/sdk_inference_tutorial/sdk_inference_tutorial.ipynb
-      - Evaluation: https://github.dev/Azure/ai-foundry-workshop/blob/main/building_agent/sdk_evaluation_tutorial/sdk_evaluation_tutorial.ipynb
-      - Content Safety: https://github.dev/Azure/ai-foundry-workshop/blob/main/building_agent/sdk_contentsafety_tutorial/sdk_contentsafety_tutorial.ipynb
-      - Monitoring: https://github.dev/Azure/ai-foundry-workshop/blob/main/building_agent/sdk_monitoring_tutorial/sdk_monitoring_tutorial.ipynb
-      - Identity: https://github.dev/Azure/ai-foundry-workshop/blob/main/building_agent/sdk_identity_tutorial/sdk_identity_tutorial.ipynb
+      - Projects: 2-notebooks/1-chat_completion/1-basic-chat-completion.ipynb
+      - Inference: 2-notebooks/1-chat_completion/2-embeddings.ipynb
+      - Evaluation: 2-notebooks/3-quality_attributes/2-evaluation.ipynb
+      - Content Safety: 2-notebooks/1-chat_completion/3-basic-rag.ipynb
+      - Monitoring: 2-notebooks/3-quality_attributes/1-Observability.ipynb
+      - Identity: 1-introduction/1-authentication.ipynb
   - Agent Tutorials:
+    - Introduction: agents/intro.md
     - Basic Agent:
       - Guide: agents/health_advisor.md
-      - Notebook: https://github.dev/Azure/ai-foundry-workshop/blob/main/building_agent/agent_basics_tutorial.ipynb
+      - Notebook: ../2-notebooks/2-agent_service/1-basics.ipynb
     - Code Interpreter:
       - Guide: models/dietary_planning.md
-      - Notebook: https://github.dev/Azure/ai-foundry-workshop/blob/main/building_agent/agent_code_interpreter_tutorial.ipynb
+      - Notebook: ../2-notebooks/2-agent_service/2-code_interpreter.ipynb
     - File Search:
       - Guide: agents/health_advisor.md
-      - Notebook: https://github.dev/Azure/ai-foundry-workshop/blob/main/building_agent/agent_file_search_tutorial.ipynb
+      - Notebook: ../2-notebooks/2-agent_service/3-file-search.ipynb
+    - Design Patterns: agents/design.md
+    - Implementation: agents/implementation.md
+    - Service Integration: agents/service.md
   - Introduction:
     - introduction/index.md
     - Getting Started: introduction/overview.md
@@ -69,47 +73,47 @@ nav:
   - Setup (30min):
     - Installation: sdk/installation.md
     - Authentication: sdk/authentication.md
-    - Interactive Setup: https://github.dev/Azure/ai-foundry-workshop/blob/main/building_agent/project_setup/project_setup.ipynb
+    - Interactive Setup: 1-introduction/2-environment_setup.ipynb
   - Building the Agent (45min):
     - Project Setup: sdk/installation.md
     - Working with AIProjectClient:
       - Guide: sdk/aiprojectclient.md
-      - Notebook: https://github.dev/Azure/ai-foundry-workshop/blob/main/building_agent/aiprojectclient/aiprojectclient.ipynb
+      - Notebook: 1-introduction/3-quick_start.ipynb
     - Available Models:
       - Guide: models/listing.md
-      - Notebook: https://github.dev/Azure/ai-foundry-workshop/blob/main/building_agent/available_models/available_models.ipynb
+      - Notebook: 2-notebooks/1-chat_completion/4-phi-4.ipynb
     - Model Deployment:
       - Guide: models/deploying.md
-      - Notebook: https://github.dev/Azure/ai-foundry-workshop/blob/main/building_agent/model_deployment/model_deployment.ipynb
+      - Notebook: 2-notebooks/2-agent_service/6-agents-az-functions.ipynb
     - Model Testing:
       - Guide: models/testing.md
-      - Notebook: https://github.dev/Azure/ai-foundry-workshop/blob/main/building_agent/model_testing/model_testing.ipynb
+      - Notebook: 2-notebooks/2-agent_service/4-bing_grounding.ipynb
   - Agent Development (45min):
     - Health Advisor Agent:
       - Guide: agents/health_advisor.md
-      - Basic Agent: https://github.dev/Azure/ai-foundry-workshop/blob/main/building_agent/agent_basics_tutorial/agent_basics_tutorial.ipynb
-      - Code Interpreter: https://github.dev/Azure/ai-foundry-workshop/blob/main/building_agent/agent_code_interpreter_tutorial/agent_code_interpreter_tutorial.ipynb
-      - File Search: https://github.dev/Azure/ai-foundry-workshop/blob/main/building_agent/agent_file_search_tutorial/agent_file_search_tutorial.ipynb
+      - Basic Agent: 2-notebooks/2-agent_service/1-basics.ipynb
+      - Code Interpreter: 2-notebooks/2-agent_service/2-code_interpreter.ipynb
+      - File Search: 2-notebooks/2-agent_service/3-file-search.ipynb
     - Dietary Planning:
       - Guide: models/dietary_planning.md
-      - Implementation: https://github.dev/Azure/ai-foundry-workshop/blob/main/building_agent/agent_implementation/implementation.ipynb
+      - Implementation: ../2-notebooks/2-agent_service/1-basics.ipynb
     - Testing & Deployment:
       - Guide: agents/deploy-test.md
-      - Testing: https://github.dev/Azure/ai-foundry-workshop/blob/main/building_agent/agent_testing/testing.ipynb
+      - Testing: ../2-notebooks/3-quality_attributes/2-evaluation.ipynb
   - Evaluation (45min):
     - Introduction:
       - Guide: evaluation/intro.md
-      - Notebook: https://github.dev/Azure/ai-foundry-workshop/blob/main/building_agent/evaluation_intro/evaluation_intro.ipynb
+      - Notebook: ../2-notebooks/3-quality_attributes/2-evaluation.ipynb
     - Agent Evaluation: evaluation/agent.md
     - Performance Metrics:
       - Guide: evaluation/setup.md
-      - Notebook: https://github.dev/Azure/ai-foundry-workshop/blob/main/building_agent/performance_metrics/performance_metrics.ipynb
+      - Notebook: ../2-notebooks/3-quality_attributes/2-evaluation.ipynb
     - Monitoring & Analysis:
       - Guide: evaluation/monitoring.md
-      - Notebook: https://github.dev/Azure/ai-foundry-workshop/blob/main/building_agent/monitoring_analysis/monitoring_analysis.ipynb
+      - Notebook: ../2-notebooks/3-quality_attributes/1-Observability.ipynb
   - Conclusion:
     - Summary: conclusion.md
-    - Final Review: https://github.dev/Azure/ai-foundry-workshop/blob/main/building_agent/conclusion/conclusion.ipynb
+    - Final Review: 2-notebooks/3-quality_attributes/1-Observability.ipynb
 
 markdown_extensions:
   - pymdownx.emoji:

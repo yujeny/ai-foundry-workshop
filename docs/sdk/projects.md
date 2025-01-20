@@ -33,7 +33,7 @@ project = client.projects.create(
 ```
 
 ## Next Steps
-- Try the [Projects Tutorial Notebook](../building_agent/sdk_projects_tutorial/sdk_projects_tutorial.ipynb)
+- Try the [Projects Tutorial Notebook](../1-introduction/3-quick_start.ipynb)
 - Learn about [Azure AI Inference](inference.md)
 - Explore [Content Safety](contentsafety.md)
 

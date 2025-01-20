@@ -28,7 +28,7 @@ evaluation = await evaluator.evaluate_text(
 ```
 
 ## Next Steps
-- Try the [Evaluation Tutorial Notebook](../building_agent/sdk_evaluation_tutorial/sdk_evaluation_tutorial.ipynb)
+- Try the [Evaluation Tutorial Notebook](../2-notebooks/3-quality_attributes/2-evaluation.ipynb)
 - Learn about [Content Safety](contentsafety.md)
 - Explore [Azure Monitor](monitoring.md)
 

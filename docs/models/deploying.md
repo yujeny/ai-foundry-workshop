@@ -1,6 +1,6 @@
-# Deploying Your Customer Service Model
+# 🚀 Deploying Your Customer Service Model
 
-Let's deploy a GPT model optimized for customer service interactions. This will take about 15 minutes.
+Let's deploy a GPT model optimized for customer service interactions. Get your health advisor ready to help users achieve their fitness goals! 🏃‍♀️ 💪 This will take about 15 minutes.
 
 ## Quick Model Deployment
 
@@ -427,7 +427,7 @@ def configure_deployment_security(deployment_name: str):
 
 For hands-on practice with model deployment in Azure AI Foundry, try our interactive notebook:
 
-[Launch Model Deployment Workshop](../building_agent/model_deployment/model_deployment.ipynb)
+[Launch Model Deployment Workshop](../2-notebooks/2-agent_service/6-agents-az-functions.ipynb)
 
 This notebook provides:
 - Step-by-step deployment configuration

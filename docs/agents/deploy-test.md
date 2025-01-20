@@ -136,7 +136,7 @@ Learn how to effectively deploy, test, and maintain AI agents in Azure AI Foundr
 
 For hands-on practice with testing and deploying AI agents in Azure AI Foundry, try our interactive notebook:
 
-[Launch Testing & Deployment Workshop](../building_agent/agent_testing/agent_testing.ipynb)
+[Launch Testing & Deployment Workshop](../2-notebooks/3-quality_attributes/2-evaluation.ipynb)
 
 This notebook provides:
 - Complete testing framework implementation
