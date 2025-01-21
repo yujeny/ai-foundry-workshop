@@ -1,15 +1,102 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from database import get_db
 from models.tables import AutomatedTestTable, DrugCandidateTable
 from models.automated_test import AutomatedTest, TestResult
 from datetime import datetime
-# Temporarily disable OpenTelemetry
-# from opentelemetry import trace
-# tracer = trace.get_tracer(__name__)
+import json
+import asyncio
+from pathlib import Path
+import logging
+
+# Configure logging
+logger = logging.getLogger(__name__)
+
+from opentelemetry import trace
+from opentelemetry.trace import Status, StatusCode
+from azure.core.tracing.ext.opentelemetry_span import OpenTelemetrySpan
+from azure.ai.projects.models import Evaluation, Dataset, EvaluatorConfiguration
+from azure.ai.evaluation import F1ScoreEvaluator
+
+# Import Azure AI Foundry clients from main
+from main import inference_client, f1_evaluator, tracer
 
 router = APIRouter(tags=["automated-testing"])
+
+@router.post("/evaluation/run-demo")
+async def run_evaluation_demo(
+    background_tasks: BackgroundTasks,
+    db: Session = Depends(get_db)
+):
+    """
+    ### 📊 Run Evaluation Demo
+    
+    This endpoint demonstrates how to use Azure AI Evaluation to assess model outputs.
+    
+    ```mermaid
+    sequenceDiagram
+        participant Client
+        participant Evaluator
+        participant Dataset
+        participant Metrics
+        
+        Client->>Dataset: Upload JSONL Data
+        Dataset->>Evaluator: Configure Evaluation
+        Evaluator->>Metrics: Run F1 Score
+        Evaluator->>Metrics: Run Relevance
+        Metrics-->>Client: Return Results
+    ```
+    
+    The evaluation will:
+    - 📝 Load sample evaluation data
+    - 🔍 Configure multiple evaluators
+    - 📈 Calculate metrics
+    - 📊 Return detailed results
+    """
+    with tracer.start_as_current_span("run_evaluation_demo") as span:
+        try:
+            # Load sample evaluation data
+            data_path = Path(__file__).parent.parent / "data" / "sample_evaluation.jsonl"
+            
+            # Load and evaluate data
+            with open(data_path, "r") as f:
+                evaluation_data = [json.loads(line) for line in f if line.strip()]
+            
+            # Run F1 score evaluation
+            evaluation_results = f1_evaluator.evaluate(evaluation_data)
+            
+            # Store results in database
+            test = AutomatedTestTable(
+                test_id=f"EVAL-{datetime.now().strftime('%Y%m%d-%H%M%S')}",
+                test_type="AI_EVALUATION",
+                start_time=datetime.now(),
+                parameters={"evaluation_type": "f1_score"},
+                result=TestResult.PASSED,
+                measurements={"f1_score": evaluation_results},
+                ai_analysis={"metrics": evaluation_results}
+            )
+            db.add(test)
+            db.commit()
+            
+            return {
+                "message": "Evaluation complete",
+                "results": {
+                    "f1_score": evaluation_results
+                },
+                "metrics": [
+                    "F1 Score - Measuring output accuracy"
+                ]
+            }
+            
+        except Exception as e:
+            span.set_status(Status(StatusCode.ERROR))
+            span.record_exception(e)
+            logger.error(f"❌ Error in evaluation demo: {str(e)}")
+            raise HTTPException(
+                status_code=500,
+                detail=f"Error in evaluation demo: {str(e)}"
+            )
 
 @router.post("/high-throughput-screen")
 async def run_high_throughput_screening(

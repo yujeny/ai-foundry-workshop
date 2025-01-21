@@ -1,0 +1,3 @@
+{"id": "TEST001", "input": "Analyze drug candidate DRUG-001 for efficacy", "output": "Drug candidate DRUG-001 shows promising efficacy with 85% success rate in preclinical trials.", "expected": "Drug efficacy analysis complete with quantitative metrics."}
+{"id": "TEST002", "input": "Check safety profile for DRUG-002", "output": "Safety analysis indicates low toxicity and minimal side effects based on preliminary data.", "expected": "Comprehensive safety assessment with risk factors identified."}
+{"id": "TEST003", "input": "Evaluate biomarker response for DRUG-003", "output": "Biomarker analysis shows positive correlation with target proteins and expected therapeutic response.", "expected": "Detailed biomarker evaluation with statistical significance."}

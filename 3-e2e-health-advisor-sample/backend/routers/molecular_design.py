@@ -12,24 +12,15 @@ import os
 import logging
 from concurrent.futures import ThreadPoolExecutor
 
-# OpenTelemetry and Azure imports temporarily disabled
-# from opentelemetry import trace
-# from opentelemetry.trace import Status, StatusCode
-# from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
-# from azure.core.tracing.ext.opentelemetry_span import OpenTelemetrySpan
+from opentelemetry import trace
+from opentelemetry.trace import Status, StatusCode
+from azure.core.tracing.ext.opentelemetry_span import OpenTelemetrySpan
 
 # Configure logging
 logger = logging.getLogger(__name__)
 
-# Azure AI SDK imports temporarily disabled
-# from azure.identity import DefaultAzureCredential
-# from azure.ai.inference import InferenceClient
-# from azure.ai.evaluation import EvaluationClient
-# from azure.core.exceptions import AzureError
-
-# Azure configuration temporarily disabled
-# AZURE_ENDPOINT = os.getenv("PROJECT_CONNECTION_STRING")
-# MODEL_NAME = os.getenv("MODEL_DEPLOYMENT_NAME")
+# Import Azure AI Foundry clients from main
+from main import inference_client, tracer
 from utils.molecular_analysis import (
     analyze_genetic_compatibility,
     analyze_biomarker_interaction,
@@ -55,6 +46,110 @@ MOLECULE_SCOPES = {
 # tracer = trace.get_tracer(__name__)
 
 router = APIRouter(tags=["molecular-design"])
+
+@router.post("/agents/demo-agent")
+async def demo_agent_interaction(
+    molecule_data: DrugCandidate,
+    db: Session = Depends(get_db)
+):
+    """
+    ### 🧬 Demo Agent Interaction
+
+    This endpoint demonstrates how an Azure AI Foundry Agent can be used to perform
+    advanced drug design tasks.
+
+    ```mermaid
+    sequenceDiagram
+        participant Client
+        participant Agent
+        participant Models
+        participant Analysis
+        
+        Client->>Agent: Submit Molecule Data
+        Agent->>Models: Analyze Properties
+        Models-->>Agent: Property Predictions
+        Agent->>Analysis: Safety Assessment
+        Analysis-->>Agent: Safety Report
+        Agent-->>Client: Complete Analysis
+    ```
+
+    The agent will:
+    - 🔍 Analyze molecular properties
+    - 🧪 Predict drug interactions
+    - ⚕️ Assess safety profile
+    - 📊 Generate recommendations
+    """
+    with tracer.start_as_current_span("demo_agent_interaction") as span:
+        try:
+            span.set_attribute("molecule_id", molecule_data.id)
+            
+            # Create a chat completion request for analysis
+            response = inference_client.chat.completions.create(
+                model=os.getenv('MODEL_DEPLOYMENT_NAME'), 
+                messages=[
+                    {
+                        "role": "system",
+                        "content": """You are a pharmaceutical research assistant specializing in drug candidate analysis.
+                        Analyze the provided molecule data and provide insights on:
+                        - Molecular properties and potential interactions
+                        - Safety considerations
+                        - Development recommendations"""
+                    },
+                    {
+                        "role": "user",
+                        "content": f"""Please analyze this drug candidate:
+                        ID: {molecule_data.id}
+                        Type: {molecule_data.molecule_type}
+                        Therapeutic Area: {molecule_data.therapeutic_area}
+                        Target Proteins: {', '.join(molecule_data.target_proteins)}
+                        Development Stage: {molecule_data.development_stage}
+                        """
+                    }
+                ],
+                temperature=0.7,
+                max_tokens=800
+            )
+            
+            # Get the analysis response
+            analysis_response = response.choices[0].message.content
+            
+            # Store the analysis in the database
+            db_molecule = DrugCandidateTable(
+                id=molecule_data.id,
+                molecule_type=molecule_data.molecule_type,
+                therapeutic_area=molecule_data.therapeutic_area,
+                predicted_efficacy=0.85,  # Example value
+                predicted_safety=0.92,  # Example value
+                creation_date=datetime.now(),
+                target_proteins=molecule_data.target_proteins,
+                side_effects=[],
+                development_stage=molecule_data.development_stage,
+                ai_confidence=0.88,  # Example value
+                properties={"ai_analysis": analysis_response}
+            )
+            
+            db.add(db_molecule)
+            db.commit()
+            
+            return {
+                "message": "Agent analysis complete",
+                "molecule_id": molecule_data.id,
+                "analysis": analysis_response,
+                "recommendations": [
+                    "Continue with detailed toxicology studies",
+                    "Consider additional protein binding assays",
+                    "Monitor for specific side effects"
+                ]
+            }
+            
+        except Exception as e:
+            span.set_status(Status(StatusCode.ERROR))
+            span.record_exception(e)
+            logger.error(f"❌ Error in agent interaction: {str(e)}")
+            raise HTTPException(
+                status_code=500,
+                detail=f"Error in agent interaction: {str(e)}"
+            )
 
 @router.post("/batch-analysis", dependencies=[Security(access_control.get_current_user, scopes=["write:molecules"])])
 async def analyze_molecules_batch(
@@ -192,67 +287,6 @@ async def analyze_molecule(
         }
     except Exception as e:
         logger.error(f"❌ Error analyzing molecule: {str(e)}")
-        raise HTTPException(
-            status_code=500,
-            detail=f"Error analyzing molecule: {str(e)}"
-        )
-            
-        # 🔒 Encrypt sensitive molecular data
-        encrypted_data = data_encryption.encrypt_molecule_data({
-            "target_proteins": molecule_data.target_proteins,
-            "mechanism_of_action": molecule_data.development_stage,
-            "properties": {
-                "side_effects": molecule_data.side_effects,
-                "development_timeline": [],
-                "confidential_notes": [],
-                "ai_analysis": inference_response
-            }
-        })
-        
-        # Store the analyzed molecule with encrypted data
-        db_molecule = DrugCandidateTable(
-            id=molecule_data.id,
-            molecule_type=molecule_data.molecule_type,
-            molecular_weight=molecule_data.molecular_weight,
-            therapeutic_area=molecule_data.therapeutic_area,
-            predicted_efficacy=molecule_data.predicted_efficacy,
-            predicted_safety=molecule_data.predicted_safety,
-            creation_date=datetime.now(),
-            target_proteins=encrypted_data["target_proteins"],
-            side_effects=molecule_data.side_effects,
-            development_stage=encrypted_data["mechanism_of_action"],
-            ai_confidence=molecule_data.ai_confidence,
-            properties=encrypted_data["properties"]
-        )
-        
-        # Audit the data access
-        data_auditing.log_modification(
-            user_id="system",  # TODO: Get from security context
-            data_type="molecule",
-            action="create",
-            resource_id=molecule_data.id,
-            changes={"operation": "create", "molecule_type": molecule_data.molecule_type}
-        )
-        
-        db.add(db_molecule)
-        db.commit()
-        db.refresh(db_molecule)
-        
-        return {
-            "message": "Molecular analysis complete",
-            "molecule": molecule_data,
-            "analysis": {
-                "efficacy_score": molecule_data.predicted_efficacy,
-                "safety_score": molecule_data.predicted_safety,
-                "confidence": molecule_data.ai_confidence,
-                "recommendations": [
-                    f"Target proteins identified: {', '.join(molecule_data.target_proteins)}",
-                    f"Development stage: {molecule_data.development_stage}",
-                    f"Potential side effects: {', '.join(molecule_data.side_effects)}"
-                ]
-            }
-        }
-    except Exception as e:
         raise HTTPException(
             status_code=500,
             detail=f"Error analyzing molecule: {str(e)}"
