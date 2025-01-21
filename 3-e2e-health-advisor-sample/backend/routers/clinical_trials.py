@@ -7,11 +7,12 @@ from models.clinical_trial import ClinicalTrial, TrialPhase, TrialStatus
 from datetime import datetime
 import logging
 
-# OpenTelemetry imports temporarily disabled
-# from opentelemetry import trace
-# from opentelemetry.trace import Status, StatusCode
-# from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
-# from azure.core.tracing.ext.opentelemetry_span import OpenTelemetrySpan
+from opentelemetry import trace
+from opentelemetry.trace import Status, StatusCode
+from azure.core.tracing.ext.opentelemetry_span import OpenTelemetrySpan
+
+# Import Azure AI Foundry clients from main
+from main import inference_client, tracer
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -24,17 +25,80 @@ async def monitor_trials(
     db: Session = Depends(get_db)
 ):
     """
-    Real-time monitoring of:
-    - trial parameters
-    - potential issues
-    - patient responses
-    - adaptive trial adjustments
+    ### 📊 Real-time Trial Monitoring
+    
+    This endpoint provides real-time monitoring of clinical trials:
+    - 📈 Trial parameters and metrics
+    - ⚠️ Potential issues and alerts
+    - 👥 Patient responses and outcomes
+    - 🔄 Adaptive trial adjustments
+    
+    ```mermaid
+    sequenceDiagram
+        participant Client
+        participant Monitor
+        participant Database
+        participant Analytics
+        
+        Client->>Monitor: Request Trial Data
+        Monitor->>Database: Query Trial Status
+        Database-->>Monitor: Trial Metrics
+        Monitor->>Analytics: Calculate KPIs
+        Analytics-->>Monitor: Performance Data
+        Monitor-->>Client: Trial Status Report
+    ```
     """
-    # Monitoring logic starts here
-    logger.info(f"Monitoring trial: {trial_id if trial_id else 'all'}")
-    trial = db.query(ClinicalTrialTable).filter(ClinicalTrialTable.trial_id == trial_id).first()
-    if not trial:
-        raise HTTPException(status_code=404, detail="Trial not found")
+    with tracer.start_as_current_span("monitor_trials") as span:
+        try:
+            span.set_attribute("trial_id", trial_id if trial_id else "all")
+            logger.info(f"Monitoring trial: {trial_id if trial_id else 'all'}")
+            
+            trial = db.query(ClinicalTrialTable).filter(ClinicalTrialTable.trial_id == trial_id).first()
+            if not trial:
+                span.set_status(Status(StatusCode.ERROR))
+                raise HTTPException(status_code=404, detail="Trial not found")
+                
+            # Get all trials if no specific trial_id is provided
+            if trial_id:
+                trials = [trial]
+            else:
+                trials = db.query(ClinicalTrialTable).all()
+
+            result = []
+            for trial in trials:
+                # Calculate metrics
+                enrollment_rate = trial.participant_count / trial.target_participant_count if trial.target_participant_count > 0 else 0
+                
+                # Format trial data
+                trial_data = {
+                    "trial_id": trial.trial_id,
+                    "phase": trial.phase,
+                    "status": trial.status,
+                    "participant_count": trial.participant_count,
+                    "target_participant_count": trial.target_participant_count,
+                    "real_time_metrics": {
+                        "enrollment_rate": enrollment_rate,
+                        "retention_rate": 0.92,  # Example fixed value
+                        "safety_signals": []
+                    }
+                }
+                result.append(trial_data)
+            
+            logger.info(f"✅ Successfully monitored {len(trials)} trials")
+            return result if not trial_id else result[0]
+            
+        except HTTPException as e:
+            span.set_status(Status(StatusCode.ERROR))
+            logger.error(f"❌ HTTP error in trial monitoring: {str(e)}")
+            raise
+        except Exception as e:
+            span.set_status(Status(StatusCode.ERROR))
+            span.record_exception(e)
+            logger.error(f"❌ Error in trial monitoring: {str(e)}")
+            raise HTTPException(
+                status_code=500,
+                detail=f"Error monitoring trials: {str(e)}"
+            )
     
     # Get all trials if no specific trial_id is provided
     if trial_id:
@@ -72,20 +136,62 @@ async def predict_patient_response(
     patient_id: str,
     db: Session = Depends(get_db)
 ):
-    """Predict individual patient response based on biomarkers and demographics"""
-    # Patient response prediction starts here
-    logger.info(f"Predicting response for patient {patient_id} in trial {trial_id}")
-    patient = db.query(PatientDataTable).filter(PatientDataTable.patient_id == patient_id).first()
-    if not patient:
-        raise HTTPException(status_code=404, detail="Patient not found")
+    """
+    ### 🧬 Patient Response Prediction
     
-    return {
-        "predicted_response": patient.treatment_response or 0.0,
-        "confidence": 0.85,
-        "biomarker_analysis": patient.biomarkers,
-        "recommendations": [
-            "Continue monitoring key biomarkers",
-            "Schedule follow-up in 2 weeks",
-            "Review medication adherence"
-        ]
-    }
+    Predict individual patient response based on:
+    - 🔬 Biomarker analysis
+    - 👤 Patient demographics
+    - 💊 Treatment history
+    - 📈 Response patterns
+    
+    ```mermaid
+    sequenceDiagram
+        participant Client
+        participant Predictor
+        participant BioData
+        participant AI
+        
+        Client->>Predictor: Patient Data
+        Predictor->>BioData: Get Biomarkers
+        BioData-->>Predictor: Patient Profile
+        Predictor->>AI: Analyze Data
+        AI-->>Predictor: Response Prediction
+        Predictor-->>Client: Treatment Recommendations
+    ```
+    """
+    with tracer.start_as_current_span("predict_patient_response") as span:
+        try:
+            span.set_attribute("trial_id", trial_id)
+            span.set_attribute("patient_id", patient_id)
+            logger.info(f"🔍 Predicting response for patient {patient_id} in trial {trial_id}")
+            
+            patient = db.query(PatientDataTable).filter(PatientDataTable.patient_id == patient_id).first()
+            if not patient:
+                span.set_status(Status(StatusCode.ERROR))
+                raise HTTPException(status_code=404, detail="Patient not found")
+    
+            logger.info("✅ Successfully predicted patient response")
+            return {
+                "predicted_response": patient.treatment_response or 0.0,
+                "confidence": 0.85,
+                "biomarker_analysis": patient.biomarkers,
+                "recommendations": [
+                    "Continue monitoring key biomarkers",
+                    "Schedule follow-up in 2 weeks",
+                    "Review medication adherence"
+                ]
+            }
+            
+        except HTTPException as e:
+            span.set_status(Status(StatusCode.ERROR))
+            logger.error(f"❌ HTTP error in patient response prediction: {str(e)}")
+            raise
+        except Exception as e:
+            span.set_status(Status(StatusCode.ERROR))
+            span.record_exception(e)
+            logger.error(f"❌ Error predicting patient response: {str(e)}")
+            raise HTTPException(
+                status_code=500,
+                detail=f"Error predicting patient response: {str(e)}"
+            )

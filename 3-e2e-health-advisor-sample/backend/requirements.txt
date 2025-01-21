@@ -1,23 +1,22 @@
 # Azure AI Foundry SDKs
-azure-ai-projects>=1.0.0b5,<2.0.0
-azure-ai-inference>=1.0.0b5,<2.0.0
-azure-ai-evaluation>=1.0.0b5,<2.0.0
-azure-search-documents>=11.4.0,<12.0.0
-azure-identity>=1.16.0,<2.0.0
+azure-ai-projects>=1.0.0b5
+azure-ai-evaluation>=1.0.0b5
+azure-search-documents==11.4.0
+azure-identity==1.16.0
 
 # FastAPI and Web Server
 fastapi>=0.109.2,<0.110.0
 uvicorn>=0.27.1,<0.28.0
 python-dotenv>=1.0.0,<2.0.0
 
-# OpenTelemetry Integration - Temporarily disabled due to dependency conflicts
-# opentelemetry-api==1.29.0
-# opentelemetry-sdk==1.29.0
-# opentelemetry-instrumentation-fastapi==0.44b0
-# opentelemetry-instrumentation==0.44b0
-# azure-core-tracing-opentelemetry>=1.0.0b11,<2.0.0
-# opentelemetry-exporter-otlp==1.29.0
-# opentelemetry-semantic-conventions==0.50b0
+# OpenTelemetry Integration
+opentelemetry-api>=1.29.0,<2.0.0
+opentelemetry-sdk>=1.29.0,<2.0.0
+opentelemetry-instrumentation-fastapi>=0.44b0,<1.0.0
+opentelemetry-instrumentation>=0.44b0,<1.0.0
+azure-core-tracing-opentelemetry>=1.0.0b11,<2.0.0
+opentelemetry-exporter-otlp>=1.29.0,<2.0.0
+opentelemetry-semantic-conventions>=0.50b0,<1.0.0
 
 # Database and Models
 sqlalchemy==1.4.49
