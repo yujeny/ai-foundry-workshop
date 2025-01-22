@@ -37,7 +37,20 @@ A hands-on workshop that guides you through building intelligent AI agents using
    source .venv/bin/activate  # Windows: .venv\Scripts\activate
    ```
 
-3. **Install dependencies**:
+3. **Configure environment**:
+   ```bash
+   cp .env.local .env
+   ```
+   Update `.env` with your Azure AI Foundry values:
+   - `PROJECT_CONNECTION_STRING`: Your project connection string from Azure ML workspace
+   - `MODEL_DEPLOYMENT_NAME`: Your model deployment name
+   - `TENANT_ID`: Your tenant ID from Azure portal
+   - `BING_CONNECTION_NAME`: Your Bing search connection name
+   - `SERVERLESS_MODEL_NAME`: Your serverless model name
+
+   > **Note**: The model specified in `MODEL_DEPLOYMENT_NAME` must be supported by Azure AI Agents Service or Assistants API. See [supported models](https://learn.microsoft.com/en-us/azure/ai-services/agents/concepts/model-region-support?tabs=python#azure-openai-models) for details.
+
+4. **Install dependencies**:
    ```bash
    # Install core Azure AI SDKs
    pip install azure-identity azure-ai-projects azure-ai-inference azure-ai-evaluation azure-ai-contentsafety azure-monitor-opentelemetry
@@ -46,12 +59,12 @@ A hands-on workshop that guides you through building intelligent AI agents using
    pip install -r requirements.txt
    ```
 
-4. **Start Jupyter**:
+5. **Start Jupyter**:
    ```bash
    jupyter notebook
    ```
 
-5. **Follow the Learning Path**:
+6. **Follow the Learning Path**:
     1. **Introduction** (`docs/1-introduction/`)
        - `1-authentication.ipynb`: Set up your Azure credentials
        - `2-environment_setup.ipynb`: Configure your environment
@@ -68,6 +81,7 @@ A hands-on workshop that guides you through building intelligent AI agents using
 
 - Python 3.10+
 - Azure subscription with access to Azure AI Foundry
+- Deployment of a model and AI Search connection configured in Azure AI Foundry
 - Basic Python knowledge
 - Azure CLI
 - Git

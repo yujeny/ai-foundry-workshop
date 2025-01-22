@@ -1,0 +1,5 @@
+PROJECT_CONNECTION_STRING=<your-project-connection-string-from-azure-ml-workspace>
+MODEL_DEPLOYMENT_NAME=<your-model-deployment-name>
+TENANT_ID=<your-tenant-id-from-azure-portal>
+BING_CONNECTION_NAME=<your-bing-search-connection-name>
+SERVERLESS_MODEL_NAME=<your-serverless-model-name>
