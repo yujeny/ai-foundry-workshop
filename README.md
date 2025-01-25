@@ -44,6 +44,7 @@ A hands-on workshop that guides you through building intelligent AI agents using
    Update `.env` with your Azure AI Foundry values:
    - `PROJECT_CONNECTION_STRING`: Your project connection string from Azure ML workspace
    - `MODEL_DEPLOYMENT_NAME`: Your model deployment name
+   - `EMBEDDING_MODEL_DEPLOYMENT_NAME`: Your embedding model deployment name
    - `TENANT_ID`: Your tenant ID from Azure portal
    - `BING_CONNECTION_NAME`: Your Bing search connection name
    - `SERVERLESS_MODEL_NAME`: Your serverless model name
