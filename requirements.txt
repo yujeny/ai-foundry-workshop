@@ -27,7 +27,6 @@ typing                                        # Type hinting support
 mkdocs-material                               # Material theme for MkDocs
 mkdocs-render-swagger-plugin                  # Swagger/OpenAPI documentation
 mkdocs-macros-plugin                          # Macros support for MkDocs
-mkdocs-with-pdf                               # PDF export capability
 mkdocs-glightbox                              # Image lightbox enhancement
 mkdocs-open-in-new-tab                        # Open links in new tabs
 mkdocs-video                                  # Video embedding support
@@ -37,6 +36,3 @@ mkdocs-jupyter                                # Jupyter notebook integration
 mkdocs-git-committers-plugin-2                # Git committers information
 mkdocs-git-revision-date-localized-plugin     # Localized Git revision dates
 mkdocs-git-revision-date-plugin               # Git revision date display
-
-# Jupyter Extensions
-jupyterlab-markup                             # Markdown rendering for JupyterLab
