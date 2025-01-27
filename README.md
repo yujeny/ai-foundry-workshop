@@ -2,15 +2,29 @@
 
 <div align="center">
 
-[🤖Overview](#-overview) | [🚀Quick Start](#-quick-start) | [📦Prerequisites](#-prerequisites) | [⚙️Local Setup](#️-local-setup) | [📔Workshop Content](#-workshop-content) | [🧩Project Structure](#-project-structure) | [❓Support](#-support) | [🤝Contributing](#-contributing)
+[📦Prerequisites](#-prerequisites) | [🚀Quick Start](#-quick-start) | [🤖Overview](#-overview) | [📔Workshop Content](#-workshop-content) | [🧩Project Structure](#-project-structure) | [❓Support](#-support) | [🤝Contributing](#-contributing)
 
 </div>
 
 ---
 
+## 📦 Prerequisites
+
+Before starting the workshop, ensure you have:
+
+- Python 3.10 or higher installed
+- An active Azure subscription with access to Azure AI Foundry
+- Azure CLI installed
+- Git installed
+- VS Code, GitHub Codespaces, or Jupyter Notebook environment
+- Basic Python programming knowledge
+- Model deployment and AI Search connection configured in Azure AI Foundry
+
+---
+
 ## 🤖 Overview
 
-A hands-on workshop that guides you through building intelligent AI agents using Azure AI Foundry's SDK, with fun examples related to health and dietary advice. You will:
+A hands-on workshop that guides you through building intelligent apps and AI agents on top of Azure AI Foundry, with fun examples related to health and dietary advice. You will:
 - Learn Azure AI Foundry fundamentals
 - Set up authentication and project configuration
 - Deploy and test AI models
@@ -84,25 +98,60 @@ A hands-on workshop that guides you through building intelligent AI agents using
    ```
 
 7. **Follow the Learning Path**:
-    1. **Introduction** (`docs/1-introduction/`)
+    1. **Introduction** (`1-introduction/`)
        - `1-authentication.ipynb`: Set up your Azure credentials
        - `2-environment_setup.ipynb`: Configure your environment
        - `3-quick_start.ipynb`: Learn basic operations
 
-    2. **Main Workshop** (`docs/2-notebooks/`)
+    2. **Main Workshop** (`2-notebooks/`)
        - Chat Completion & RAG (`1-chat_completion/`)
        - Agent Development (`2-agent_service/`)
        - Quality Attributes (`3-quality_attributes/`)
 
 ---
 
-## 📦 Prerequisites
+## 📔 Workshop Learning Path
 
-- Python 3.10+
-- Azure subscription with access to Azure AI Foundry
-- Deployment of a model and AI Search connection configured in Azure AI Foundry
-- Basic Python knowledge
-- Azure CLI
-- Git
+Follow these notebooks in sequence to complete the workshop:
 
-### Setting Up Azure CLI
+### 1. Introduction (`1-introduction/`)
+| Notebook | Description |
+|----------|-------------|
+| [1. Authentication](1-introduction/1-authentication.ipynb) | Set up Azure credentials and access |
+| [2. Environment Setup](1-introduction/2-environment_setup.ipynb) | Configure your development environment |
+| [3. Quick Start](1-introduction/3-quick_start.ipynb) | Learn basic Azure AI Foundry operations |
+
+### 2. Main Workshop (`2-notebooks/`)
+| Topic | Notebooks |
+|-------|-----------|
+| **Chat Completion & RAG** | • [Chat Completion & RaG](2-notebooks/1-chat_completion/) |
+| **Agent Development** | • [Agent Development](2-notebooks/2-agent_service/) |
+| **Quality Attributes** | • [Observability & Evaluations](2-notebooks/3-quality_attributes/) |
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details on how to:
+- Submit bug reports and feature requests
+- Submit pull requests
+- Follow our coding standards
+- Participate in code reviews
+
+---
+
+## ❓ Support
+
+If you need help or have questions:
+- Open an issue in this repository
+- Contact Azure support
+- Visit [Azure AI Foundry documentation](https://learn.microsoft.com/azure/ai-foundry)
+
+---
+
+<div align="center">
+© 2024 Microsoft Corporation. All rights reserved.
+</div>
+
+
+
