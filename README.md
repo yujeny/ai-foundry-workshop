@@ -67,6 +67,7 @@ Before starting the workshop, ensure you have:
       3. Deploy required models:
          - GPT models(gpt-4o, gpt-4o-mini) for chat/completion (**set TPM to max** to avoid issues with Agents notebooks)
          - Embedding model for vector search
+         - Ensure the model is deployed in `Global-Standard` or `DataZone-Standard`
       4. Set up connections:
          - Configure Bing Search connection
          - Configure Azure AI Search connection
