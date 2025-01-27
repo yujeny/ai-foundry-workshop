@@ -90,7 +90,7 @@ Before starting the workshop, ensure you have:
 5. **Install dependencies**:
    ```bash
    # Install core Azure AI SDKs and Jupyter requirements
-   uv pip install azure-identity azure-ai-projects azure-ai-inference[opentelemetry] azure-ai-evaluation azure-monitor-opentelemetry
+   uv pip install azure-identity azure-ai-projects azure-ai-inference[opentelemetry] azure-search-documents azure-ai-evaluation azure-monitor-opentelemetry
 
    # Install Jupyter requirements
    uv pip install ipykernel jupyterlab notebook
