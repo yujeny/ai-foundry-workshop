@@ -42,19 +42,32 @@ A hands-on workshop that guides you through building intelligent AI agents using
    source .venv/bin/activate  # Windows: .venv\Scripts\activate
    ```
 
-4. **Configure environment**:
-   ```bash
-   cp .env.example .env
-   ```
-   Update `.env` with your Azure AI Foundry values:
-   - `PROJECT_CONNECTION_STRING`: Your project connection string from Azure ML workspace
-   - `MODEL_DEPLOYMENT_NAME`: Your model deployment name
-   - `EMBEDDING_MODEL_DEPLOYMENT_NAME`: Your embedding model deployment name
-   - `TENANT_ID`: Your tenant ID from Azure portal
-   - `BING_CONNECTION_NAME`: Your Bing search connection name
-   - `SERVERLESS_MODEL_NAME`: Your serverless model name
+4. **Set up Azure AI Foundry**:
 
-   > **Note**: The model specified in `MODEL_DEPLOYMENT_NAME` must be supported by Azure AI Agents Service or Assistants API. See [supported models](https://learn.microsoft.com/en-us/azure/ai-services/agents/concepts/model-region-support?tabs=python#azure-openai-models) for details.
+   a. **Create Project and Deploy Resources**:
+      1. Go to [Azure AI Foundry](https://ai.azure.com)
+      2. Create a new AI Hub and Project using the AI Foundry Wizard
+      3. Deploy required models:
+         - GPT models(gpt-4o, gpt-4o-mini) for chat/completion (**set TPM to max** to avoid issues with Agents notebooks)
+         - Embedding model for vector search
+      4. Set up connections:
+         - Configure Bing Search connection
+         - Configure Azure AI Search connection
+      5. Add your user account to the `Azure AI Developer` role from Azure AI Foundry Management Portal
+
+   b. **Configure Environment Variables**:
+      ```bash
+      cp .env.example .env
+      ```
+      Update `.env` with your Azure AI Foundry values:
+      - `PROJECT_CONNECTION_STRING`: Your project connection string from Azure ML workspace
+      - `MODEL_DEPLOYMENT_NAME`: Your model deployment name
+      - `EMBEDDING_MODEL_DEPLOYMENT_NAME`: Your embedding model deployment name
+      - `TENANT_ID`: Your tenant ID from Azure portal
+      - `BING_CONNECTION_NAME`: Your Bing search connection name
+      - `SERVERLESS_MODEL_NAME`: Your serverless model name
+
+      > **Note**: The model specified in `MODEL_DEPLOYMENT_NAME` must be supported by Azure AI Agents Service or Assistants API. See [supported models](https://learn.microsoft.com/en-us/azure/ai-services/agents/concepts/model-region-support?tabs=python#azure-openai-models) for details. For Grounding with Bing Search, you need to use `gpt-4o-mini` model.
 
 5. **Install dependencies**:
    ```bash
