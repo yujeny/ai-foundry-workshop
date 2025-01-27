@@ -6,21 +6,6 @@
 
 </div>
 
----
-
-## 📦 Prerequisites
-
-Before starting the workshop, ensure you have:
-
-- Python 3.10 or higher installed
-- An active Azure subscription with access to Azure AI Foundry
-- Azure CLI installed
-- Git installed
-- VS Code, GitHub Codespaces, or Jupyter Notebook environment
-- Basic Python programming knowledge
-- Model deployment and AI Search connection configured in Azure AI Foundry
-
----
 
 ## 🤖 Overview
 
@@ -37,6 +22,20 @@ A hands-on workshop that guides you through building intelligent apps and AI age
 
 ---
 
+## 📦 Prerequisites
+
+Before starting the workshop, ensure you have:
+
+- [Python 3.10](https://www.python.org/downloads/) or higher installed
+- An active Azure subscription with access to [Azure AI Foundry](https://ai.azure.com)
+- [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli) installed
+- [Git](https://git-scm.com/downloads) installed
+- [VS Code](https://code.visualstudio.com/), [GitHub Codespaces](https://github.com/features/codespaces), or [Jupyter Notebook](https://jupyter.org/install) environment
+- Basic Python programming knowledge
+- Model deployment and [AI Search](https://learn.microsoft.com/en-us/azure/search/search-what-is-azure-search) connection configured in Azure AI Foundry
+
+---
+
 ## 🚀 Quick Start
 
 1. **Clone the repo**:
@@ -47,12 +46,16 @@ A hands-on workshop that guides you through building intelligent apps and AI age
 
 2. **Install uv**:
    ```bash
+   # Unix/Linux/macOS
    curl -LsSf https://astral.sh/uv/install.sh | sh
+
+   # Windows (PowerShell)
+   (Invoke-WebRequest -Uri https://astral.sh/uv/install.ps1 -UseBasicParsing).Content | pwsh
    ```
 
 3. **Create & activate a virtual environment**:
    ```bash
-   uv venv .venv
+   uv venv
    source .venv/bin/activate  # Windows: .venv\Scripts\activate
    ```
 
@@ -85,15 +88,47 @@ A hands-on workshop that guides you through building intelligent apps and AI age
 
 5. **Install dependencies**:
    ```bash
-   # Install core Azure AI SDKs
-   uv pip install azure-identity azure-ai-projects azure-ai-inference azure-ai-evaluation azure-ai-contentsafety azure-monitor-opentelemetry
+   # Install core Azure AI SDKs and Jupyter requirements
+   uv pip install azure-identity azure-ai-projects azure-ai-inference[opentelemetry] azure-ai-evaluation azure-monitor-opentelemetry
 
-   # Install additional requirements
+   # Install Jupyter requirements
+   uv pip install ipykernel jupyterlab notebook
+
+   # Register the kernel with Jupyter
+   python -m ipykernel install --user --name=.venv --display-name="Python (.venv)"
+
+   # Install additional requirements (optional - for deploying repo or running mkdocs)
    uv pip install -r requirements.txt
    ```
 
-6. **Start Jupyter**:
+   > **Note**: If you encounter kernel errors in VS Code, try:
+   > 1. Select kernel: Click "Select Kernel" > "Python Environments" > "Python (.venv)"
+   > 2. If kernel is not listed, run `python -m ipykernel install --user --name=.venv` again, or use the "Create New Kernel" wizard in VS Code to create a new Python environment
+   > 3. Reload VS Code if needed
+
+6. **Choose your notebook environment**:
+
+   **Option A: VS Code**
+   - Install [VS Code Python extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
+   - Install either:
+     - [Jupyter extension](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter) for .ipynb files
+     - [Polyglot Notebooks extension](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.dotnet-interactive-vscode) for .dib files
+   - Open any notebook and select your Python kernel (.venv)
+
+   **Option B: GitHub Codespaces**
+   - Click "Code" > "Create codespace" on the repository
+   - Wait for environment setup
+   - Notebooks will be ready to run
+
+   **Option C: Jupyter Lab/Notebook**
    ```bash
+   # Install Jupyter if you haven't already
+   uv pip install jupyterlab notebook
+
+   # Start Jupyter Lab (recommended)
+   jupyter lab
+
+   # Or start Jupyter Notebook
    jupyter notebook
    ```
 
@@ -143,15 +178,9 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 ## ❓ Support
 
 If you need help or have questions:
-- Open an issue in this repository
-- Contact Azure support
-- Visit [Azure AI Foundry documentation](https://learn.microsoft.com/azure/ai-foundry)
 
 ---
 
-<div align="center">
-© 2024 Microsoft Corporation. All rights reserved.
-</div>
 
 
 
