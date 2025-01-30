@@ -23,13 +23,13 @@ load_dotenv()
 
 # Azure Configuration
 # Set environment variables for DefaultAzureCredential
-os.environ["AZURE_CLIENT_ID"] = os.getenv("AZURE_CLIENT_ID", "")
-os.environ["AZURE_CLIENT_SECRET"] = os.getenv("AZURE_CLIENT_SECRET", "")
-os.environ["AZURE_TENANT_ID"] = os.getenv("AZURE_TENANT_ID", "")
+os.environ["AZURE_CLIENT_ID"] = os.getenv("spn_4o_AZURE_CLIENT_ID", "")
+os.environ["AZURE_CLIENT_SECRET"] = os.getenv("spn_4o_AZURE_CLIENT_SECRET", "")
+os.environ["AZURE_TENANT_ID"] = os.getenv("spn_4o_AZURE_TENANT_ID", "")
 
 # Update Azure endpoint and model variables
-AZURE_ENDPOINT = os.getenv("PROJECT_CONNECTION_STRING")  # Using the connection string from .env
-MODEL_DEPLOYMENT_NAME = os.getenv("MODEL_DEPLOYMENT_NAME")
+AZURE_ENDPOINT = os.getenv("spn_4o_azure_endpoint")
+MODEL_DEPLOYMENT_NAME = os.getenv("spn_4o_model")
 
 # OpenTelemetry Configuration
 OTEL_EXPORTER_OTLP_ENDPOINT = os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:4318")
@@ -177,8 +177,9 @@ async def health_check():
 # Initialize clients on startup
 @app.on_event("startup")
 async def startup_event():
-    """Initialize clients on startup."""
-    await ensure_clients()
+    """Initialize mock clients for local development."""
+    logger.info("🔧 Starting server with mock clients")
+    # Skip client initialization for local development
 
 # Register routers
 app.include_router(molecular_design.router, prefix="/molecular-design", tags=["molecular-design"])
