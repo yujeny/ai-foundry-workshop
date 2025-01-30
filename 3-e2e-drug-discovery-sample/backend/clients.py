@@ -1,4 +1,28 @@
-"""Azure AI client initialization module."""
+"""Azure AI client initialization module for drug discovery platform.
+
+This module demonstrates the integration of three key Azure AI SDKs:
+
+1. azure-ai-projects SDK:
+   - Creates and manages AI projects for drug analysis
+   - Configures AI agents with specialized tools for molecular analysis
+   - Manages deployment of models and resources
+
+2. azure-ai-inference SDK:
+   - Handles chat completions for drug property predictions
+   - Processes molecular structure analysis
+   - Manages model inference for drug candidate evaluation
+
+3. Tools Configuration:
+   - BingGroundingTool: Searches scientific literature and research papers
+   - FunctionTool: Executes custom drug analysis functions
+   - CodeInterpreterTool: Processes clinical trial data
+
+Workshop Learning Objectives:
+- Understanding Azure AI project setup and configuration
+- Working with AI agents for drug discovery
+- Implementing scientific literature search
+- Managing model deployments for molecular analysis
+"""
 import os
 import logging
 import asyncio
@@ -25,18 +49,19 @@ chat_client = None
 toolset = None
 
 async def init_clients():
-    """Initialize Azure AI clients asynchronously."""
+    """Initialize mock clients for local development."""
     global project_client, chat_client, toolset
+    logger.info("🔧 Using mock clients for local development")
     
     try:
         # Check required environment variables
-        deployment_name = os.getenv('MODEL_DEPLOYMENT_NAME')
+        deployment_name = os.getenv('spn_4o_model')
         if not deployment_name:
-            raise ValueError("Model deployment name not found")
+            raise ValueError("Model deployment name (spn_4o_model) not found")
 
-        project_endpoint = os.getenv("AZURE_AI_PROJECT_ENDPOINT")
+        project_endpoint = os.getenv("spn_4o_azure_endpoint")
         if not project_endpoint:
-            raise ValueError("Azure AI Project endpoint (AZURE_AI_PROJECT_ENDPOINT) not found")
+            raise ValueError("Azure AI Project endpoint (spn_4o_azure_endpoint) not found")
 
         subscription_id = os.getenv("spn_4o_AZURE_SUBSCRIPTION_ID")
         if not subscription_id:

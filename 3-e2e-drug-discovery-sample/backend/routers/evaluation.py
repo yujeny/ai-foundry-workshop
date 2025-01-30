@@ -15,7 +15,24 @@ async def run_evaluation_demo():
     """
     ### 📝 Evaluation Demo
 
-    Runs an evaluation using azure-ai-evaluation.
+    This endpoint demonstrates how to use the azure-ai-evaluation SDK to assess 
+    drug discovery model performance. The SDK helps measure:
+    
+    1. Prediction Accuracy:
+       - F1 scores for molecular property predictions
+       - Precision of drug candidate analysis
+       - Recall rates for therapeutic predictions
+    
+    2. Quality Assessment:
+       - Relevance of generated molecular insights
+       - Confidence scores for predictions
+       - Support metrics for evaluation robustness
+    
+    Workshop Learning Goals:
+    - Understanding evaluation metrics for AI in drug discovery
+    - Implementing F1 score calculations
+    - Working with JSONL datasets for evaluation
+    - Interpreting model performance results
 
     Steps:
     1. Upload JSONL data (sample data)
@@ -44,8 +61,9 @@ async def run_evaluation_demo():
             with open("data/sample_evaluation.jsonl", "r") as f:
                 evaluation_data = [json.loads(line) for line in f if line.strip()]
 
-            # Run F1 score evaluation
-            # Format data for F1 score evaluation
+            # Demonstrate azure-ai-evaluation SDK usage for F1 score calculation
+            # The SDK typically handles this automatically, but we show the process
+            # for workshop learning purposes
             formatted_data = [
                 {
                     "prediction": item["output"],

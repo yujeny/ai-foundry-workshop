@@ -113,7 +113,6 @@ async def demo_agent_interaction(
             analysis_response = response.choices[0].message.content
             
             # Store the analysis in the storage
-            storage = db()
             molecule_dict = {
                 "id": molecule_data.id,
                 "molecule_type": molecule_data.molecule_type,
@@ -168,7 +167,6 @@ async def analyze_molecules_batch(
     with ThreadPoolExecutor() as executor:
         # Process molecules in parallel
         futures = []
-        storage = db()
         for molecule in molecules:
             future = executor.submit(
                 analyze_single_molecule,
@@ -251,7 +249,6 @@ async def analyze_molecule(
         })
         
         # Store the analyzed molecule with encrypted data
-        storage = db()
         molecule_dict = {
             "id": molecule_data.id,
             "molecule_type": molecule_data.molecule_type,
@@ -301,7 +298,6 @@ async def prepare_regulatory_submission(
     - Prepare clinical trial summaries
     - Format for regulatory requirements
     """
-    storage = db()
     molecule = storage["get_item"]("drug_candidates", molecule_id)
     if not molecule:
         raise HTTPException(status_code=404, detail="Molecule not found")
@@ -328,7 +324,7 @@ async def prepare_regulatory_submission(
                     "safety_flags": test["safety_flags"]
                 }
                 for test in tests
-                if test["result"] == TestResult.PASSED
+                if test["result"] == TestResult.PASS
             ]
         },
         "efficacy_data": {
@@ -366,7 +362,6 @@ async def analyze_patient_specific_response(
     - Assess potential interactions
     - Predict efficacy
     """
-    storage = db()
     molecule = storage["get_item"]("drug_candidates", molecule_id)
     if not molecule:
         raise HTTPException(status_code=404, detail="Molecule not found")

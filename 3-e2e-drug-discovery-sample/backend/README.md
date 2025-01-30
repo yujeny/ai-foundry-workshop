@@ -420,6 +420,35 @@ Response:
 }
 ```
 
+## Deployment with Azure Developer CLI (azd) 🚀
+
+1. **Install Azure Developer CLI**:
+   ```bash
+   curl -fsSL https://aka.ms/install-azd.sh | bash
+   ```
+
+2. **Login to Azure**:
+   ```bash
+   azd auth login
+   ```
+
+3. **Deploy from Root Directory**:
+   From the root of "3-e2e-drug-discovery-sample/", run:
+   ```bash
+   azd init
+   azd up
+   ```
+
+This will:
+- Create Azure Container App for the backend
+- Configure environment variables from your .env
+- Deploy the backend service
+- Output the public endpoint URL
+
+After deployment:
+- Access API documentation at `https://<your-app>.azurecontainerapps.io/docs`
+- Use the endpoint URL in your frontend configuration
+
 ## Learn More 📚
 - [Azure AI Projects SDK](https://learn.microsoft.com/python/api/overview/azure/ai-projects-readme?view=azure-python-preview)
 - [Azure AI Inference SDK](https://learn.microsoft.com/python/api/overview/azure/ai-inference-readme?view=azure-python-preview)

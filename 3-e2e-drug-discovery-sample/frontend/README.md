@@ -150,6 +150,35 @@ const useDrugDiscoveryStore = create((set) => ({
 - CSP headers for security
 - Input sanitization and validation
 
+## Deployment with Azure Developer CLI (azd) 🚀
+
+1. **Install Azure Developer CLI**:
+   ```bash
+   curl -fsSL https://aka.ms/install-azd.sh | bash
+   ```
+
+2. **Login to Azure**:
+   ```bash
+   azd auth login
+   ```
+
+3. **Deploy from Root Directory**:
+   From the root of "3-e2e-drug-discovery-sample/", run:
+   ```bash
+   azd init
+   azd up
+   ```
+
+This will:
+- Create Azure Static Web App for the frontend
+- Configure environment variables
+- Deploy the frontend application
+- Output the public URL for your site
+
+After deployment:
+- Access your site at the provided Static Web App URL
+- The backend API URL will be automatically configured
+
 ## License 📄
 
 This project is licensed under the MIT License - see the LICENSE file for details.
