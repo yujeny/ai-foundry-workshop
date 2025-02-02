@@ -1,3 +1,5 @@
+"use client"
+
 import { createContext, useContext, useEffect, useState } from "react"
 
 type Theme = "dark" | "light" | "system"
@@ -19,10 +21,15 @@ export function ThemeProvider({
   children,
   defaultTheme = "system",
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(() => {
+  const [theme, setTheme] = useState<Theme>(defaultTheme)
+  
+  // Initialize theme from localStorage after mount
+  useEffect(() => {
     const savedTheme = localStorage.getItem('theme') as Theme
-    return savedTheme || defaultTheme
-  })
+    if (savedTheme) {
+      setTheme(savedTheme)
+    }
+  }, [])
 
   useEffect(() => {
     const root = window.document.documentElement
@@ -33,9 +40,9 @@ export function ThemeProvider({
         ? "dark"
         : "light"
       root.classList.add(systemTheme)
-      document.body.style.colorScheme = systemTheme
       localStorage.setItem('theme', 'system')
 
+      // Listen for system theme changes
       const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
       const handleChange = (e: MediaQueryListEvent) => {
         root.classList.remove("light", "dark")
@@ -45,7 +52,6 @@ export function ThemeProvider({
       return () => mediaQuery.removeEventListener("change", handleChange)
     } else {
       root.classList.add(theme)
-      document.body.style.colorScheme = theme
       localStorage.setItem('theme', theme)
     }
   }, [theme])
