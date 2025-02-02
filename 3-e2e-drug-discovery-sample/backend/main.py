@@ -28,8 +28,8 @@ os.environ["AZURE_CLIENT_SECRET"] = os.getenv("spn_4o_AZURE_CLIENT_SECRET", "")
 os.environ["AZURE_TENANT_ID"] = os.getenv("spn_4o_AZURE_TENANT_ID", "")
 
 # Update Azure endpoint and model variables
-AZURE_ENDPOINT = os.getenv("spn_4o_azure_endpoint")
-MODEL_DEPLOYMENT_NAME = os.getenv("spn_4o_model")
+PROJECT_CONNECTION_STRING = os.getenv("PROJECT_CONNECTION_STRING")
+MODEL_DEPLOYMENT_NAME = os.getenv("MODEL_DEPLOYMENT_NAME")
 
 # OpenTelemetry Configuration
 OTEL_EXPORTER_OTLP_ENDPOINT = os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:4318")
@@ -49,9 +49,6 @@ logger = logging.getLogger(__name__)
 
 # Validate required environment variables
 required_vars = [
-    "AZURE_CLIENT_ID",
-    "AZURE_CLIENT_SECRET",
-    "AZURE_TENANT_ID",
     "PROJECT_CONNECTION_STRING",
     "MODEL_DEPLOYMENT_NAME"
 ]

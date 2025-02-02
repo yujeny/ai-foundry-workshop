@@ -233,21 +233,26 @@ async def literature_search(request: LiteratureSearchRequest):
             
             # Start a conversation with the agent
             conversation = await chat_client.create_conversation(agent_id=agent.id)
-            response = await conversation.send_message(
-                f"""Search for recent scientific literature about: {request.query}
-                Max Results: {request.max_results}
-                Include Clinical Trials: {request.include_clinical_trials}
-                
-                Focus on drug development implications and summarize key findings.
-                Provide references to support your analysis.
-                
-                Format your response as a JSON object with these fields:
-                {
-                    "query": "the search query",
-                    "summary": "your analysis and findings",
-                    "references": ["list of DOIs or citations"]
-                }"""
+            message_template = """Search for recent scientific literature about: {}
+Max Results: {}
+Include Clinical Trials: {}
+
+Focus on drug development implications and summarize key findings.
+Provide references to support your analysis.
+
+Format your response as a JSON object with these fields:
+{{
+    "query": "the search query",
+    "summary": "your analysis and findings",
+    "references": ["list of DOIs or citations"]
+}}"""
+
+            message = message_template.format(
+                request.query,
+                request.max_results,
+                request.include_clinical_trials
             )
+            response = await conversation.send_message(message)
             
             logger.info("✅ Literature search complete")
             return {
@@ -358,24 +363,29 @@ async def analyze_molecule(request: MoleculeAnalysisRequest):
             
             # Start a conversation with the agent
             conversation = await chat_client.create_conversation(agent_id=agent.id)
-            response = await conversation.send_message(
-                f"""Analyze this molecule:
-                SMILES: {request.smiles}
-                Target Proteins: {', '.join(request.target_proteins)}
-                Therapeutic Area: {request.therapeutic_area}
-                
-                Provide a detailed analysis of its drug-like properties and potential interactions.
-                
-                Format your response as a JSON object with these fields:
-                {
-                    "molecule": "SMILES string",
-                    "analysis": {
-                        "binding_predictions": {"protein": score},
-                        "drug_likeness": score,
-                        "safety_assessment": "description"
-                    }
-                }"""
+            molecule_template = """Analyze this molecule:
+SMILES: {}
+Target Proteins: {}
+Therapeutic Area: {}
+
+Provide a detailed analysis of its drug-like properties and potential interactions.
+
+Format your response as a JSON object with these fields:
+{{
+    "molecule": "SMILES string",
+    "analysis": {{
+        "binding_predictions": {{"protein": score}},
+        "drug_likeness": score,
+        "safety_assessment": "description"
+    }}
+}}"""
+
+            molecule_message = molecule_template.format(
+                request.smiles,
+                ', '.join(request.target_proteins),
+                request.therapeutic_area
             )
+            response = await conversation.send_message(molecule_message)
             
             logger.info("✅ Molecule analysis complete")
             return {
@@ -502,14 +512,14 @@ async def analyze_trial_data(file: UploadFile = File(...)):
                 4. Provide recommendations based on the analysis
                 
                 Format your response as a JSON object with these fields:
-                {
+                {{
                     "filename": "name of analyzed file",
-                    "analysis": {
-                        "correlations": {"metric": value},
+                    "analysis": {{
+                        "correlations": {{"metric": value}},
                         "summary": "key findings",
                         "recommendations": ["list of recommendations"]
-                    }
-                }"""
+                    }}
+                }}"""
             )
             
             logger.info("✅ Trial data analysis complete")
@@ -588,26 +598,33 @@ async def process_manufacturing_opt_request(request: ManufacturingOptRequest) ->
 
     # Start conversation
     conversation = await chat_client.create_conversation(agent_id=agent.id)
-    response = await conversation.send_message(
-        f"""Optimize manufacturing schedule:
-        Drug: {request.drug_candidate}
-        Batch Sizes: {request.batch_size_range}
-        Raw Materials: {json.dumps(request.raw_materials)}
-        Constraints: {json.dumps(request.production_constraints)}
-        
-        1. Use linear programming to optimize batch size
-        2. Consider raw material constraints
-        3. Validate against production constraints
-        
-        Format response as JSON:
-        {{
-            "optimized_schedule": {{
-                "batch_size": int,
-                "line_allocation": str,
-                "estimated_unit_cost": float
-            }}
-        }}"""
+    mfg_template = """Optimize manufacturing process:
+Drug Candidate: {}
+Batch Sizes: {}
+Raw Materials: {}
+Constraints: {}
+
+1. Use linear programming to optimize batch size
+2. Consider raw material constraints
+3. Validate against production constraints
+
+Format response as JSON:
+{{
+    "optimized_schedule": {{
+        "batch_size": int,
+        "line_allocation": "factory name",
+        "estimated_unit_cost": float
+    }}
+}}"""
+
+    mfg_message = mfg_template.format(
+        request.drug_candidate,
+        json.dumps(request.batch_size_range),
+        json.dumps(request.raw_materials),
+        json.dumps(request.production_constraints)
     )
+
+    response = await conversation.send_message(mfg_message)
 
     return {
         "optimized_schedule": json.loads(response.message.content)["optimized_schedule"],
@@ -830,25 +847,32 @@ async def process_precision_med_request(request: PrecisionMedRequest) -> dict:
 
     # Start conversation
     conversation = await chat_client.create_conversation(agent_id=agent.id)
-    response = await conversation.send_message(
-        f"""Analyze patient data for personalized treatment:
-        Patient ID: {request.patient_id}
-        Genetic Markers: {json.dumps(request.genetic_markers)}
-        Medical History: {json.dumps(request.medical_history)}
-        Current Medications: {', '.join(request.current_medications)}
-        
-        1. Analyze genomic compatibility
-        2. Check recent literature for evidence
-        3. Generate personalized recommendations
-        
-        Format response as JSON:
-        {{
-            "patient_id": str,
-            "custom_dosage": str,
-            "predicted_outcome": float,
-            "recommended_followups": [str]
-        }}"""
+    med_template = """Analyze patient data for precision medicine:
+Patient ID: {}
+Genetic Markers: {}
+Medical History: {}
+Current Medications: {}
+
+1. Analyze genomic compatibility
+2. Check recent literature for evidence
+3. Generate personalized recommendations
+
+Format response as JSON:
+{{
+    "patient_id": str,
+    "custom_dosage": str,
+    "predicted_outcome": float,
+    "recommended_followups": [str]
+}}"""
+
+    med_message = med_template.format(
+        request.patient_id,
+        json.dumps(request.genetic_markers),
+        json.dumps(request.medical_history),
+        json.dumps(request.current_medications)
     )
+
+    response = await conversation.send_message(med_message)
 
     return json.loads(response.message.content) | {"agent_id": agent.id}
 
@@ -1094,23 +1118,41 @@ async def process_digital_twin_request(request: DigitalTwinRequest) -> dict:
 
     # Start conversation
     conversation = await chat_client.create_conversation(agent_id=agent.id)
-    response = await conversation.send_message(
-        f"""Run digital twin simulation:
-        Molecule Parameters: {json.dumps(request.molecule_parameters)}
-        Target Population: {json.dumps(request.target_population)}
-        Simulation Config: {json.dumps(request.simulation_config)}
-        
-        1. Generate virtual population
-        2. Run PK/PD simulation
-        3. Analyze outcomes and safety
-        
-        Format response as JSON:
-        {{
-            "simulated_population_size": int,
-            "mean_toxicity_score": float,
-            "average_survival_gain": str
-        }}"""
+
+    # Create message template for the main function
+    sim_template = """Analyze clinical trial outcomes:
+    Molecule Parameters: {}
+    Target Population: {}
+    Simulation Config: {}
+
+    1. Run PK/PD simulations
+    2. Generate virtual patient cohorts
+    3. Calculate outcome metrics
+    4. Analyze safety and efficacy
+
+    Format your response as a JSON object with these fields:
+    {{
+        "simulated_population_size": integer,
+        "mean_toxicity_score": float between 0 and 1,
+        "average_survival_gain": "duration in months",
+        "detailed_metrics": {{
+            "efficacy_by_subgroup": {{
+                "subgroup_name": float (efficacy score)
+            }},
+            "adverse_events": {{
+                "event_type": float (frequency)
+            }}
+        }}
+    }}"""
+
+    # Format the message with request data
+    sim_message = sim_template.format(
+        json.dumps(request.molecule_parameters),
+        json.dumps(request.target_population),
+        json.dumps(request.simulation_config)
     )
+
+    response = await conversation.send_message(sim_message)
 
     return json.loads(response.message.content) | {"agent_id": agent.id}
 
@@ -1331,27 +1373,33 @@ async def process_drug_repurpose_request(request: DrugRepurposeRequest) -> dict:
 
     # Start conversation
     conversation = await chat_client.create_conversation(agent_id=agent.id)
-    response = await conversation.send_message(
-        f"""Analyze repurposing potential:
-        Molecule ID: {request.molecule_id}
-        Current Indications: {', '.join(request.current_indications)}
-        Proposed New Indication: {request.new_indication}
-        
-        1. Search for recent research about this molecule and similar compounds
-        2. Calculate repurposing score
-        3. Provide evidence-based recommendations
-        
-        Format response as JSON:
+    repurpose_template = """Analyze repurposing potential:
+Molecule ID: {}
+Current Indications: {}
+Proposed New Indication: {}
+
+1. Search for relevant literature about similar repurposing cases
+2. Calculate repurposing feasibility scores
+3. Provide detailed recommendations with supporting evidence
+
+Format your response as a JSON object with these fields:
+{{
+    "repurposing_opportunities": [
         {{
-            "repurposing_opportunities": [
-                {{
-                    "disease": "disease name",
-                    "confidence": 0.0-1.0,
-                    "supporting_sources": ["DOI references"]
-                }}
-            ]
-        }}"""
+            "disease": "disease name",
+            "confidence": 0.0 to 1.0,
+            "supporting_sources": ["DOI or citation"]
+        }}
+    ]
+}}"""
+
+    repurpose_message = repurpose_template.format(
+        request.molecule_id,
+        ', '.join(request.current_indications),
+        request.new_indication
     )
+
+    response = await conversation.send_message(repurpose_message)
 
     return {
         "repurposing_opportunities": json.loads(response.message.content)["repurposing_opportunities"],
