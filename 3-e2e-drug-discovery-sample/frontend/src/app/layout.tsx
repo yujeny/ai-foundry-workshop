@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "../components/ui/theme-provider";
 import "./globals.css";
+import { MainLayout } from '../components/layout/main-layout'
 
 const inter = Inter({
   subsets: ["latin"],
@@ -31,9 +32,9 @@ export const viewport = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -48,13 +49,10 @@ export default function RootLayout({
         ))}
       </head>
       <body className={`${inter.variable} font-sans antialiased bg-background text-foreground`}>
-        <ThemeProvider 
-          attribute="class" 
-          defaultTheme={process.env.NEXT_PUBLIC_DEFAULT_THEME || "dark"} 
-          enableSystem 
-          disableTransitionOnChange
-        >
-          {children}
+        <ThemeProvider defaultTheme="dark">
+          <MainLayout>
+            {children}
+          </MainLayout>
         </ThemeProvider>
       </body>
     </html>
