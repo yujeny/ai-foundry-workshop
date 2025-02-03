@@ -1,14 +1,30 @@
-"use client"
-
-import { ThemeProvider } from './components/ui/theme-provider'
+// Remove unused import
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { ThemeProvider } from './components/theme-provider'
 import { MainLayout } from './components/layout/main-layout'
+import { HomePage } from './pages/home'
+import { AgentsPage } from './pages/agents'
+import { AnalysisPage } from './pages/analysis'
+import { TrialsPage } from './pages/trials'
+import { LiteraturePage } from './pages/literature'
+import { PatientPage } from './pages/patient'
 
 function App() {
   return (
     <ThemeProvider defaultTheme="dark">
-      <MainLayout>
-        {/* Next.js will handle routing automatically based on the pages directory structure */}
-      </MainLayout>
+      <Router>
+        <MainLayout>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/agents" element={<AgentsPage />} />
+            <Route path="/analysis" element={<AnalysisPage />} />
+            <Route path="/trials" element={<TrialsPage />} />
+            <Route path="/literature" element={<LiteraturePage />} />
+            <Route path="/patient" element={<PatientPage />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </MainLayout>
+      </Router>
     </ThemeProvider>
   )
 }

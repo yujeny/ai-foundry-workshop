@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+// Remove unused import
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
 
 export function HomePage() {
@@ -31,4 +31,4 @@ export function HomePage() {
       </Card>
     </div>
   )
-} 
+}  

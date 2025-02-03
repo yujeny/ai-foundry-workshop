@@ -1,9 +1,7 @@
-"use client"
-
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+// Remove unused import
+import { Link, useLocation } from "react-router-dom"
 import { Button } from "../ui/button"
-import { useTheme } from "../ui/theme-provider"
+import { useTheme } from "../theme-provider"
 import {
   Sun,
   Moon,
@@ -16,23 +14,23 @@ import {
 } from "lucide-react"
 
 const navigation = [
-  { name: 'Agents', href: '/agents', icon: TestTube },
-  { name: 'Analysis', href: '/analysis', icon: Microscope },
-  { name: 'Trials', href: '/trials', icon: LineChart },
-  { name: 'Literature', href: '/literature', icon: Search },
-  { name: 'Patient', href: '/patient', icon: Users },
+  { id: 'agents', name: 'Agents', href: '/agents', icon: TestTube },
+  { id: 'analysis', name: 'Analysis', href: '/analysis', icon: Microscope },
+  { id: 'trials', name: 'Trials', href: '/trials', icon: LineChart },
+  { id: 'literature', name: 'Literature', href: '/literature', icon: Search },
+  { id: 'patient', name: 'Patient', href: '/patient', icon: Users },
 ]
 
 export function Navbar() {
   const { theme, setTheme } = useTheme()
-  const pathname = usePathname()
+  const { pathname } = useLocation()
 
   return (
-    <nav className="border-b">
+    <nav className="border-b bg-background">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center">
-            <Link href="/" className="flex items-center space-x-2">
+            <Link to="/" className="flex items-center space-x-2 text-foreground hover:text-foreground/80">
               <FileText className="h-6 w-6" />
               <span className="text-lg font-semibold">Drug Discovery</span>
             </Link>
@@ -44,7 +42,8 @@ export function Navbar() {
               return (
                 <Link
                   key={item.name}
-                  href={item.href}
+                  to={item.href}
+                  data-appid={item.id}
                   className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                     pathname === item.href
                       ? 'bg-secondary text-secondary-foreground'
@@ -52,7 +51,7 @@ export function Navbar() {
                   }`}
                 >
                   <Icon className="h-4 w-4" />
-                  <span>{item.name}</span>
+                  <span>{item.name.charAt(0).toUpperCase() + item.name.slice(1)}</span>
                 </Link>
               )
             })}
@@ -60,12 +59,14 @@ export function Navbar() {
             <Button
               variant="ghost"
               size="icon"
+              data-appid="0"
+              className="theme-toggle"
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
             >
               {theme === 'dark' ? (
-                <Sun className="h-5 w-5" />
+                <Sun className="h-5 w-5 text-yellow-500" />
               ) : (
-                <Moon className="h-5 w-5" />
+                <Moon className="h-5 w-5 text-slate-700" />
               )}
             </Button>
           </div>
