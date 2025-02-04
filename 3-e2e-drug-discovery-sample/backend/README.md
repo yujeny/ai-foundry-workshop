@@ -377,48 +377,46 @@ sequenceDiagram
 2. Create a feature branch
 3. Submit a Pull Request
 
-```bash
-POST /evaluation/run-demo
-```
-Demonstrates Azure AI Evaluation capabilities using sample drug analysis data.
+## Setup and Running
 
-Response:
-```json
-{
-    "message": "Evaluation started",
-    "evaluation_id": "eval-123",
-    "status": "in_progress",
-    "metrics": [
-        "F1 Score - Measuring output accuracy",
-        "Relevance Score - Assessing response quality"
-    ]
-}
-```
+1. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-### Supply Chain Endpoints
+2. Start the server (runs on port 8002):
 
-#### 1. Predict Demand
-```bash
-GET /supply-chain/predict-demand?therapeutic_area=Oncology&timeframe_days=90
-```
-Predicts drug demand using historical data and market trends.
+   Windows (PowerShell):
+   ```powershell
+   .\start.ps1
+   ```
+   
+   Unix/Linux/MacOS:
+   ```bash
+   ./start.sh
+   ```
 
-Response:
-```json
-{
-    "current_demand": 1000,
-    "predicted_demand": 1150,
-    "confidence_score": 0.85,
-    "factors": {
-        "active_trials": 5,
-        "growth_rate": 0.15,
-        "market_trends": [
-            "Increasing demand in oncology",
-            "Stable demand in cardiovascular"
-        ]
-    }
-}
-```
+## Environment Variables
+
+The backend server uses the following environment variables:
+
+- `PORT`: Server port (defaults to 8002)
+- `PROJECT_CONNECTION_STRING`: Azure project connection string
+- `MODEL_DEPLOYMENT_NAME`: Azure model deployment name
+- Other environment variables as specified in main.py
+
+## API Documentation
+
+Once the server is running, you can access the API documentation at:
+- http://localhost:8002/ (ReDoc interface)
+
+## Development
+
+The server includes:
+- FastAPI framework
+- OpenTelemetry instrumentation
+- CORS middleware configured for frontend at http://localhost:3000
+- Health check endpoint at /health
 
 ## Deployment with Azure Developer CLI (azd) 🚀
 

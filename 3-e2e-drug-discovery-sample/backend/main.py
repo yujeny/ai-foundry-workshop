@@ -114,6 +114,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# After the load_dotenv() line, add:
+PORT = int(os.getenv("PORT", "8002"))
+
 @app.get("/api/drugs")
 async def get_drugs():
     try:
@@ -192,3 +195,8 @@ if not os.getenv("TEST_MODE"):
     logger.info("FastAPI OpenTelemetry instrumentation enabled")
 else:
     logger.info("Running in test mode - FastAPI OpenTelemetry instrumentation disabled")
+
+# At the very end of the file, add:
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=PORT)
