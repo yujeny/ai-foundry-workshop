@@ -28,10 +28,7 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/agents/, '/agents'),
         configure: (proxy) => {
           proxy.on('proxyReq', (proxyReq, req) => {
-            proxyReq.setHeader('x-api-key', process.env.VITE_BING_API_KEY || '');
             proxyReq.setHeader('x-api-version', process.env.VITE_API_VERSION || 'v1');
-            proxyReq.setHeader('x-azure-endpoint', process.env.VITE_AZURE_ENDPOINT || '');
-            proxyReq.setHeader('x-azure-model', process.env.VITE_AZURE_MODEL || '');
             proxyReq.setHeader('Accept', 'application/json');
             proxyReq.setHeader('Content-Type', 'application/json');
             proxyReq.setHeader('Origin', req.headers.origin || 'http://localhost:3000');
