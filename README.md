@@ -69,7 +69,7 @@ Before starting the workshop, ensure you have:
          - Embedding model for vector search
          - Ensure the model is deployed in `Global-Standard` or `DataZone-Standard`
       4. Set up connections:
-         - Configure Bing Search connection
+         - Configure [Grounding with Bing](https://learn.microsoft.com/en-us/azure/ai-services/agents/how-to/tools/bing-grounding?view=azure-python-preview&tabs=python&pivots=overview) connection
          - Configure Azure AI Search connection
       5. Add your user account to the `Azure AI Developer` role from Azure AI Foundry Management Portal
 
