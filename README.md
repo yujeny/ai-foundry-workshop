@@ -40,8 +40,8 @@ Before starting the workshop, ensure you have:
 
 1. **Clone the repo**:
    ```bash
-   git clone https://github.com/Azure/azure-ai-foundry-workshop.git
-   cd azure-ai-foundry-workshop
+   git clone https://github.com/Azure/ai-foundry-workshop.git
+   cd ai-foundry-workshop
    ```
 
 2. **Install uv**:
