@@ -59,7 +59,7 @@ describe('AnalysisPage', () => {
       disclaimer: 'This information is for educational purposes only.'
     }
     
-    vi.mocked(api.analyzeMedication).mockResolvedValueOnce(mockResponse)
+    vi.mocked(api.analyzeMedication).mockResolvedValueOnce({ data: mockResponse })
     
     render(<AnalysisPage />)
     

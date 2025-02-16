@@ -8,14 +8,18 @@ with randomized patient data and vital signs.
 import json
 import random
 import asyncio
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from datetime import datetime, timezone
 from azure.eventhub.aio import EventHubProducerClient
 from azure.eventhub import EventData
+import logging
+from ...utils.telemetry import tracer
 
 from config import EVENT_HUBS_CONFIG
 
-def generate_trial_event():
+logger = logging.getLogger(__name__)
+
+def generate_trial_event() -> Dict[str, Any]:
     """Generate a simulated trial event with random data."""
     return {
         "trialId": f"CTO{random.randint(1,1000):03d}",

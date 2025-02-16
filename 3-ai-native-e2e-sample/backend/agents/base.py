@@ -62,8 +62,11 @@ from typing import Any, Dict, List, Optional
 from unittest.mock import AsyncMock
 from azure.ai.projects import AIProjectClient
 from azure.ai.inference import ChatCompletionsClient
+import logging
 
 from .types import AgentConfig, ToolResources
+
+logger = logging.getLogger(__name__)
 
 class BaseAgent(ABC):
     """Base class for all AI agents in the drug discovery platform."""
@@ -76,6 +79,11 @@ class BaseAgent(ABC):
             chat_client: Azure OpenAI chat client
             config: Agent configuration
         """
+        logger.info("🔄 Initializing BaseAgent")
+        logger.debug("Project client in BaseAgent: %s", project_client)
+        logger.debug("Project client type: %s", type(project_client))
+        logger.debug("Project client dir: %s", dir(project_client))
+        
         self.project_client = project_client
         self.chat_client = chat_client
         self.config = config

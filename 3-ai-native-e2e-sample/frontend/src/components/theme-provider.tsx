@@ -8,6 +8,11 @@ type ThemeProviderProps = {
   storageKey?: string
 }
 
+type ThemeContextType = {
+  theme: Theme
+  setTheme: (theme: Theme) => void
+}
+
 type ThemeProviderState = {
   theme: Theme
   setTheme: (theme: Theme) => void
@@ -18,7 +23,7 @@ const initialState: ThemeProviderState = {
   setTheme: () => null
 }
 
-const ThemeContext = createContext<ThemeProviderState>(initialState)
+const ThemeContext = createContext<ThemeContextType>(initialState)
 
 const applyThemeToDOM = (resolvedTheme: "dark" | "light") => {
   const root = window.document.documentElement

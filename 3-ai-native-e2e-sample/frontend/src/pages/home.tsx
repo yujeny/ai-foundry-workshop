@@ -1,7 +1,7 @@
 import { Button } from "../components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
 import { useNavigate } from "react-router-dom"
-import { Bot, Microscope, LineChart, MessageSquare } from "lucide-react"
+import { Microscope, LineChart, MessageSquare } from "lucide-react"
 
 export function HomePage() {
   const navigate = useNavigate()

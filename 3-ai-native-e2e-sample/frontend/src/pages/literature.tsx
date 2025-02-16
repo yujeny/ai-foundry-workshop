@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, type FormEvent } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
 import { Button } from "../components/ui/button"
 import { Input } from "../components/ui/input"
@@ -12,124 +12,81 @@ export function LiteraturePage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     if (!input.trim()) return
-    await sendMessage(input)
-    setInput("")
-  }
-
-  const sendMessage = async (content: string) => {
-    const userMessage: ChatMessage = {
-      id: Date.now().toString(),
-      content: content,
-      role: 'user',
-      timestamp: new Date().toISOString()
-    }
-    setMessages(prev => [...prev, userMessage])
-
     setLoading(true)
     setError(null)
     try {
-      const response = await api.searchLiterature(content)
-      if (response.error) {
-        throw new Error(response.error)
+      const { data, error: apiError } = await api.searchLiterature(input)
+      if (apiError) {
+        throw new Error(apiError)
       }
-      
-      // Add assistant message
-      const assistantMessage: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        content: response.data?.summary || "No summary available",
-        role: 'assistant',
-        timestamp: new Date().toISOString()
-      }
-      setMessages(prev => [...prev, assistantMessage])
-    } catch (error) {
-      setError(error instanceof Error ? error.message : "Failed to search literature")
+      const timestamp = new Date().toISOString()
+      const newMessages: ChatMessage[] = [
+        { 
+          id: `user-${timestamp}`,
+          role: 'user',
+          content: input,
+          timestamp
+        },
+        { 
+          id: `assistant-${timestamp}`,
+          role: 'assistant',
+          content: data.summary,
+          timestamp
+        }
+      ]
+      setMessages(prev => [...prev, ...newMessages])
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to search literature')
     } finally {
       setLoading(false)
+      setInput("")
     }
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1>Literature Research</h1>
-        <p className="text-lg text-muted-foreground mt-2">
-          Research and analyze scientific literature through interactive conversations.
-        </p>
-      </div>
-
-      {error && (
-        <Card className="border-destructive">
-          <CardContent className="p-6">
-            <p className="text-center text-destructive">{error}</p>
-          </CardContent>
-        </Card>
-      )}
-
-      <Card className="h-[600px] flex flex-col">
+    <div className="space-y-4">
+      <Card>
         <CardHeader>
-          <CardTitle>Literature Research</CardTitle>
+          <CardTitle>Literature Search</CardTitle>
         </CardHeader>
-        <CardContent className="flex-1 flex flex-col">
-          <div className="flex-1 overflow-y-auto space-y-4 mb-4">
-            {messages.map((message) => (
-              <div
-                key={message.id}
-                className={`flex ${
-                  message.role === "user" ? "justify-end" : "justify-start"
-                }`}
-              >
-                <div
-                  className={`max-w-[80%] rounded-lg p-3 ${
-                    message.role === "user"
-                      ? "bg-primary text-primary-foreground ml-auto"
-                      : "bg-muted"
-                  }`}
-                >
-                  {message.content}
-                </div>
-              </div>
-            ))}
-            {loading && (
-              <div className="flex justify-center">
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
-              </div>
-            )}
-          </div>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault()
-              if (!input.trim()) return
-              sendMessage(input)
-              setInput("")
-            }}
-            className="flex gap-2"
-          >
+        <CardContent>
+          <form onSubmit={handleSubmit} className="flex gap-2">
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask questions about drug research and development..."
+              placeholder="Enter your research query..."
               disabled={loading}
-              className="flex-1"
             />
-            <Button 
-              type="submit" 
-              disabled={loading}
-              variant="outline"
-              className="border-2 hover:bg-primary hover:text-primary-foreground transition-colors px-4"
-            >
+            <Button type="submit" disabled={loading || !input.trim()}>
               {loading ? (
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
               ) : (
-                <div className="flex items-center gap-2">
-                  <SendHorizontal className="h-4 w-4" />
-                  <span>Send</span>
-                </div>
+                <SendHorizontal className="h-4 w-4" />
               )}
             </Button>
           </form>
+          
+          {error && (
+            <p className="mt-2 text-sm text-destructive">{error}</p>
+          )}
+          
+          <div className="mt-4 space-y-4">
+            {messages.map((message, index) => (
+              <div
+                key={index}
+                className={`p-4 rounded-lg ${
+                  message.role === 'user'
+                    ? 'bg-primary/10 ml-auto max-w-[80%]'
+                    : 'bg-muted'
+                }`}
+              >
+                <p className="text-sm">{message.content}</p>
+              </div>
+            ))}
+          </div>
         </CardContent>
       </Card>
     </div>

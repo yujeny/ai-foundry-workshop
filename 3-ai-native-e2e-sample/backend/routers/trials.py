@@ -1,84 +1,52 @@
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
 import uuid
-import json
 import logging
-from azure.eventhub import EventHubProducerClient, EventData
-from config import EVENT_HUBS_CONFIG
+from utils.telemetry import tracer, Status, StatusCode
 
 # Configure logging
 logger = logging.getLogger(__name__)
 
-router = APIRouter(tags=["trials"])
-
-def generate_mock_trial_data():
-    """Generate mock trial data for simulation."""
-    return {
-        "phase": 2,
-        "status": "active",
-        "participants": 250,
-        "conditions": ["Type 2 Diabetes", "Hypertension"],
-        "interventions": ["Drug A", "Placebo"],
-        "metrics": {
-            "efficacy": 0.75,
-            "safety": 0.92,
-            "adherence": 0.88
-        }
-    }
+router = APIRouter()
 
 @router.post("/simulate")
 async def simulate_trial_data():
-    """
-    ### 📊 Simulate Clinical Trial Data
-    
-    Generates simulated trial data and sends it to Azure Event Hubs
-    for real-time processing and analysis.
-    
-    #### Process Flow
-    1. Generate mock trial data
-    2. Send event to Azure Event Hubs
-    3. Return simulation status
-    
-    Returns:
-        dict: Status and message indicating simulation started
-    """
-    try:
-        logger.info("🔄 Starting trial data simulation")
-        
-        # Create Event Hubs producer
-        producer = EventHubProducerClient(
-            fully_qualified_namespace=EVENT_HUBS_CONFIG["fully_qualified_namespace"],
-            eventhub_name=EVENT_HUBS_CONFIG["eventhub_name"],
-            credential=EVENT_HUBS_CONFIG["credential"]
-        )
-        
-        # Generate and send event
-        async with producer:
-            event_data_batch = await producer.create_batch()
+    """Simulate clinical trial data."""
+    with tracer.start_as_current_span("simulate_trial_data") as span:
+        try:
+            logger.info("🔄 Starting trial data simulation")
+            logger.debug("Generating trial ID...")
+            trial_id = f"CT-{uuid.uuid4().hex[:8]}"
+            logger.debug("Generated trial ID: %s", trial_id)
             
-            # Create event with mock data
-            event = {
-                "trial_id": f"TRIAL_{uuid.uuid4()}",
-                "timestamp": datetime.now().isoformat(),
-                "data": generate_mock_trial_data()
+            # Generate mock trial data
+            trial_data = {
+                "trials": [
+                    {
+                        "id": trial_id,
+                        "phase": 2,
+                        "status": "Recruiting",
+                        "startDate": datetime.now().isoformat(),
+                        "completionDate": None,
+                        "participants": 250,
+                        "conditions": ["Type 2 Diabetes", "Hypertension"],
+                        "interventions": ["Drug A", "Placebo"]
+                    }
+                ],
+                "totalTrials": 1,
+                "page": 1,
+                "pageSize": 10
             }
             
-            # Add event to batch
-            event_data_batch.add(EventData(json.dumps(event)))
+            logger.debug("Generated trial data: %s", trial_data)
+            logger.info("✅ Trial data simulation completed for trial %s", trial_id)
+            return trial_data
             
-            # Send batch to Event Hubs
-            await producer.send_batch(event_data_batch)
-            
-            logger.info("✅ Trial data simulation event sent successfully")
-            return {
-                "status": "success",
-                "message": "Trial data simulation started",
-                "trial_id": event["trial_id"]
-            }
-            
-    except Exception as e:
-        logger.error(f"❌ Error in trial data simulation: {str(e)}")
-        raise HTTPException(
-            status_code=500,
-            detail=f"Error simulating trial data: {str(e)}"
-        )
+        except Exception as e:
+            logger.error("❌ Error in trial data simulation: %s", str(e), exc_info=True)
+            span.set_status(Status(StatusCode.ERROR))
+            span.record_exception(e)
+            raise HTTPException(
+                status_code=500,
+                detail=str(e)
+            )

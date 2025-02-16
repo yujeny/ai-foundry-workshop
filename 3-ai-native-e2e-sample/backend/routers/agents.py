@@ -19,18 +19,20 @@ from pydantic import BaseModel
 from azure.ai.projects.models import ToolSet, BingGroundingTool, FunctionTool, CodeInterpreterTool
 import numpy as np
 
-from clients import ensure_clients
+from clients import ensure_clients, validate_project_client
 from agents.factory import AgentFactory
 from agents.literature.agent import LiteratureAgent, LiteratureQuery
-from agents.utils import convert_numpy_types
 from agents.molecule.agent import MoleculeAgent, MoleculeAnalysisRequest
 from agents.molecule.functions import analyze_molecule_properties
 from agents.manufacturing.agent import ManufacturingAgent, ManufacturingOptRequest
 from agents.precision_med.agent import PrecisionMedAgent, PrecisionMedRequest
-from agents.digital_twin.agent import DigitalTwinAgent, DigitalTwinRequest
 from agents.drug_repurpose.agent import DrugRepurposeAgent, DrugRepurposeRequest
+from agents.digital_twin.agent import DigitalTwinAgent
 from agents.types import AgentConfig, ToolResources
-from clients import project_client, chat_client, tracer
+from utils.telemetry import tracer, Status, StatusCode
+from datetime import datetime
+import random
+import traceback
 
 # Initialize agent cache
 agent_cache = {}
@@ -41,10 +43,35 @@ logger = logging.getLogger(__name__)
 # Initialize router
 router = APIRouter(tags=["agents"])
 
-# Initialize agent factory
-agent_factory = AgentFactory(project_client, chat_client)
+# Initialize global variables
+project_client = None
+chat_client = None
+agent_factory = None
 
+# Initialize clients first
+try:
+    logger.info("Initializing clients for agents router")
+    project_client, chat_client = ensure_clients()
+    
+    # Log client states
+    logger.debug("Project client initialized: %s", project_client)
+    logger.debug("Project client type: %s", type(project_client))
+    logger.debug("Project client attributes: %s", dir(project_client))
+    
+    # Create agent factory with initialized clients
+    logger.info("Creating AgentFactory instance")
+    agent_factory = AgentFactory(project_client, chat_client)
+    logger.info("✅ AgentFactory created successfully")
+except Exception as e:
+    logger.error("❌ Failed to initialize agents router: %s", str(e), exc_info=True)
+    raise
 
+# Add this near the top with other model definitions
+class DigitalTwinRequest(BaseModel):
+    """Request model for digital twin simulation."""
+    molecule_parameters: Dict[str, Any]
+    target_population: Dict[str, Any]
+    simulation_config: Optional[Dict[str, Any]] = {}
 
 @router.post("/molecule-analysis", summary="Analyze molecular properties")
 async def analyze_molecule_v1(request: MoleculeAnalysisRequest):
@@ -802,7 +829,7 @@ async def optimize_production(request: ManufacturingOptRequest):
                 request.drug_candidate,
                 request.batch_size_range,
                 request.raw_materials,
-                request.production_constraints
+                request.production_constraints or {}
             )
             
             # Parse the agent's response
@@ -1102,12 +1129,6 @@ async def precision_medicine(request: PrecisionMedRequest):
             )
 
 
-class DigitalTwinRequest(BaseModel):
-    """Request model for digital twin clinical simulation."""
-    molecule_parameters: dict
-    target_population: dict
-    simulation_config: Optional[dict] = {}
-
 def run_clinical_simulation(
     molecule_params: Dict[str, Any],
     population_data: Dict[str, Any],
@@ -1200,7 +1221,6 @@ async def process_digital_twin_request(request: DigitalTwinRequest) -> dict:
         json.dumps(request.target_population),
         json.dumps(request.simulation_config)
     )
-
     response = await conversation.send_message(sim_message)
 
     return json.loads(response.message.content) | {"agent_id": agent.id}
@@ -1617,3 +1637,63 @@ async def drug_repurpose(request: DrugRepurposeRequest):
                 status_code=500,
                 detail=f"Error in drug repurposing analysis: {str(e)}"
             )
+
+@router.post("/digital-twin")
+async def run_digital_twin_simulation(params: Dict[str, Any] = None):
+    """Run a digital twin simulation."""
+    global project_client, chat_client  # Moved global declaration to top of function
+    
+    request_id = str(uuid.uuid4())
+    logger.info("🔬 Starting digital twin simulation - Request ID: %s", request_id)
+    
+    try:
+        # Validate module-level project client
+        logger.debug("Validating module-level project client")
+        if not validate_project_client(project_client):
+            logger.warning("Module-level project client invalid, getting new clients")
+            project_client, chat_client = ensure_clients()
+            if not validate_project_client(project_client):
+                raise ValueError("Failed to initialize valid project client")
+        
+        logger.debug("Using project client: %s", project_client)
+        logger.debug("Project client type: %s", type(project_client))
+        logger.debug("Project client attributes: %s", dir(project_client))
+        
+        # Create agent config
+        logger.debug("Creating agent config")
+        config = AgentConfig(
+            model=os.getenv('MODEL_DEPLOYMENT_NAME', 'gpt-4'),
+            instructions="""You are a digital twin simulation agent specialized in clinical trials.""",
+            tools=[],
+            tool_resources=ToolResources()
+        )
+        
+        # Initialize the agent
+        logger.debug("Initializing DigitalTwinAgent")
+        agent = DigitalTwinAgent(project_client, chat_client, config)
+        
+        # Process the simulation
+        logger.debug("Processing simulation request")
+        result = await agent.process({
+            "molecule_parameters": params.get("molecule", {}),
+            "target_population": params.get("population", {}),
+            "simulation_config": params.get("config", {})
+        })
+        
+        return result
+        
+    except Exception as e:
+        logger.error("❌ Error in digital twin simulation - Request ID: %s", request_id)
+        logger.error("Error type: %s", type(e).__name__)
+        logger.error("Error message: %s", str(e))
+        logger.error("Project client state: %s", project_client)
+        logger.error("Project client type: %s", type(project_client) if project_client else None)
+        logger.error("Project client attributes: %s", dir(project_client) if project_client else None)
+        logger.error("Stack trace:\n%s", traceback.format_exc())
+        raise HTTPException(
+            status_code=500,
+            detail=f"Digital twin simulation failed: {str(e)}"
+        )
+
+# Log router initialization complete
+logger.info("✅ Agents router initialized successfully")

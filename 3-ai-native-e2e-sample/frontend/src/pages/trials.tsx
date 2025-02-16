@@ -4,6 +4,7 @@ import { Card, CardContent } from "../components/ui/card"
 import { RefreshCw } from "lucide-react"
 import { api } from "../lib/api"
 import type { TrialResponse, DigitalTwinResponse } from "../types/api"
+import { TrialVisualization } from "../components/trial-visualization"
 
 export function TrialsPage() {
   const [trials, setTrials] = useState<TrialResponse | null>(null)
@@ -205,60 +206,67 @@ export function TrialsPage() {
                   </CardContent>
                 </Card>
               ) : simulationResult ? (
-                <Card>
-                  <CardContent className="p-6 space-y-4">
-                    <div>
-                      <h3 className="font-medium mb-2">Population Metrics</h3>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <p className="text-sm text-muted-foreground">Population Size</p>
-                          <p className="text-2xl font-semibold">{simulationResult.population_size}</p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-muted-foreground">Response Rate</p>
-                          <p className="text-2xl font-semibold">{(simulationResult.efficacy_metrics.response_rate * 100).toFixed(1)}%</p>
+                <div className="space-y-6">
+                  <TrialVisualization 
+                    data={[
+                      {
+                        timestamp: new Date().toISOString(),
+                        efficacy: simulationResult.efficacy_metrics.response_rate * 100,
+                        safety: (1 - simulationResult.toxicity_scores.mean) * 100,
+                        adherence: 95 // Mock data for demonstration
+                      },
+                      // Add more data points for demonstration
+                      {
+                        timestamp: new Date(Date.now() + 86400000).toISOString(), // +1 day
+                        efficacy: simulationResult.efficacy_metrics.response_rate * 100 + 5,
+                        safety: ((1 - simulationResult.toxicity_scores.mean) * 100) - 2,
+                        adherence: 92
+                      },
+                      {
+                        timestamp: new Date(Date.now() + 172800000).toISOString(), // +2 days
+                        efficacy: simulationResult.efficacy_metrics.response_rate * 100 + 8,
+                        safety: ((1 - simulationResult.toxicity_scores.mean) * 100) - 4,
+                        adherence: 90
+                      }
+                    ]}
+                  />
+
+                  <Card>
+                    <CardContent className="p-6 space-y-4">
+                      <div>
+                        <h3 className="font-medium mb-2">Population Metrics</h3>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <p className="text-sm text-muted-foreground">Population Size</p>
+                            <p className="text-2xl font-semibold">{simulationResult.population_size}</p>
+                          </div>
+                          <div>
+                            <p className="text-sm text-muted-foreground">Response Rate</p>
+                            <p className="text-2xl font-semibold">{(simulationResult.efficacy_metrics.response_rate * 100).toFixed(1)}%</p>
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    <div>
-                      <h3 className="font-medium mb-2">Survival Gain</h3>
-                      <p className="text-2xl font-semibold">{simulationResult.efficacy_metrics.survival_gain}</p>
-                    </div>
-
-                    <div>
-                      <h3 className="font-medium mb-2">Toxicity Profile</h3>
-                      <div className="space-y-2">
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm">Mean Score</span>
-                          <span className="font-medium">{(simulationResult.toxicity_scores.mean * 100).toFixed(1)}%</span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm">Standard Deviation</span>
-                          <span className="font-medium">{(simulationResult.toxicity_scores.std * 100).toFixed(1)}%</span>
+                      <div>
+                        <h3 className="font-medium mb-2">Adverse Events</h3>
+                        <div className="space-y-2">
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm">Mild</span>
+                            <span className="font-medium">{(simulationResult.adverse_events.mild * 100).toFixed(1)}%</span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm">Moderate</span>
+                            <span className="font-medium">{(simulationResult.adverse_events.moderate * 100).toFixed(1)}%</span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm">Severe</span>
+                            <span className="font-medium">{(simulationResult.adverse_events.severe * 100).toFixed(1)}%</span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-
-                    <div>
-                      <h3 className="font-medium mb-2">Adverse Events</h3>
-                      <div className="space-y-2">
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm">Mild</span>
-                          <span className="font-medium">{(simulationResult.adverse_events.mild * 100).toFixed(1)}%</span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm">Moderate</span>
-                          <span className="font-medium">{(simulationResult.adverse_events.moderate * 100).toFixed(1)}%</span>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm">Severe</span>
-                          <span className="font-medium">{(simulationResult.adverse_events.severe * 100).toFixed(1)}%</span>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                    </CardContent>
+                  </Card>
+                </div>
               ) : null}
             </div>
           </div>

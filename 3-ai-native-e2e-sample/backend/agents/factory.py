@@ -18,6 +18,7 @@ from azure.ai.projects import AIProjectClient
 from azure.ai.inference import ChatCompletionsClient
 from .types import AgentConfig, ToolResources
 from .utils import create_tool_config
+from azure.ai.projects.models import ToolSet
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -46,9 +47,12 @@ class AgentFactory:
             project_client: Azure AI Projects client
             chat_client: Azure OpenAI chat client
         """
+        logger.info("🏭 Initializing AgentFactory")
         self._project_client = project_client
         self._chat_client = chat_client
         self._cache: Dict[str, Any] = {}
+        logger.debug("Project client: %s", "initialized" if project_client else "not initialized")
+        logger.debug("Chat client: %s", "initialized" if chat_client else "not initialized")
         
     async def get_or_create_agent(
         self,
@@ -118,3 +122,14 @@ class AgentFactory:
         """
         logger.info("🗣️ Creating new conversation")
         return await self._chat_client.create_conversation(agent_id=agent.id)
+
+    def get_tools(self) -> List[ToolSet]:
+        """Get available tools for agents."""
+        logger.debug("Getting tools from project client")
+        try:
+            tools = self._project_client.list_tools()
+            logger.debug("Available tools: %s", tools)
+            return tools
+        except Exception as e:
+            logger.error("Failed to get tools: %s", str(e), exc_info=True)
+            raise
