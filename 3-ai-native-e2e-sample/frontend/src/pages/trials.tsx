@@ -6,6 +6,31 @@ import { api } from "../lib/api"
 import type { TrialResponse, DigitalTwinResponse } from "../types/api"
 import { TrialVisualization } from "../components/trial-visualization"
 
+// First, let's define the correct types for the API response
+interface TrialEvent {
+  trialId: string;
+  patientId: string;
+  studyArm: string;
+  timestamp: string;
+  vitals: {
+    heartRate: number;
+    bloodPressure: string;
+    temperature: number;
+    respiratoryRate: number;
+    oxygenSaturation: number;
+  };
+  adverseEvents: Array<{
+    type: string;
+    description: string | null;
+  }>;
+}
+
+interface TrialEventResponse {
+  status: string;
+  message: string;
+  events: TrialEvent[];
+}
+
 export function TrialsPage() {
   const [trials, setTrials] = useState<TrialResponse | null>(null)
   const [loading, setLoading] = useState(false)
@@ -17,28 +42,60 @@ export function TrialsPage() {
     setLoading(true)
     setError(null)
     try {
+      console.log('Calling simulateTrialData API...')
       const { data, error: apiError } = await api.simulateTrialData()
+      
+      console.log('API Response:', { data, error: apiError })
+      
       if (apiError) {
         throw new Error(apiError)
       }
-      if (data) {
-        setTrials(data)
-        if (data.trials.length > 0) {
-          const firstTrial = data.trials[0]
-          runSimulation({
-            molecule_parameters: {
-              id: firstTrial.id,
-              phase: firstTrial.phase
-            },
-            target_population: {
-              size: firstTrial.participants,
-              conditions: firstTrial.conditions
-            }
-          })
-        }
+
+      if (!data || typeof data !== 'object') {
+        console.error('No data received from API')
+        throw new Error("No data received from API")
+      }
+
+      // Transform the event data into the expected trials format
+      const transformedData = {
+        trials: data.events.map(event => ({
+          id: event.trialId,
+          phase: 2, // Default phase since not provided in event
+          status: 'Active',
+          participants: 1,
+          startDate: event.timestamp,
+          completionDate: null,
+          conditions: [event.studyArm],
+          interventions: [`Patient ${event.patientId}`],
+        })),
+        totalTrials: data.events.length,
+        page: 1,
+        pageSize: 10
+      }
+
+      console.log('Transformed trial data:', transformedData)
+      setTrials(transformedData)
+      
+      if (transformedData.trials.length > 0) {
+        console.log('First trial data:', transformedData.trials[0])
+        const firstTrial = transformedData.trials[0]
+        runSimulation({
+          molecule_parameters: {
+            id: firstTrial.id,
+            phase: firstTrial.phase
+          },
+          target_population: {
+            size: firstTrial.participants,
+            conditions: firstTrial.conditions
+          }
+        })
+      } else {
+        console.log('No trials available in the response')
       }
     } catch (error) {
-      setError(error instanceof Error ? error.message : "Failed to simulate trial data")
+      const errorMessage = error instanceof Error ? error.message : "Failed to simulate trial data"
+      console.error('Trial simulation error:', error)
+      setError(errorMessage)
       setTrials(null)
     } finally {
       setLoading(false)
@@ -127,7 +184,7 @@ export function TrialsPage() {
         </Card>
       )}
 
-      {trials && (
+      {trials && trials.trials && (
         <div className="space-y-6">
           <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-4">
@@ -189,8 +246,8 @@ export function TrialsPage() {
               </div>
               
               <div className="flex justify-between items-center text-sm text-muted-foreground">
-                <span>Showing {trials.trials.length} of {trials.totalTrials} trials</span>
-                <span>Page {trials.page} of {Math.ceil(trials.totalTrials / trials.pageSize)}</span>
+                <span>Showing {trials.trials.length} of {trials.totalTrials || 0} trials</span>
+                <span>Page {trials.page || 1} of {Math.ceil((trials.totalTrials || 0) / (trials.pageSize || 10))}</span>
               </div>
             </div>
 

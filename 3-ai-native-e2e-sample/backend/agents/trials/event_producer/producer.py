@@ -13,11 +13,17 @@ from datetime import datetime, timezone
 from azure.eventhub.aio import EventHubProducerClient
 from azure.eventhub import EventData
 import logging
-from ...utils.telemetry import tracer
+from utils.telemetry import tracer
 
 from config import EVENT_HUBS_CONFIG
 
 logger = logging.getLogger(__name__)
+
+# Log config values at module import (without sensitive data)
+logger.info("Producer module loaded with config:")
+logger.info(f"Event Hub Name: {EVENT_HUBS_CONFIG.get('eventhub_name')}")
+logger.info(f"Consumer Group: {EVENT_HUBS_CONFIG.get('consumer_group')}")
+logger.info(f"Connection String Present: {bool(EVENT_HUBS_CONFIG.get('connection_string'))}")
 
 def generate_trial_event() -> Dict[str, Any]:
     """Generate a simulated trial event with random data."""
@@ -50,19 +56,30 @@ def generate_trial_event() -> Dict[str, Any]:
     }
 
 async def simulate_trial_data(num_events: int = 1) -> list:
-    """Generate and send simulated trial data to Event Hub.
-    
-    Args:
-        num_events: Number of events to generate and send
-        
-    Returns:
-        List of generated events
-    """
+    """Generate and send simulated trial data to Event Hub."""
     try:
+        # Detailed logging of configuration state
+        logger.info("Creating producer with config:")
+        logger.info(f"Event Hub Name: {EVENT_HUBS_CONFIG.get('eventhub_name')}")
+        logger.info(f"Connection String Present: {bool(EVENT_HUBS_CONFIG.get('connection_string'))}")
+        logger.info("Full config keys available: %r", list(EVENT_HUBS_CONFIG.keys()))
+        
+        # Log the actual connection string value (careful with sensitive data)
+        connection_string = EVENT_HUBS_CONFIG.get("connection_string")
+        logger.info("Connection string type: %s", type(connection_string))
+        logger.info("Connection string length: %s", len(connection_string) if connection_string else 0)
+        logger.info("Connection string first 10 chars: %s", connection_string[:10] if connection_string else None)
+        
+        if not EVENT_HUBS_CONFIG.get('connection_string'):
+            raise ValueError("Event Hubs connection string is missing or None")
+            
         # Create producer client using connection string
+        logger.info("About to create EventHubProducerClient with connection string")
         producer = EventHubProducerClient.from_connection_string(
-            conn_str=EVENT_HUBS_CONFIG["connection_string"]
+            conn_str=EVENT_HUBS_CONFIG["connection_string"],
+            eventhub_name=EVENT_HUBS_CONFIG["eventhub_name"]
         )
+        logger.info("Successfully created EventHubProducerClient")
         
         # Generate events
         events = [generate_trial_event() for _ in range(num_events)]
@@ -76,10 +93,12 @@ async def simulate_trial_data(num_events: int = 1) -> list:
                 event_data_batch.add(event_data)
             
             await producer.send_batch(event_data_batch)
+            logger.info(f"Successfully sent {len(events)} events to Event Hub")
             
         return events
         
     except Exception as e:
+        logger.error(f"Error simulating trial data: {str(e)}", exc_info=True)
         raise RuntimeError(f"Error simulating trial data: {str(e)}") from e
 
 async def start_continuous_simulation(

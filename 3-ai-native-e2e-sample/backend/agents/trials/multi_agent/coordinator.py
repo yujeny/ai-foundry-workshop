@@ -1,7 +1,8 @@
 from typing import Dict, Any, List
 from azure.ai.projects import AIProjectClient
 from azure.ai.inference import InferenceClient
-from ...telemetry import tracer
+from opentelemetry import trace
+from utils.telemetry import tracer
 
 class TrialAgentCoordinator:
     def __init__(self, project_client: AIProjectClient, inference_client: InferenceClient):
@@ -66,5 +67,35 @@ class TrialAgentCoordinator:
 
     async def _delegate_tasks(self, event: Dict[str, Any]) -> Dict[str, Any]:
         """Team Leader delegates tasks to specialized agents."""
-        # Implementation for task delegation
-        pass 
+        with tracer.start_as_current_span("delegate_trial_tasks") as span:
+            try:
+                # Collect responses from specialized agents
+                responses = {}
+                
+                # Process vitals
+                if "vitals" in event:
+                    vitals_response = await self.agents["vitals"].process_message(
+                        f"Analyze these vital signs: {event['vitals']}"
+                    )
+                    responses["vitals_analysis"] = vitals_response
+                
+                # Process adverse events
+                if "adverseEvents" in event and event["adverseEvents"]:
+                    adverse_response = await self.agents["adverse_events"].process_message(
+                        f"Assess these adverse events: {event['adverseEvents']}"
+                    )
+                    responses["adverse_events_analysis"] = adverse_response
+                
+                # Generate summary
+                summary_response = await self.agents["data_summary"].process_message(
+                    f"Summarize this trial event data: {event}"
+                )
+                responses["summary"] = summary_response
+                
+                span.set_attribute("tasks.completed", len(responses))
+                return responses
+                
+            except Exception as e:
+                span.set_status(trace.Status(trace.StatusCode.ERROR))
+                span.record_exception(e)
+                raise   

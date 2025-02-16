@@ -1,4 +1,4 @@
-"""Azure AI client initialization module for drug discovery platform."""
+"""Azure AI client initialization module for Clinical Trials Monitor."""
 import os
 import logging
 from azure.ai.projects import AIProjectClient
