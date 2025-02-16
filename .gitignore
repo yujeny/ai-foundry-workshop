@@ -58,6 +58,8 @@ coverage.xml
 
 # Translations
 *.mo
+command
+
 
 # Scrapy stuff:
 .scrapy
