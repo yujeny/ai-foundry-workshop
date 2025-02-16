@@ -22,7 +22,7 @@ export function AnalysisPage() {
     setError(null)
     try {
       const data = await api.analyzeMedication(medicationData)
-      setAnalysis(data)
+      setAnalysis(data as MedicationAnalysis)
     } catch (error) {
       console.error('Analysis error:', error)
       setError(error instanceof Error ? error.message : "Failed to analyze medication. Please try again.")

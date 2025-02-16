@@ -4,6 +4,7 @@ azure-ai-inference[opentelemetry]
 azure-ai-evaluation
 azure-search-documents
 azure-identity
+azure-eventhub
 
 # Web Framework and Server
 fastapi
