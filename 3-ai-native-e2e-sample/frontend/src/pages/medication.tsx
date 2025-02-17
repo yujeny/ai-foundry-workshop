@@ -7,18 +7,8 @@ import { Pill } from "lucide-react"
 import { api } from "../lib/api"
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 
-interface MedicationResult {
-  structured_info: {
-    common_uses: string
-    mechanism: string
-    side_effects: string
-    interactions: string
-    contraindications: string
-    special_populations: string
-  }
-  ai_explanation: string
-  disclaimer: string
-}
+import type { MedicationAnalysis } from "../types/api"
+type MedicationResult = MedicationAnalysis
 
 export function MedicationPage() {
   const [name, setName] = useState("")
@@ -35,7 +25,7 @@ export function MedicationPage() {
       if (apiError) {
         throw new Error(apiError)
       }
-      setResult(data)
+      setResult(data ?? null)
     } catch (error) {
       setError(error instanceof Error ? error.message : "Failed to analyze medication")
       setResult(null)
@@ -109,23 +99,23 @@ export function MedicationPage() {
               <h2 className="text-2xl font-semibold">Analysis Results</h2>
               
               <div>
-                <h3 className="font-medium mb-2">Common Uses</h3>
-                <p className="text-muted-foreground">{result.structured_info.common_uses}</p>
-              </div>
-              
-              <div>
-                <h3 className="font-medium mb-2">Mechanism of Action</h3>
-                <p className="text-muted-foreground">{result.structured_info.mechanism}</p>
+                <h3 className="font-medium mb-2">Category</h3>
+                <p className="text-muted-foreground">{result.structured_info.category}</p>
               </div>
               
               <div>
                 <h3 className="font-medium mb-2">Side Effects</h3>
-                <p className="text-muted-foreground">{result.structured_info.side_effects}</p>
+                <p className="text-muted-foreground">{result.structured_info.common_side_effects.join(", ")}</p>
+              </div>
+              
+              <div>
+                <h3 className="font-medium mb-2">Risk Rating</h3>
+                <p className="text-muted-foreground">{result.structured_info.risk_rating}</p>
               </div>
               
               <div>
                 <h3 className="font-medium mb-2">Drug Interactions</h3>
-                <p className="text-muted-foreground">{result.structured_info.interactions}</p>
+                <p className="text-muted-foreground">{result.structured_info.interactions.join(", ")}</p>
               </div>
             </CardContent>
           </Card>

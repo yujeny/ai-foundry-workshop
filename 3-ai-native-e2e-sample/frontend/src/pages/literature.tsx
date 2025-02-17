@@ -33,7 +33,7 @@ export function LiteraturePage() {
         { 
           id: `assistant-${timestamp}`,
           role: 'assistant',
-          content: data.summary,
+          content: data?.summary ?? "",
           timestamp
         }
       ]
