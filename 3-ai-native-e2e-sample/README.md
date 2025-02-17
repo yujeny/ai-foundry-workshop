@@ -13,7 +13,11 @@ This sample demonstrates an AI-native platform built with Azure AI Foundry SDKs.
 - 🤖 **Event-Driven Agents**: Real-time analysis and response through Azure Event Hub integration
 - 🔍 **Automated Testing**: Evaluation pipelines using Azure AI Evaluation SDK
 
-![screenshot](image.png)
+![screenshot](assets/ui.png)
+
+![Deep Research](assets/medications.png)
+
+![Clinical Trials](assets/eda-agents.png)
 
 ## Tech Stack 💻
 
