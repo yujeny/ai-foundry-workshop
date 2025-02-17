@@ -5,6 +5,7 @@ import { HomePage } from './pages/home'
 import { AnalysisPage } from './pages/analysis'
 import { TrialsPage } from './pages/trials'
 import { LiteraturePage } from './pages/literature'
+import { Toaster } from './components/ui/toaster'
 import { PatientPage } from './pages/patient'
 import { MedicationPage } from './pages/medication'
 

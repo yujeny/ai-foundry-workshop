@@ -66,10 +66,24 @@ export interface AnalysisResult {
   similarCompounds: string[]
 }
 
+export interface Document {
+  title: string;
+  abstract: string;
+  content: string;
+  authors: string[];
+  relevance: number;
+}
+
 export interface SearchResponse {
-  query: string
-  summary: string
-  agent_id: string
+  query: string;
+  summary: string;
+  agent_id: string;
+  data?: {
+    category?: string;
+    risk_rating?: string;
+    side_effects?: string[];
+    interactions?: string[];
+  };
 }
 
 export interface TrialResponse {

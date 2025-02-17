@@ -13,7 +13,7 @@ resource containerApp 'Microsoft.App/containerApps@2023-05-01' = {
       activeRevisionsMode: 'Single'
       ingress: {
         external: true
-        targetPort: 8000
+        targetPort: 8003
         transport: 'http'
       }
     }

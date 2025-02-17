@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
-import { api } from "../lib/api"
+import { searchLiterature } from "../lib/api"
 import type { MedicationInfo, MedicationAnalysis } from "../types/api"
 
 export function AnalysisPage() {
@@ -21,8 +21,21 @@ export function AnalysisPage() {
     setLoading(true)
     setError(null)
     try {
-      const data = await api.analyzeMedication(medicationData)
-      setAnalysis(data as MedicationAnalysis)
+      const response = await searchLiterature(medicationData.name)
+      const data = response.data
+      if (!data) {
+        throw new Error('No data returned from search')
+      }
+      setAnalysis({
+        structured_info: {
+          category: data.category || 'Unknown',
+          risk_rating: data.risk_rating || 'Unknown',
+          common_side_effects: data.side_effects || [],
+          interactions: data.interactions || []
+        },
+        ai_explanation: response.summary || '',
+        disclaimer: 'This analysis is provided for informational purposes only.'
+      })
     } catch (error) {
       console.error('Analysis error:', error)
       setError(error instanceof Error ? error.message : "Failed to analyze medication. Please try again.")
