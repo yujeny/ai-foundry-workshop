@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint . --ext .ts,.tsx",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest"
@@ -45,7 +45,6 @@
     "embla-carousel-react": "^8.5.2",
     "framer-motion": "^12.4.3",
     "input-otp": "^1.4.2",
-    "lucide-react": "^0.323.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.54.2",
@@ -56,7 +55,9 @@
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^1.1.2",
-    "zustand": "^4.5.0"
+    "zustand": "^4.5.0",
+    "react-textarea-autosize": "^8.3.3",
+    "react-toastify": "^9.0.8"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.6.3",
@@ -77,6 +78,7 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",
     "jsdom": "^26.0.0",
+    "lucide-react": "^0.323.0",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.7.3",

@@ -10,7 +10,7 @@ async def test_simulation():
     """Test the trial event simulation endpoint."""
     try:
         async with aiohttp.ClientSession() as session:
-            async with session.post('http://localhost:8000/api/trials/simulate', 
+            async with session.post('http://localhost:8003/api/trials/simulate', 
                                   json={'num_events': 3}) as response:
                 logger.info(f'Status: {response.status}')
                 result = await response.text()
