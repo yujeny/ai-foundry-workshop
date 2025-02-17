@@ -15,7 +15,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 node_modules/
 parts/
@@ -115,7 +114,7 @@ var/
 sdist/
 develop-eggs/
 .installed.cfg
-lib/
+
 lib64/
 bld/
 [Bb]in/

@@ -2,12 +2,14 @@ import { useState, useRef, useEffect, type FormEvent } from "react"
 import { Button } from "../components/ui/button"
 import { Input } from "../components/ui/input"
 import { SendHorizontal, Mic, MicOff, FileText, MessageSquare } from "lucide-react"
-import { literatureChat } from "../lib/api"
+import { literatureApi } from "../lib/api"
 import type { ChatMessage, Document } from "../types/api"
 import { cn } from "../lib/utils"
 import TextareaAutosize from 'react-textarea-autosize';
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { Card, CardContent } from '../components/ui/card';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../components/ui/tooltip"
 
 export function LiteraturePage() {
   const [messages, setMessages] = useState<ChatMessage[]>([])
@@ -67,8 +69,12 @@ export function LiteraturePage() {
     setError(null)
 
     try {
-      const stream = await literatureChat(input)
+      const stream = await literatureApi.chat(input)
+      if (!stream) throw new Error('No response stream')
+
       const reader = stream.getReader()
+      const decoder = new TextDecoder()
+
       let content = ""
 
       // Reset documents for new response
@@ -88,48 +94,62 @@ export function LiteraturePage() {
         const { done, value } = await reader.read()
         if (done) break
 
-        // Decode the stream chunk and parse the JSON
-        const text = new TextDecoder().decode(value)
+        const text = decoder.decode(value)
         const lines = text.split('\n')
         
         for (const line of lines) {
           if (line.startsWith('data: ')) {
+            const data = line.slice(6)
             try {
-              const data = JSON.parse(line.slice(6))
-              
-              if (data.error) {
-                throw new Error(data.error)
+              const parsed = JSON.parse(data)
+              if (parsed.done) break
+              if (parsed.type === 'error') {
+                throw new Error(parsed.content)
               }
-              
-              if (data.done) {
-                break
-              }
+              content += parsed.content
 
-              if (data.type === 'delta' || data.type === 'message') {
-                content += data.content
-
-                // Update messages with the new content
-                setMessages((prev) => {
-                  const lastMsg = prev[prev.length - 1]
-                  if (lastMsg?.role === "assistant") {
-                    return [
-                      ...prev.slice(0, -1),
-                      { ...lastMsg, content },
-                    ]
-                  }
+              // Update messages with the new content
+              setMessages((prev) => {
+                const lastMsg = prev[prev.length - 1]
+                if (lastMsg?.role === "assistant") {
                   return [
-                    ...prev,
-                    {
-                      id: `assistant-${Date.now()}`,
-                      role: "assistant",
-                      content,
-                      timestamp: new Date().toISOString(),
-                    },
+                    ...prev.slice(0, -1),
+                    { ...lastMsg, content },
                   ]
-                })
-              }
+                }
+                return [
+                  ...prev,
+                  {
+                    id: `assistant-${Date.now()}`,
+                    role: "assistant",
+                    content,
+                    timestamp: new Date().toISOString(),
+                  },
+                ]
+              })
             } catch (e) {
-              console.error('Error parsing SSE data:', e)
+              // Handle non-JSON data
+              content += data
+
+              // Update messages with the new content
+              setMessages((prev) => {
+                const lastMsg = prev[prev.length - 1]
+                if (lastMsg?.role === "assistant") {
+                  return [
+                    ...prev.slice(0, -1),
+                    { ...lastMsg, content },
+                  ]
+                }
+                return [
+                  ...prev,
+                  {
+                    id: `assistant-${Date.now()}`,
+                    role: "assistant",
+                    content,
+                    timestamp: new Date().toISOString(),
+                  },
+                ]
+              })
             }
           }
         }
@@ -142,6 +162,22 @@ export function LiteraturePage() {
       setLoading(false)
     }
   }
+
+  // Add this helper function to extract clean text from the response
+  const extractCleanText = (content: string) => {
+    try {
+      // Try to parse if it's a JSON string
+      const parsed = JSON.parse(content);
+      if (parsed.type === 'text' && parsed.text?.value) {
+        return parsed.text.value;
+      }
+      // Fallback for other formats
+      return content;
+    } catch {
+      // If not JSON, return as is
+      return content;
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
@@ -184,7 +220,20 @@ export function LiteraturePage() {
                     : "bg-muted"
                 )}
               >
-                {message.content}
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="cursor-help">
+                        {extractCleanText(message.content)}
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="max-w-xs break-all font-mono text-xs">
+                        [{message.content}]
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
             ))}
             {loading && (
