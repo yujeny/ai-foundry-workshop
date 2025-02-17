@@ -1,80 +1,86 @@
+import { Link } from "react-router-dom"
 import { Button } from "../components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
-import { useNavigate } from "react-router-dom"
-import { Microscope, LineChart, MessageSquare } from "lucide-react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card"
+import { Pill, LineChart, MessageSquare, Users } from "lucide-react"
 
 export function HomePage() {
-  const navigate = useNavigate()
-
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight mb-2">Event-Driven AI Platform</h1>
-        <p className="text-base sm:text-lg text-muted-foreground">
-          Explore how Azure AI Foundry powers real-time, event-driven ambient agents for clinical research and drug discovery.
+    <div className="space-y-8">
+      <div className="space-y-2">
+        <h1 className="text-3xl font-bold">Welcome to Drug Discovery Platform</h1>
+        <p className="text-muted-foreground">
+          Explore medications, clinical trials, and research literature with AI assistance
         </p>
       </div>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-        <Card className="group hover:shadow-lg transition-all duration-200 flex flex-col">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-lg sm:text-xl font-bold">Clinical Trials Monitor</CardTitle>
-            <LineChart className="h-5 w-5 sm:h-6 sm:w-6 text-muted-foreground group-hover:text-primary transition-colors" />
-          </CardHeader>
-          <CardContent className="flex-1 flex flex-col">
-            <p className="text-sm sm:text-base text-muted-foreground mb-4 flex-1">
-              Experience real-time clinical trial monitoring with event-driven AI agents. Simulate trial data streams and observe how agents analyze safety signals and efficacy trends.
-            </p>
-            <Button 
-              variant="outline"
-              className="w-full hover:bg-primary hover:text-primary-foreground" 
-              onClick={() => navigate('/trials')}
-              data-appid="trials-link"
-            >
-              Monitor Trials
-            </Button>
-          </CardContent>
-        </Card>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
+        <Link to="/medication">
+          <Card className="hover:bg-muted/50 transition-colors">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Pill className="h-5 w-5" />
+                Analyze Medications
+              </CardTitle>
+              <CardDescription>
+                Analyze drug compounds and their potential effects
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button variant="secondary">Get Started</Button>
+            </CardContent>
+          </Card>
+        </Link>
 
-        <Card className="group hover:shadow-lg transition-all duration-200 flex flex-col">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-lg sm:text-xl font-bold">Literature Answer Engine</CardTitle>
-            <MessageSquare className="h-5 w-5 sm:h-6 sm:w-6 text-muted-foreground group-hover:text-primary transition-colors" />
-          </CardHeader>
-          <CardContent className="flex-1 flex flex-col">
-            <p className="text-sm sm:text-base text-muted-foreground mb-4 flex-1">
-              Get instant answers from your research literature. Ask questions about drug research, clinical studies, and scientific publications to receive focused, evidence-based responses.
-            </p>
-            <Button 
-              variant="outline"
-              className="w-full hover:bg-primary hover:text-primary-foreground" 
-              onClick={() => navigate('/literature')}
-              data-appid="literature-link"
-            >
-              Ask Questions
-            </Button>
-          </CardContent>
-        </Card>
+        <Link to="/trials">
+          <Card className="hover:bg-muted/50 transition-colors">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <LineChart className="h-5 w-5" />
+                Clinical Trials
+              </CardTitle>
+              <CardDescription>
+                Monitor and analyze ongoing clinical trials
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button variant="secondary">View Trials</Button>
+            </CardContent>
+          </Card>
+        </Link>
 
-        <Card className="group hover:shadow-lg transition-all duration-200 flex flex-col">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-lg sm:text-xl font-bold">Medication Analysis</CardTitle>
-            <Microscope className="h-5 w-5 sm:h-6 sm:w-6 text-muted-foreground group-hover:text-primary transition-colors" />
-          </CardHeader>
-          <CardContent className="flex-1 flex flex-col">
-            <p className="text-sm sm:text-base text-muted-foreground mb-4 flex-1">
-              Get comprehensive medication information and AI-powered analysis of drug interactions and effects.
-            </p>
-            <Button 
-              variant="outline"
-              className="w-full hover:bg-primary hover:text-primary-foreground" 
-              onClick={() => navigate('/analysis')}
-              data-appid="analysis-link"
-            >
-              Analyze Medications
-            </Button>
-          </CardContent>
-        </Card>
+        <Link to="/literature">
+          <Card className="hover:bg-muted/50 transition-colors">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <MessageSquare className="h-5 w-5" />
+                Literature Search
+              </CardTitle>
+              <CardDescription>
+                Search and analyze research papers
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button variant="secondary">Search Papers</Button>
+            </CardContent>
+          </Card>
+        </Link>
+
+        <Link to="/patient">
+          <Card className="hover:bg-muted/50 transition-colors">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Users className="h-5 w-5" />
+                Patient Data
+              </CardTitle>
+              <CardDescription>
+                View and analyze patient information
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button variant="secondary">View Patients</Button>
+            </CardContent>
+          </Card>
+        </Link>
       </div>
     </div>
   )
