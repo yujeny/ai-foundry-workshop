@@ -32,7 +32,7 @@ export function PatientPage() {
       if (apiError) {
         throw new Error(apiError)
       }
-      setEligibility(data)
+      setEligibility(data ?? null)
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Failed to check eligibility')
       setEligibility(null)

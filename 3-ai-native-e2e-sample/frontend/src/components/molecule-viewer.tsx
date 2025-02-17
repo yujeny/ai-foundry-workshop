@@ -5,7 +5,20 @@ import React, { useEffect, useRef } from 'react';
 // Access 3Dmol from window object since it's loaded via CDN
 declare global {
   interface Window {
-    $3Dmol: any;
+    $3Dmol: {
+      createViewer: (element: HTMLElement, options: { backgroundColor: string; id: string }) => Viewer;
+    };
+  }
+
+  interface Viewer {
+    addModel: (data: string, format: string) => Model;
+    zoomTo: () => void;
+    render: () => void;
+    clear: () => void;
+  }
+
+  interface Model {
+    setStyle: (style: { stick: object }) => void;
   }
 }
 
@@ -25,7 +38,7 @@ export function MoleculeViewer({
   className,
 }: MoleculeViewerProps) {
   const viewerRef = useRef<HTMLDivElement>(null);
-  const viewerInstanceRef = useRef<any>(null);
+  const viewerInstanceRef = useRef<Viewer | null>(null);
 
   useEffect(() => {
     if (!viewerRef.current || !smiles || !window.$3Dmol) return;

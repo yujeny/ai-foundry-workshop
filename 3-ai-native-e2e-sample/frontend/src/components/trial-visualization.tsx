@@ -3,12 +3,8 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } f
 import { Card, CardContent } from "./ui/card"
 import { cn } from "../lib/utils"
 import { motion, AnimatePresence } from "framer-motion"
-
-interface TrialEvent {
-  timestamp: string
-  type: string
-  data: any
-}
+import { AgentWorkflow } from "./agents/agent-workflow"
+import type { TrialEvent, TrialEventAnalysis } from "../types/api"
 
 interface TrialVisualizationProps {
   data: Array<{
@@ -23,9 +19,26 @@ interface TrialVisualizationProps {
 
 export function TrialVisualization({ data, events = [], className }: TrialVisualizationProps) {
   const [eventLog, setEventLog] = useState<TrialEvent[]>([])
+  const [currentAnalysis, setCurrentAnalysis] = useState<TrialEventAnalysis>()
+  const [processing, setProcessing] = useState(false)
 
   useEffect(() => {
-    setEventLog(prev => [...prev, ...events].slice(-10))
+    if (events.length > 0) {
+      setEventLog(prev => [...prev, ...events].slice(-10))
+      setProcessing(true)
+      // Simulate agent processing time
+      setTimeout(() => {
+        setProcessing(false)
+        const latestEvent = events[events.length - 1]
+        setCurrentAnalysis({
+          vitals_analysis: `Analysis of vital signs: HR=${latestEvent.vitals.heartRate}, BP=${latestEvent.vitals.bloodPressure}, Temp=${latestEvent.vitals.temperature}°C`,
+          adverse_events_analysis: latestEvent.adverseEvents.length > 0 
+            ? `Found ${latestEvent.adverseEvents.length} adverse events: ${latestEvent.adverseEvents.map(ae => ae.type).join(', ')}` 
+            : undefined,
+          summary: `Trial ${latestEvent.trialId} proceeding as expected. Patient ${latestEvent.patientId} in ${latestEvent.studyArm} arm shows stable indicators.`
+        })
+      }, 2000)
+    }
   }, [events])
 
   return (
@@ -82,6 +95,11 @@ export function TrialVisualization({ data, events = [], className }: TrialVisual
         </CardContent>
       </Card>
 
+      <AgentWorkflow
+        analysis={currentAnalysis}
+        processing={processing}
+      />
+
       <Card>
         <CardContent className="p-6">
           <h3 className="text-lg font-semibold mb-4">Event Log</h3>
@@ -96,12 +114,28 @@ export function TrialVisualization({ data, events = [], className }: TrialVisual
                   className="p-3 bg-muted rounded-md"
                 >
                   <div className="flex justify-between text-sm">
-                    <span className="font-medium">{event.type}</span>
+                    <span className="font-medium">Trial {event.trialId}</span>
                     <span className="text-muted-foreground">
                       {new Date(event.timestamp).toLocaleTimeString()}
                     </span>
                   </div>
-                  <p className="mt-1 text-sm">{JSON.stringify(event.data)}</p>
+                  <div className="mt-2 space-y-2 text-sm">
+                    <p>Patient: {event.patientId} ({event.studyArm})</p>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <span className="text-muted-foreground">Heart Rate:</span> {event.vitals.heartRate} bpm
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">BP:</span> {event.vitals.bloodPressure}
+                      </div>
+                    </div>
+                    {event.adverseEvents.length > 0 && (
+                      <div className="mt-1">
+                        <span className="text-muted-foreground">Adverse Events:</span>{' '}
+                        {event.adverseEvents.map(ae => ae.type).join(', ')}
+                      </div>
+                    )}
+                  </div>
                 </motion.div>
               ))}
             </AnimatePresence>
