@@ -17,6 +17,7 @@ export function TrialsPage() {
           <CardTitle>Active Trials</CardTitle>
         </CardHeader>
         <CardContent>
+          {/* TODO: Connect this section to the /api/trials endpoint to display dynamic active trial data */}
           <p className="text-muted-foreground">
             No active trials found.
           </p>
@@ -24,4 +25,4 @@ export function TrialsPage() {
       </Card>
     </div>
   )
-} 
+}

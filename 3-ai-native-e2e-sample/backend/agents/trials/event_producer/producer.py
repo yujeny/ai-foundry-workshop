@@ -1,8 +1,8 @@
 """Trial Data Producer Module.
 
-This module handles the generation and publishing of simulated clinical trial data
-to Azure Event Hubs. It provides utilities for creating realistic trial events
-with randomized patient data and vital signs.
+This module generates simulated trial events that feed into the event-driven architecture.
+Generated events (with vital signs and adverse event data) are sent to Azure Event Hubs,
+which then triggers multi-agent processing via the event consumer.
 """
 
 import json
@@ -58,13 +58,6 @@ def generate_trial_event() -> Dict[str, Any]:
 async def simulate_trial_data(num_events: int = 1) -> list:
     """Generate and send simulated trial data to Event Hub."""
     try:
-        # Detailed logging of configuration state
-        logger.info("Creating producer with config:")
-        logger.info(f"Event Hub Name: {EVENT_HUBS_CONFIG.get('eventhub_name')}")
-        logger.info(f"Connection String Present: {bool(EVENT_HUBS_CONFIG.get('connection_string'))}")
-        logger.info("Full config keys available: %r", list(EVENT_HUBS_CONFIG.keys()))
-        
-        # Log the actual connection string value (careful with sensitive data)
         connection_string = EVENT_HUBS_CONFIG.get("connection_string")
         logger.info("Connection string type: %s", type(connection_string))
         logger.info("Connection string length: %s", len(connection_string) if connection_string else 0)
@@ -73,7 +66,7 @@ async def simulate_trial_data(num_events: int = 1) -> list:
         if not EVENT_HUBS_CONFIG.get('connection_string'):
             raise ValueError("Event Hubs connection string is missing or None")
             
-        # Create producer client using connection string
+        # Create and use EventHubProducerClient to send trial events
         logger.info("About to create EventHubProducerClient with connection string")
         producer = EventHubProducerClient.from_connection_string(
             conn_str=EVENT_HUBS_CONFIG["connection_string"],
@@ -81,17 +74,13 @@ async def simulate_trial_data(num_events: int = 1) -> list:
         )
         logger.info("Successfully created EventHubProducerClient")
         
-        # Generate events
         events = [generate_trial_event() for _ in range(num_events)]
         
-        # Send events
         async with producer:
             event_data_batch = await producer.create_batch()
-            
             for event in events:
                 event_data = EventData(json.dumps(event))
                 event_data_batch.add(event_data)
-            
             await producer.send_batch(event_data_batch)
             logger.info(f"Successfully sent {len(events)} events to Event Hub")
             
@@ -105,27 +94,26 @@ async def start_continuous_simulation(
     interval_seconds: float = 5.0,
     max_events: Optional[int] = None
 ) -> None:
-    """Start continuous trial data simulation.
+    """
+    Start continuous trial data simulation.
+    
+    This function simulates trial events indefinitely (or up to max_events) and
+    continuously feeds events into the processing pipeline.
     
     Args:
-        interval_seconds: Time between event batches
-        max_events: Optional maximum number of events to generate
-        
-    This function runs indefinitely unless max_events is specified.
+        interval_seconds: Time between event batches.
+        max_events: Optional maximum number of events to generate.
     """
     events_sent = 0
     try:
         while True:
             await simulate_trial_data()
             events_sent += 1
-            
             if max_events and events_sent >= max_events:
                 break
-                
             await asyncio.sleep(interval_seconds)
             
     except asyncio.CancelledError:
-        # Allow clean cancellation
         pass
     except Exception as e:
         raise RuntimeError(f"Error in continuous simulation: {str(e)}") from e

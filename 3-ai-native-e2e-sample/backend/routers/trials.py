@@ -15,18 +15,21 @@ async def simulate_trial_events(num_events: int = Query(default=1, ge=1, le=100)
     """
     Simulate clinical trial events.
     
+    This endpoint triggers the simulation of trial events, publishes them via Event Hubs,
+    and they are subsequently processed by the multi-agent system.
+    
     Args:
         num_events: Number of events to generate (1-100)
         
     Returns:
-        List of generated trial events
+        List of generated trial events and simulation status.
     """
     with tracer.start_as_current_span("simulate_trial_events") as span:
         try:
             logger.info("🔄 Starting trial event simulation for %d events", num_events)
             span.set_attribute("trial.num_events", num_events)
             
-            # Generate and publish events
+            # Generate and publish trial events which will be consumed and processed by agents.
             events = await simulate_trial_data(num_events)
             
             logger.info("✅ Trial event simulation completed")

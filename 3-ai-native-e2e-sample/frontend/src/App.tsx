@@ -16,6 +16,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/analysis" element={<AnalysisPage />} />
+            {/* The /trials route connects the frontend view with backend trial simulation and multi-agent processing */}
             <Route path="/trials" element={<TrialsPage />} />
             <Route path="/literature" element={<LiteraturePage />} />
             <Route path="/patient" element={<PatientPage />} />

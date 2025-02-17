@@ -1,12 +1,10 @@
 """
 Main FastAPI Application Entry Point
 
-This module initializes and configures the FastAPI application for the Clinical Trials Monitor.
-It provides:
-1. Environment and logging configuration
-2. FastAPI application setup with CORS and routers
-3. Core health and documentation endpoints
-4. Development server configuration
+This application ties together:
+- Simulation of trial events (via the /simulate endpoint)
+- Multi-agent trial event analysis (using the coordinator and specialized agents)
+- Telemetry integration for monitoring the full end-to-end pipeline.
 """
 
 import os
@@ -53,22 +51,10 @@ app = FastAPI(
     description="""
     Real-time clinical trial event monitoring and analysis system using Azure AI Agents Service.
     
-    ## Features 🚀
-    
-    ### 1. Event Simulation
-    - Generate simulated trial events
-    - Publish events to Azure Event Hubs
-    - Real-time event streaming
-    
-    ### 2. Multi-Agent Processing
-    - Team Leader coordination
-    - Specialized agent analysis
-    - Adaptive recommendations
-    
-    ### 3. Telemetry Integration
-    - OpenTelemetry tracing
-    - Operation monitoring
-    - Performance insights
+    This system integrates:
+      • Trial event simulation via Azure Event Hubs.
+      • Multi-agent processing to analyze trial events.
+      • Telemetry for tracing and performance insights.
     """,
     version="1.0.0"
 )
@@ -105,6 +91,9 @@ app.include_router(
 async def startup_event():
     """
     Initialize required services and verify dependencies on application startup.
+    This includes:
+      • Validating that the Azure AI clients are set up to enable multi-agent communication.
+      • Ensuring all telemetry configurations are in place.
     """
     logger.info("📦 Imported dependencies successfully")
     logger.info("✅ Backend services initialized successfully")
@@ -120,11 +109,7 @@ async def root():
 
 @app.get("/health")
 async def health_check():
-    """
-    Health check endpoint to verify service status.
-    Returns:
-        dict: Status indicator
-    """
+    """Health check endpoint to verify service status."""
     return {"status": "ok"}
 
 # -------------------------------

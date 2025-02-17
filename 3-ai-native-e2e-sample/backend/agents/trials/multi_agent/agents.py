@@ -1,8 +1,10 @@
 """
-Clinical Trials Multi-Agent System
---------------------------------
-This module implements specialized agents for analyzing different aspects
-of clinical trial events.
+This module implements the specialized agents for clinical trial event analysis.
+Each agent is responsible for a specific task in the workflow:
+  - VitalsAgent: Processes patient vital signs.
+  - AdverseEventAgent: Assesses adverse events.
+  - DataSummaryAgent: Summarizes overall trial data.
+These agents are coordinated by the TrialAgentCoordinator.
 """
 
 from typing import Dict, Any
@@ -34,7 +36,7 @@ class SpecializedAgent:
             message: The message to process
             
         Returns:
-            The agent's response
+            The agent's response.
         """
         with tracer.start_as_current_span("process_agent_message") as span:
             try:

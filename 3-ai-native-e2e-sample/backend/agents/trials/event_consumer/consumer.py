@@ -1,8 +1,9 @@
 """
 Trial Events Consumer
-------------------
-This module handles consuming and processing trial events from Azure Event Hubs.
-It coordinates with the multi-agent system to analyze trial data and generate insights.
+
+This module consumes trial events from Azure Event Hubs and passes them
+to the multi-agent coordinator for analysis. The consumer bridges the gap
+between event generation and agent processing.
 """
 
 import asyncio
@@ -23,10 +24,11 @@ class TrialEventsConsumer:
     """Consumes trial events and processes them through the multi-agent system."""
     
     def __init__(self, coordinator: TrialAgentCoordinator):
-        """Initialize the consumer with a coordinator.
-        
-        Args:
-            coordinator: The multi-agent coordinator for processing events
+        """
+        Initialize the consumer with a coordinator.
+
+        The coordinator processes the event with its team-led agent system,
+        integrating telemetry and aggregated analysis.
         """
         self.coordinator = coordinator
         self.consumer = EventHubConsumerClient.from_connection_string(
@@ -37,10 +39,11 @@ class TrialEventsConsumer:
         logger.info("✅ Trial events consumer initialized")
     
     async def process_event(self, event: Dict[str, Any]) -> None:
-        """Process a single trial event using the multi-agent system.
+        """
+        Process a single trial event using the multi-agent system.
         
-        Args:
-            event: The trial event data to process
+        This method extracts the trial event payload and hands it over to the coordinator
+        for detailed analysis, connecting simulation with agent-based interpretation.
         """
         with tracer.start_as_current_span("process_trial_event") as span:
             try:
@@ -48,10 +51,8 @@ class TrialEventsConsumer:
                 span.set_attribute("trial.id", trial_id)
                 logger.info("🔄 Processing trial event: %s", trial_id)
                 
-                # Process event through multi-agent system
                 analysis = await self.coordinator.process_trial_event(event)
                 
-                # Log analysis results
                 logger.info("✅ Analysis completed for trial: %s", trial_id)
                 logger.debug("Analysis results: %s", analysis)
                 span.set_attribute("analysis.completed", True)
@@ -63,13 +64,13 @@ class TrialEventsConsumer:
                 raise
     
     async def start_receiving(self) -> None:
-        """Start receiving events from Event Hub."""
+        """Start receiving events from Event Hub and processing them."""
         with tracer.start_as_current_span("receive_trial_events") as span:
             try:
                 logger.info("🎯 Starting trial event consumer")
                 async with self.consumer:
                     async def on_event(partition_context, event):
-                        # Extract event data
+                        # Extract event data and forward for processing.
                         event_data = json.loads(event.body_as_str())
                         await self.process_event(event_data)
                         await partition_context.update_checkpoint(event)
