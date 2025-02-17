@@ -5,6 +5,9 @@ import { SendHorizontal, Mic, MicOff, FileText, MessageSquare } from "lucide-rea
 import { literatureChat } from "../lib/api"
 import type { ChatMessage, Document } from "../types/api"
 import { cn } from "../lib/utils"
+import TextareaAutosize from 'react-textarea-autosize';
+import { toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export function LiteraturePage() {
   const [messages, setMessages] = useState<ChatMessage[]>([])
@@ -57,17 +60,8 @@ export function LiteraturePage() {
     e.preventDefault()
     if (!input.trim()) return
 
-    const userMessage: ChatMessage = {
-      id: `user-${Date.now()}`,
-      role: "user",
-      content: input,
-      timestamp: new Date().toISOString(),
-    }
-
-    setMessages((prev) => [...prev, userMessage])
     setLoading(true)
     setError(null)
-    setInput("")
 
     try {
       const stream = await literatureChat(input)
@@ -77,57 +71,70 @@ export function LiteraturePage() {
       // Reset documents for new response
       setDocuments([])
 
+      const userMessage: ChatMessage = {
+        id: `user-${Date.now()}`,
+        role: "user",
+        content: input,
+        timestamp: new Date().toISOString(),
+      }
+
+      setMessages((prev) => [...prev, userMessage])
+      setInput("")
+
       while (true) {
         const { done, value } = await reader.read()
         if (done) break
 
+        // Decode the stream chunk and parse the JSON
         const text = new TextDecoder().decode(value)
-        content += text
+        const lines = text.split('\n')
+        
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            try {
+              const data = JSON.parse(line.slice(6))
+              
+              if (data.error) {
+                throw new Error(data.error)
+              }
+              
+              if (data.done) {
+                break
+              }
 
-        // Extract referenced documents from response
-        const matches = text.matchAll(/\[(.*?)\]/g)
-        for (const match of matches) {
-          const title = match[1]
-          if (title && !documents.some((d) => d.title === title)) {
-            setDocuments((prev) => [
-              ...prev,
-              {
-                title,
-                abstract: "",
-                content: "",
-                authors: [],
-                relevance: Math.random() * 0.3 + 0.7, // Placeholder relevance
-              },
-            ])
+              if (data.type === 'delta' || data.type === 'message') {
+                content += data.content
+
+                // Update messages with the new content
+                setMessages((prev) => {
+                  const lastMsg = prev[prev.length - 1]
+                  if (lastMsg?.role === "assistant") {
+                    return [
+                      ...prev.slice(0, -1),
+                      { ...lastMsg, content },
+                    ]
+                  }
+                  return [
+                    ...prev,
+                    {
+                      id: `assistant-${Date.now()}`,
+                      role: "assistant",
+                      content,
+                      timestamp: new Date().toISOString(),
+                    },
+                  ]
+                })
+              }
+            } catch (e) {
+              console.error('Error parsing SSE data:', e)
+            }
           }
         }
-
-        setMessages((prev) => {
-          const lastMsg = prev[prev.length - 1]
-          if (lastMsg?.role === "assistant") {
-            return [
-              ...prev.slice(0, -1),
-              {
-                ...lastMsg,
-                content,
-              },
-            ]
-          }
-          return [
-            ...prev,
-            {
-              id: `assistant-${Date.now()}`,
-              role: "assistant",
-              content,
-              timestamp: new Date().toISOString(),
-            },
-          ]
-        })
       }
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Failed to chat with literature agent"
-      )
+      const errorMessage = err instanceof Error ? err.message : "Failed to chat with literature agent"
+      setError(errorMessage)
+      toast.error(errorMessage)
     } finally {
       setLoading(false)
     }
@@ -135,6 +142,7 @@ export function LiteraturePage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+      <ToastContainer />
       {/* Make the header sticky so it's always visible */}
       <header className="sticky top-0 z-50 border-b bg-white/50 backdrop-blur-sm dark:bg-gray-900/50">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
@@ -203,7 +211,7 @@ export function LiteraturePage() {
                   <Mic className="w-5 h-5" />
                 )}
               </button>
-              <Input
+              <TextareaAutosize
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={(e) => {
@@ -213,7 +221,7 @@ export function LiteraturePage() {
                 }}
                 placeholder="Ask about research literature..."
                 disabled={loading || isRecording}
-                className="flex-1"
+                className="flex-1 resize-none p-2 border rounded-md"
               />
               <Button
                 type="submit"
@@ -226,7 +234,6 @@ export function LiteraturePage() {
                 )}
               </Button>
             </form>
-            {error && <p className="mt-2 text-sm text-destructive">{error}</p>}
           </div>
         </div>
 

@@ -1,6 +1,7 @@
-from azure.ai.projects.models import AgentEventHandler, MessageDeltaChunk, ThreadMessage, ThreadRun, RunStep
+from azure.ai.projects.models import AgentEventHandler, MessageDeltaChunk, ThreadMessage, ThreadRun, RunStep, RunStatus, RunStepType, RunStepStatus
 from typing import Any, Generator, Dict, Union
 import logging
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -11,15 +12,23 @@ class LiteratureChatHandler(AgentEventHandler):
         """Handle streaming message chunks."""
         if delta.text:
             logger.debug(f"Received message delta: {delta.text[:100]}...")
-            yield delta.text
+            return json.dumps({
+                "type": "delta",
+                "content": delta.text
+            })
+        return None
 
     def on_thread_message(self, message: ThreadMessage) -> Generator[Dict[str, Any], None, None]:
         """Handle complete thread messages."""
         if message.content:
             logger.info(f"Received thread message: {message.id}")
-            yield message.content[0].as_dict()
+            return json.dumps({
+                "type": "message",
+                "content": message.content[0].as_dict()
+            })
         else:
             logger.warning(f"Received empty thread message: {message.id}")
+            return None
 
     def on_thread_run(self, run: ThreadRun) -> None:
         """Handle thread run status updates."""
@@ -33,13 +42,31 @@ class LiteratureChatHandler(AgentEventHandler):
         """Handle error events."""
         error_msg = f"Error in literature chat: {data}"
         logger.error(error_msg)
-        yield {"error": error_msg}
+        return json.dumps({"error": error_msg})
 
     def on_done(self) -> Generator[Dict[str, Any], None, None]:
         """Handle stream completion."""
         logger.info("Literature chat stream completed")
-        yield {"done": True}
+        return json.dumps({"done": True})
 
     def on_unhandled_event(self, event_type: str, event_data: Any) -> None:
         """Handle any unrecognized events."""
         logger.warning(f"Unhandled event type: {event_type}, Data: {event_data}")
+
+    def on_run_step_started(self, event_data):
+        """Handle run step started events"""
+        step_type = event_data.get("step_type")
+        logger.info(f"Run step type: {step_type}, Status: RunStepStatus.IN_PROGRESS")
+        return None
+
+    def on_run_step_completed(self, event_data):
+        """Handle run step completed events"""
+        step_type = event_data.get("step_type")
+        logger.info(f"Run step type: {step_type}, Status: RunStepStatus.COMPLETED")
+        return None
+
+    def on_run_status_changed(self, event_data):
+        """Handle run status changed events"""
+        status = event_data.get("status")
+        logger.info(f"Thread run status: {status}")
+        return None

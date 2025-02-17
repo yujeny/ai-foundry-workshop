@@ -40,6 +40,7 @@ logger.info("🎯 Starting Clinical Trials Monitor")
 # Router Imports
 # -------------------------------
 from routers.trials import router as trials_router
+from routers.literature import router as literature_router
 
 # -------------------------------
 # FastAPI App Configuration
@@ -81,6 +82,11 @@ app.include_router(
     trials_router,
     prefix="/api/trials",
     tags=["trials"]
+)
+app.include_router(
+    literature_router,
+    prefix="/api/agents",
+    tags=["literature"]
 )
 
 # -------------------------------

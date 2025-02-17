@@ -1,22 +1,23 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import StreamingResponse
 from azure.ai.projects import AIProjectClient
-from azure.ai.projects.models import AzureAISearchTool
+from azure.ai.projects.models import AzureAISearchTool, ConnectionType
 from azure.identity import DefaultAzureCredential
-from ..agents.literature import LiteratureChatHandler
+from agents.literature import LiteratureChatHandler
 import os
 import logging
+import json
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
-@router.post("/agents/literature-chat")
-async def chat_literature(message: str):
+@router.post("/literature-chat")
+async def chat_literature(request: Request):
     """
     Stream chat responses about literature using AI Search.
     
     Args:
-        message: The user's chat message
+        request: The request object containing the user's chat message
         
     Returns:
         StreamingResponse: Server-sent events stream of chat responses
@@ -25,6 +26,11 @@ async def chat_literature(message: str):
         HTTPException: If there's an error processing the request
     """
     try:
+        body = await request.json()
+        message = body.get("message")
+        if not message:
+            raise HTTPException(status_code=400, detail="Message field is required")
+
         # Initialize AI Project client
         project_client = AIProjectClient.from_connection_string(
             credential=DefaultAzureCredential(),
@@ -33,7 +39,7 @@ async def chat_literature(message: str):
         
         # Get AI Search connection
         search_conn = project_client.connections.get_default(
-            connection_type="AZURE_AI_SEARCH",
+            connection_type=ConnectionType.AZURE_AI_SEARCH,
             include_credentials=True
         )
         if not search_conn:
@@ -76,8 +82,23 @@ async def chat_literature(message: str):
             event_handler=LiteratureChatHandler()
         )
         
+        async def generate_events():
+            try:
+                with stream as active_stream:
+                    for event in active_stream:  # Changed to regular for loop
+                        if isinstance(event, tuple) and len(event) == 3:
+                            _, _, response = event  # Unpack the event tuple
+                            if response:  # Only yield if there's a response
+                                yield f"data: {response}\n\n"
+            except Exception as e:
+                logger.error(f"Stream error: {str(e)}")
+                error_msg = json.dumps({"error": str(e)})
+                yield f"data: {error_msg}\n\n"
+            finally:
+                yield "data: {\"done\": true}\n\n"
+        
         return StreamingResponse(
-            stream,
+            generate_events(),
             media_type="text/event-stream"
         )
         
