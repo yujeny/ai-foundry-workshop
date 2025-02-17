@@ -85,14 +85,26 @@ async def chat_literature(request: Request):
         async def generate_events():
             try:
                 with stream as active_stream:
-                    for event in active_stream:  # Changed to regular for loop
+                    for event in active_stream:
                         if isinstance(event, tuple) and len(event) == 3:
-                            _, _, response = event  # Unpack the event tuple
-                            if response:  # Only yield if there's a response
+                            _, _, response = event
+                            if response:
                                 yield f"data: {response}\n\n"
+                                
+                                # Check if this was an error response
+                                try:
+                                    resp_data = json.loads(response)
+                                    if resp_data.get("type") == "error":
+                                        logger.error(f"Stream error: {resp_data.get('content')}")
+                                        break
+                                except:
+                                    pass
             except Exception as e:
                 logger.error(f"Stream error: {str(e)}")
-                error_msg = json.dumps({"error": str(e)})
+                error_msg = json.dumps({
+                    "type": "error",
+                    "content": str(e)
+                })
                 yield f"data: {error_msg}\n\n"
             finally:
                 yield "data: {\"done\": true}\n\n"

@@ -20,7 +20,10 @@ export function LiteraturePage() {
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    // Only scroll to bottom if there are messages
+    if (messages.length > 0) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    }
   }, [messages])
 
   const startRecording = async () => {
@@ -160,9 +163,16 @@ export function LiteraturePage() {
           {/* Message list can scroll if it grows large */}
           <div className="p-4 space-y-4 overflow-y-auto" style={{ maxHeight: "60vh" }}>
             {messages.length === 0 && (
-              <p className="text-sm text-muted-foreground text-center">
-                Ask questions about research literature to get started
-              </p>
+              <div className="flex flex-col items-center justify-center space-y-4 p-8">
+                <div className="p-6 backdrop-blur-sm bg-white/30 dark:bg-gray-800/30 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+                  <h2 className="text-xl font-semibold mb-2 text-center">RAG-Powered Literature Assistant</h2>
+                  <p className="text-sm text-muted-foreground text-center max-w-md">
+                    This is a Retrieval-Augmented Generation (RAG) agent powered by Azure AI Agent Service. 
+                    It can help you find and understand scientific literature by searching through a curated collection 
+                    of research papers and providing evidence-based responses.
+                  </p>
+                </div>
+              </div>
             )}
             {messages.map((message) => (
               <div
