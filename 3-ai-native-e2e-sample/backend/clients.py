@@ -1,4 +1,5 @@
-"""Azure AI client initialization module for drug discovery platform."""
+# This module initializes and validates the Azure AI clients.
+# These clients are critical for communication with the AI agents used in the trial event analysis flow.
 import os
 import logging
 from azure.ai.projects import AIProjectClient
@@ -6,14 +7,11 @@ from azure.identity import DefaultAzureCredential
 from opentelemetry import trace
 from opentelemetry.sdk.trace import TracerProvider
 
-# Configure logging
 logger = logging.getLogger(__name__)
 
-# Initialize OpenTelemetry
 trace.set_tracer_provider(TracerProvider())
 tracer = trace.get_tracer(__name__)
 
-# Initialize Azure AI clients
 project_client = None
 chat_client = None
 
@@ -32,19 +30,17 @@ def validate_project_client(client) -> bool:
     return True
 
 def ensure_clients():
-    """Ensure clients are initialized."""
+    """Ensure clients are initialized for multi-agent communication."""
     global project_client, chat_client
     
     logger.info("🔌 Initializing Azure AI clients")
     
     try:
-        # Validate connection string
         conn_str = os.getenv("PROJECT_CONNECTION_STRING")
         if not conn_str:
             raise ValueError("PROJECT_CONNECTION_STRING environment variable not set")
         logger.debug("Connection string: %s", conn_str)
         
-        # Initialize project client if needed
         if not project_client or not validate_project_client(project_client):
             logger.info("Creating new project client")
             try:
@@ -61,7 +57,6 @@ def ensure_clients():
                     
                 logger.info("✅ AIProjectClient initialized successfully")
                 
-                # Get chat client from project client
                 logger.debug("Getting chat client from project client")
                 chat_client = project_client.inference.get_chat_completions_client()
                 logger.info("✅ Chat client initialized successfully")
@@ -73,7 +68,6 @@ def ensure_clients():
         else:
             logger.debug("Using existing project client: %s", project_client)
             
-        # Final validation
         if not validate_project_client(project_client):
             raise ValueError("Project client validation failed in final check")
             

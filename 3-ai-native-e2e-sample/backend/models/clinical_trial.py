@@ -1,3 +1,5 @@
+# This model defines the clinical trial data schema which is used both for persisting trial details
+# and for correlating with the output from the multi-agent analysis system.
 from enum import Enum
 from pydantic import BaseModel
 from datetime import datetime

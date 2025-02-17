@@ -1,3 +1,5 @@
+// This file defines the API types used by the frontend to interact with backend endpoints
+// such as trial event simulation, multi-agent responses, and clinical trial data.
 export interface ChatMessage {
   id: string
   content: string
@@ -126,4 +128,34 @@ export interface EligibilityResponse {
   };
   ai_explanation: string;
   disclaimer: string;
+}
+
+export interface TrialEvent {
+  trialId: string;
+  patientId: string;
+  studyArm: string;
+  timestamp: string;
+  vitals: {
+    heartRate: number;
+    bloodPressure: string;
+    temperature: number;
+    respiratoryRate: number;
+    oxygenSaturation: number;
+  };
+  adverseEvents: Array<{
+    type: string;
+    description: string | null;
+  }>;
+}
+
+export interface TrialEventAnalysis {
+  vitals_analysis?: string;
+  adverse_events_analysis?: string;
+  summary: string;
+}
+
+export interface TrialEventResponse {
+  status: string;
+  message: string;
+  events: TrialEvent[];
 }
