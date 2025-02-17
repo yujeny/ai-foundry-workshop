@@ -1,89 +1,82 @@
 import { useState } from "react"
-import { Button } from "../components/ui/button"
 import { Card, CardContent } from "../components/ui/card"
 import { Input } from "../components/ui/input"
 import { Textarea } from "../components/ui/textarea"
-import { Pill } from "lucide-react"
+import { Button } from "../components/ui/button"
 import { api } from "../lib/api"
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
-
 import type { MedicationAnalysis } from "../types/api"
-type MedicationResult = MedicationAnalysis
+
+import { motion, AnimatePresence } from "framer-motion"
+import { FlaskConical } from "lucide-react"
 
 export function MedicationPage() {
   const [name, setName] = useState("")
   const [notes, setNotes] = useState("")
   const [loading, setLoading] = useState(false)
-  const [result, setResult] = useState<MedicationResult | null>(null)
+  const [finalResult, setFinalResult] = useState<MedicationAnalysis | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [statusMessages, setStatusMessages] = useState<string[]>([])
 
   const analyzeMedication = async () => {
     setLoading(true)
     setError(null)
+    setFinalResult(null)
+    setStatusMessages([])
     try {
-      const { data, error: apiError } = await api.analyzeMedication({ name, notes })
-      if (apiError) {
-        throw new Error(apiError)
+      const res = await api.analyzeMedication({ name, notes }, (event) => {
+        if (event.type === "message") {
+          setStatusMessages((prev) => [...prev, event.content])
+        } else if (event.type === "final") {
+          setFinalResult(event.content)
+        }
+      })
+      if (res.error) {
+        throw new Error(res.error)
       }
-      setResult(data ?? null)
-    } catch (error) {
-      setError(error instanceof Error ? error.message : "Failed to analyze medication")
-      setResult(null)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to analyze medication")
     } finally {
       setLoading(false)
     }
   }
 
-  // Mock data for visualization
-  const sideEffectData = [
-    { name: "Common", value: 75 },
-    { name: "Uncommon", value: 20 },
-    { name: "Rare", value: 5 }
-  ]
-
   return (
     <div className="space-y-6">
-      <div className="flex items-center space-x-4">
-        <Pill className="h-8 w-8 text-primary" />
-        <div>
-          <h1 className="text-4xl font-bold">Medication Analysis</h1>
-          <p className="text-lg text-muted-foreground mt-2">
-            Analyze medication properties and potential interactions
-          </p>
-        </div>
+      {/* Header */}
+      <div className="space-y-1">
+        <h1 className="text-4xl font-bold">Medication Analysis</h1>
+        <p className="text-lg text-muted-foreground">
+          Analyze medication properties and potential interactions
+        </p>
       </div>
 
+      {/* Input Card */}
       <Card>
-        <CardContent className="p-6">
-          <div className="grid gap-4">
-            <Input 
-              placeholder="Enter medication name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <Textarea
-              placeholder="Additional notes or context (optional)"
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-            />
-            <Button 
-              onClick={analyzeMedication}
-              disabled={loading || !name}
-              className="w-full"
-            >
-              {loading ? (
-                <div className="flex items-center space-x-2">
-                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"></div>
-                  <span>Analyzing...</span>
-                </div>
-              ) : (
-                "Analyze Medication"
-              )}
-            </Button>
-          </div>
+        <CardContent className="p-6 space-y-4">
+          <Input
+            placeholder="Enter medication name (e.g. 'Aspirin')"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <Textarea
+            placeholder="Additional notes or context (optional)"
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+          />
+
+          <Button
+            variant="outline"
+            className="flex items-center justify-center gap-2 transition-colors duration-200"
+            onClick={analyzeMedication}
+            disabled={loading || !name}
+          >
+            <FlaskConical className="h-4 w-4" />
+            {loading ? "Analyzing..." : "Analyze Medication"}
+          </Button>
         </CardContent>
       </Card>
 
+      {/* Error Display */}
       {error && (
         <Card className="border-destructive">
           <CardContent className="p-6">
@@ -92,62 +85,122 @@ export function MedicationPage() {
         </Card>
       )}
 
-      {result && (
-        <div className="grid gap-6 md:grid-cols-2">
-          <Card>
-            <CardContent className="p-6 space-y-4">
-              <h2 className="text-2xl font-semibold">Analysis Results</h2>
-              
-              <div>
-                <h3 className="font-medium mb-2">Category</h3>
-                <p className="text-muted-foreground">{result.structured_info.category}</p>
-              </div>
-              
-              <div>
-                <h3 className="font-medium mb-2">Side Effects</h3>
-                <p className="text-muted-foreground">{result.structured_info.common_side_effects.join(", ")}</p>
-              </div>
-              
-              <div>
-                <h3 className="font-medium mb-2">Risk Rating</h3>
-                <p className="text-muted-foreground">{result.structured_info.risk_rating}</p>
-              </div>
-              
-              <div>
-                <h3 className="font-medium mb-2">Drug Interactions</h3>
-                <p className="text-muted-foreground">{result.structured_info.interactions.join(", ")}</p>
-              </div>
-            </CardContent>
-          </Card>
+      {/* Show a spinner if loading but no messages yet */}
+      <AnimatePresence>
+        {loading && statusMessages.length === 0 && (
+          <motion.div
+            key="loadingSpinner"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="flex items-center justify-center"
+          >
+            <div className="flex flex-col items-center gap-2 py-4">
+              {/* Tailwind spinner style */}
+              <div className="animate-spin h-8 w-8 border-4 border-current border-t-transparent rounded-full" />
+              <p className="text-muted-foreground">Starting analysis...</p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-          <Card>
-            <CardContent className="p-6 space-y-4">
-              <h2 className="text-2xl font-semibold">Side Effect Distribution</h2>
-              <div className="h-[300px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={sideEffectData}>
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Line 
-                      type="monotone" 
-                      dataKey="value" 
-                      stroke="hsl(217.2 91.2% 59.8%)"
-                      strokeWidth={2}
-                      dot={{ r: 4 }}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
+      {/* Progress Messages */}
+      <AnimatePresence>
+        {loading && statusMessages.length > 0 && (
+          <motion.div
+            key="progressCard"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Card>
+              <CardContent className="p-6">
+                <h2 className="text-xl font-medium mb-2">Progress</h2>
+                <ul className="list-disc pl-6 space-y-1">
+                  {statusMessages.map((msg, idx) => (
+                    <motion.li
+                      key={idx}
+                      className="text-muted-foreground"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: idx * 0.05 }}
+                    >
+                      {msg}
+                    </motion.li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-              <div className="mt-4 p-4 bg-muted rounded-lg">
-                <h3 className="font-medium mb-2">Medical Disclaimer</h3>
-                <p className="text-sm text-muted-foreground">{result.disclaimer}</p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      )}
+      {/* Final Result */}
+      <AnimatePresence>
+        {finalResult && (
+          <motion.div
+            key="analysisCard"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.4 }}
+          >
+            <Card>
+              <CardContent className="p-6 space-y-4">
+                <h2 className="text-2xl font-bold">Analysis Results</h2>
+
+                <div>
+                  <h3 className="font-medium mb-1">Analysis:</h3>
+                  <p className="text-muted-foreground">
+                    {finalResult.analysis || "N/A"}
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="font-medium mb-1">Interactions:</h3>
+                  {finalResult.interactions?.length ? (
+                    <ul className="list-disc pl-5">
+                      {finalResult.interactions.map((item, i) => (
+                        <li key={i}>{item}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-muted-foreground">N/A</p>
+                  )}
+                </div>
+
+                <div>
+                  <h3 className="font-medium mb-1">Warnings:</h3>
+                  {finalResult.warnings?.length ? (
+                    <ul className="list-disc pl-5">
+                      {finalResult.warnings.map((item, i) => (
+                        <li key={i}>{item}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-muted-foreground">N/A</p>
+                  )}
+                </div>
+
+                <div>
+                  <h3 className="font-medium mb-1">Recommendations:</h3>
+                  {finalResult.recommendations?.length ? (
+                    <ul className="list-disc pl-5">
+                      {finalResult.recommendations.map((item, i) => (
+                        <li key={i}>{item}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-muted-foreground">N/A</p>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

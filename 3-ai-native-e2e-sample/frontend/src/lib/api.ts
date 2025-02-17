@@ -6,10 +6,18 @@ interface ApiResponse<T> {
   error: string | null;
 }
 
+export interface ApiEvent {
+  type: string;
+  content: any;
+}
+
 export const api = {
-  analyzeMedication: async ({ name, notes }: MedicationInfo): Promise<ApiResponse<MedicationAnalysis>> => {
+   analyzeMedication: async (
+    { name, notes }: MedicationInfo,
+    onEvent: (event: ApiEvent) => void
+  ): Promise<ApiResponse<MedicationAnalysis>> => {
     try {
-      const response = await fetch(`${API_URL}/agents/medication/analyze`, {
+      const response = await fetch(`${API_URL}/agents/medication/analyze_stream`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -19,8 +27,8 @@ export const api = {
       });
       
       if (!response.ok) {
-        const error = await response.text();
-        throw new Error(error || 'Failed to analyze medication');
+        const errorText = await response.text();
+        throw new Error(errorText || 'Failed to analyze medication');
       }
       
       if (!response.body) {
@@ -28,40 +36,48 @@ export const api = {
       }
 
       const reader = response.body.getReader();
-      let result = '';
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let finalResult: MedicationAnalysis | null = null;
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
 
-        const chunk = new TextDecoder().decode(value);
-        const lines = chunk.split('\n');
-
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || "";
+        
         for (const line of lines) {
           if (line.startsWith('data: ')) {
-            const data = line.slice(6);
-            if (data.trim()) {
-              try {
-                const parsed = JSON.parse(data);
-                if (parsed.type === 'error') {
-                  throw new Error(parsed.content);
-                }
-                if (parsed.type === 'message') {
-                  result = parsed.content;
-                }
-                if (parsed.done) {
-                  const structuredResult = JSON.parse(result);
-                  return { data: structuredResult, error: null };
-                }
-              } catch (e) {
-                console.error('Error parsing SSE data:', e);
+            const dataStr = line.slice(6).trim();
+            if (!dataStr) continue;
+            try {
+              const parsed = JSON.parse(dataStr);
+              if (parsed.type === 'error') {
+                throw new Error(parsed.content);
               }
+              if (parsed.type === 'message') {
+                // Pass run status messages to UI
+                onEvent({ type: 'message', content: parsed.content });
+              }
+              if (parsed.done === true) {
+                // Final result received
+                finalResult = parsed.content;
+                onEvent({ type: 'final', content: parsed.content });
+              }
+            } catch (e) {
+              console.error('Error parsing SSE data:', e);
             }
           }
         }
       }
-
-      throw new Error('Stream ended without valid response');
+      
+      if (!finalResult) {
+        throw new Error('Stream ended without valid final response');
+      }
+      
+      return { data: finalResult, error: null };
     } catch (error) {
       return { 
         data: null, 
@@ -102,31 +118,6 @@ export interface LiteratureSearchResponse {
   error?: string
 }
 
-export async function searchLiterature(query: string): Promise<LiteratureSearchResponse> {
-  try {
-    const response = await fetch(`${API_URL}/agents/literature-search`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-version': API_VERSION,
-      },
-      body: JSON.stringify({ query }),
-    })
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-
-    return await response.json()
-  } catch (error) {
-    console.error('Error searching literature:', error)
-    return {
-      results: [],
-      error: error instanceof Error ? error.message : 'An unknown error occurred'
-    }
-  }
-}
-
 export interface LiteratureChatResponse {
   response: string
   error?: string
@@ -137,27 +128,21 @@ export interface LiteratureChatRequest {
   history?: Array<{ role: 'user' | 'assistant', content: string }>
 }
 
-export async function literatureChat(request: LiteratureChatRequest): Promise<LiteratureChatResponse> {
-  try {
-    const response = await fetch(`${API_URL}/agents/literature-chat`, {
+export const literatureApi = {
+  chat: async (message: string) => {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/agents/literature-chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-version': API_VERSION,
       },
-      body: JSON.stringify(request),
-    })
+      body: JSON.stringify({ message }),
+    });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
+      throw new Error(`Literature chat failed: ${response.statusText}`);
     }
 
-    return await response.json()
-  } catch (error) {
-    console.error('Error in literature chat:', error)
-    return {
-      response: '',
-      error: error instanceof Error ? error.message : 'An unknown error occurred'
-    }
+    console.dir(response.body, { depth: null });
+    return response.body;
   }
-}
+};

@@ -27,15 +27,11 @@ class LiteratureChatHandler(AgentEventHandler):
         if message.content and len(message.content) > 0:
             logger.info(f"Received thread message: {message.id}")
             try:
-                # Extract text content safely
-                content = ""
-                for content_item in message.content:
-                    if hasattr(content_item, 'text'):
-                        content += content_item.text
-                    elif hasattr(content_item, 'value'):
-                        content += content_item.value
-                    else:
-                        content += str(content_item)
+                # Handle MessageTextDetails object properly
+                if hasattr(message.content, 'value'):
+                    content = message.content.value
+                else:
+                    content = str(message.content)
 
                 if content.strip():  # Only send if there's actual content
                     return json.dumps({
@@ -102,3 +98,45 @@ class LiteratureChatHandler(AgentEventHandler):
         step_type = event_data.get("step_type")
         logger.info(f"Run step type: {step_type}, Status: RunStepStatus.COMPLETED")
         return None
+
+    def __call__(self, run_status=None, run_step=None, message=None):
+        try:
+            if run_status:
+                logger.info(f"Thread run status: {run_status}")
+                
+            if run_step:
+                logger.info(f"Run step type: {run_step.type}, Status: {run_step.status}")
+                
+            if message:
+                logger.info(f"Received thread message: {message.id}")
+                if message.content:
+                    try:
+                        # Handle MessageTextDetails object properly
+                        if hasattr(message.content, 'value'):
+                            content = message.content.value
+                        else:
+                            content = str(message.content)
+                            
+                        # Return properly formatted JSON response
+                        return None, None, json.dumps({
+                            "type": "message",
+                            "content": content
+                        })
+                    except Exception as e:
+                        logger.error(f"Error processing message content: {str(e)}")
+                        return None, None, json.dumps({
+                            "type": "error",
+                            "content": f"Failed to process message: {str(e)}"
+                        })
+
+            if run_status == RunStatus.COMPLETED:
+                logger.info("Literature chat stream completed")
+                
+        except Exception as e:
+            logger.error(f"Error in literature chat handler: {str(e)}")
+            return None, None, json.dumps({
+                "type": "error",
+                "content": f"Handler error: {str(e)}"
+            })
+        
+        return None, None, None
