@@ -5,7 +5,7 @@ import { useTheme } from "../theme-provider"
 import {
   Sun,
   Moon,
-  Microscope,
+  Pill,
   LineChart,
   MessageSquare,
   Users,
@@ -13,7 +13,7 @@ import {
 } from "lucide-react"
 
 const navigation = [
-  { id: 'analysis', name: 'Medications', href: '/analysis', icon: Microscope },
+  { id: 'medication', name: 'Medications', href: '/medication', icon: Pill },
   { id: 'trials', name: 'Trials', href: '/trials', icon: LineChart },
   { id: 'literature', name: 'Literature', href: '/literature', icon: MessageSquare },
   { id: 'patient', name: 'Patient', href: '/patient', icon: Users },

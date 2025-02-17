@@ -14,6 +14,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from utils.telemetry import configure_telemetry
 from clients import ensure_clients
+from routers import medication, literature, trials  # Add medication import
 
 # -------------------------------
 # Environment Configuration
@@ -41,6 +42,7 @@ logger.info("🎯 Starting Clinical Trials Monitor")
 # -------------------------------
 from routers.trials import router as trials_router
 from routers.literature import router as literature_router
+from routers.medication import router as medication_router
 
 # -------------------------------
 # FastAPI App Configuration
@@ -88,6 +90,12 @@ app.include_router(
     prefix="/api/agents",
     tags=["literature"]
 )
+app.include_router(
+    medication_router,
+    prefix="/api/medication",
+    tags=["medication"]
+)
+app.include_router(medication.router)  # Add this line
 
 # -------------------------------
 # Application Events
@@ -139,7 +147,7 @@ if __name__ == "__main__":
     uvicorn.run(
         "main:app",
         host="0.0.0.0",
-        port=8002,
+        port=8003,
         reload=True,
         log_level=os.getenv("LOG_LEVEL", "info").lower()
     )
