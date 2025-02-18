@@ -1,6 +1,6 @@
-# Building Your Health Advisor Agent 🏥
+# Building Your Health Advisor Agent with Azure AI Foundry 🏥
 
-Let's create a health advisor agent that can provide personalized fitness and nutrition guidance. This will take about 30 minutes.
+Let's create a health advisor agent using Azure AI Foundry that can provide personalized fitness and nutrition guidance. This will take about 30 minutes.
 
 !!! warning "⚠️ Important Medical Disclaimer ⚠️"
     The health information provided by this guide is for general educational and entertainment purposes only and is not intended as a substitute for professional medical advice, diagnosis, or treatment.
@@ -19,10 +19,10 @@ class HealthAdvisorAgent:
         """Initialize the health advisor agent."""
         self.client = None
         self.inference_client = None
-        self.product_docs = {
-            "password_reset": "To reset password: 1) Click 'Forgot Password' 2) Enter email 3) Follow link",
-            "billing": "Billing cycle runs monthly. Payment processed on 1st of each month.",
-            "features": "Product includes: cloud storage, sync, sharing, and admin controls."
+        self.health_docs = {
+            "nutrition": "Daily nutritional guidelines include balanced meals with proteins, carbs, and healthy fats.",
+            "exercise": "Regular exercise recommendations include both cardio and strength training.",
+            "wellness": "Overall wellness involves proper sleep, stress management, and regular health check-ups."
         }
     
     async def initialize(self):

@@ -1,0 +1,32 @@
+# Azure AI Foundry Workshop Context
+
+This repository contains documentation and examples for building AI-native applications using Azure AI Foundry. Key concepts include:
+
+## Agent Development
+- Health advisor implementation
+- File search capabilities
+- Code interpreter integration
+- Event-driven patterns
+
+## Azure Services
+- AI Foundry project setup
+- AI Search integration
+- Cosmos DB vector storage
+- PostgreSQL with pgvector
+- API Management for AI endpoints
+- Logic Apps for workflows
+- Azure Functions deployment
+
+## Evaluation & Monitoring
+- Groundedness evaluation
+- Relevance metrics
+- OpenTelemetry integration
+- Azure Monitor setup
+
+## Implementation Patterns
+- RAG with AI Search
+- Multi-tool agents
+- Event-driven processing
+- Real-time monitoring
+
+This context is optimized for AI coding assistants to provide relevant suggestions for Azure AI Foundry development.

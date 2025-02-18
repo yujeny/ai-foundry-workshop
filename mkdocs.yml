@@ -63,9 +63,21 @@ nav:
     - File Search:
       - Guide: agents/health_advisor.md
       - Notebook: docs/2-notebooks/2-agent_service/3-file-search.ipynb
+    - Agent Tools: agents/tools.md
     - Design Patterns: agents/design.md
+    - Implementation Patterns: agents/patterns.md
     - Implementation: agents/implementation.md
     - Service Integration: agents/service.md
+  - E2E Sample:
+    - Architecture: e2e-sample/architecture.md
+    - Backend Implementation: 3-ai-native-e2e-sample/backend/README.md
+    - Frontend Implementation: 3-ai-native-e2e-sample/frontend/README.md
+  - Azure Integrations:
+    - Service Overview: integrations/azure-services.md
+    - Prerequisites: integrations/prerequisites.md
+  - Evaluation & Monitoring:
+    - Metrics & Observability: evaluation/metrics.md
+    - Performance Tracking: evaluation/monitoring.md
   - Introduction:
     - introduction/index.md
     - Getting Started: introduction/overview.md
