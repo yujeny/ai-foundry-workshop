@@ -1,6 +1,6 @@
-# Azure AI Foundry
+# Azure AI Foundry 【†L1】
 
-Azure AI Foundry is the web-based portal that serves as your central hub for AI development. It provides a project-based environment where all paths lead to organized, collaborative AI development.
+Azure AI Foundry is the web-based portal that serves as your central hub for AI development. Learn more in the [official documentation](https://learn.microsoft.com/azure/ai-foundry).It provides a project-based environment where all paths lead to organized, collaborative AI development.
 
 ![Azure AI Foundry Homepage](../img/ai-foundry-home.png)
 
