@@ -15,25 +15,25 @@ A hands-on workshop that guides you through building intelligent apps and AI age
 - Deploy and test AI models
 - Build AI agents (health advisor examples)
 - Implement health calculations and dietary planning
-- Evaluate agent performance with safety checks
+- Evaluate agent performance and monitor quality attributes
+- Deploy an end-to-end AI native sample app that incorporates all these capabilities and design patterns
 
-> **Duration**: 2-4 hours  
+> **Duration**: 4-5 hours  
 > **Focus**: Hands-on exercises, interactive notebooks, practical examples, end-to-end project
 
 ## 📸 Visuals
 
 ### Sections Overview
 ![Sections](sections.png)
-*Figure 1: Overview of different sections in the Azure AI Foundry Workshop.*
+*Figure 1: Overview of different sections in this workshop.*
 
 ### End-to-End Sample UI
 ![e2esample](./3-ai-native-e2e-sample/assets/ui.png)
 *Figure 2: User interface of the end-to-end AI native sample project.*
 
-These visuals provide a quick glance at the structure and user interface elements you will encounter throughout the workshop.
 ---
 
-## 📦 Prerequisites
+## 📦 Prerequisites    
 
 Before starting the workshop, ensure you have:
 
