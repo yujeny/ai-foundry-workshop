@@ -130,19 +130,19 @@ export interface LiteratureChatRequest {
 
 export const literatureApi = {
   chat: async (message: string) => {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/agents/literature-chat`, {
+    const response = await fetch(`${API_URL}/api/agents/literature-chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'x-api-version': API_VERSION,
       },
       body: JSON.stringify({ message }),
     });
 
     if (!response.ok) {
-      throw new Error(`Literature chat failed: ${response.statusText}`);
+      throw new Error('Failed to chat with literature agent');
     }
 
-    console.dir(response.body, { depth: null });
     return response.body;
   }
 };

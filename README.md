@@ -24,11 +24,11 @@ A hands-on workshop that guides you through building intelligent apps and AI age
 ## 📸 Visuals
 
 ### Sections Overview
-![Sections](sections.png)
+<img src="./3-ai-native-e2e-sample/assets/sections.png" width="50%" />
 *Figure 1: Overview of different sections in this workshop.*
 
 ### End-to-End Sample UI
-![e2esample](./3-ai-native-e2e-sample/assets/ui.png)
+<img src="./3-ai-native-e2e-sample/assets/ui.png" width="50%" />
 *Figure 2: User interface of the end-to-end AI native sample project.*
 
 ---
