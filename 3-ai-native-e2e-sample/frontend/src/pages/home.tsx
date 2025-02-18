@@ -18,10 +18,10 @@ export function HomePage() {
     {
       to: "/medication",
       icon: <Pill className="h-5 w-5" />,
-      title: "Analyze Medications",
+      title: "Smart Medication Insights",
       desc: `This is about showcasing how you can build deep research using your company’s proprietary tools and data sources using AI Agent Service. 🧪 
         It uses AI Agent Service, Azure Functions, Grounding with Bing, Logic Apps, and Azure AI Search to generate a deeply researched report.`,
-      buttonText: "Deep Research on your proprietary data",
+      buttonText: "Deep Research on your data",
       buttonIcon: <Pill className="h-4 w-4" />,
     },
     {
@@ -55,11 +55,11 @@ export function HomePage() {
     <div className="space-y-8">
       {/* Centered main copy */}
       <div className="text-center space-y-4 max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold">Welcome to the AI Agents Demo</h1>
+        <h2 className="text-4xl font-bold">AI Agent Showcase: Intelligent Workflows in Action</h2>
         <p className="text-muted-foreground text-base sm:text-lg">
           This is an art-of-the-possible sample app demonstrating Azure AI Foundry
           and Azure AI Agent Service capabilities. It showcases different design
-          patterns and integrations that can be built using AI Agent Service.
+          patterns and integrations that can be built using AI Agent Service to drive automation, personalization, decision-making, and intelligent research.
         </p>
       </div>
 
