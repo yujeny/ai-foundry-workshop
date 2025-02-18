@@ -37,6 +37,7 @@ theme:
 nav:
   - Home: workshop/README.md
   - Architecture: workshop/architecture.md
+  - Prerequisites: README.md
   - Notebooks:
     - Introduction:
       - Authentication: 1-introduction/1-authentication.ipynb
@@ -60,7 +61,6 @@ nav:
   - E2E Sample:
     - Backend: 3-ai-native-e2e-sample/backend/README.md
     - Frontend: 3-ai-native-e2e-sample/frontend/README.md
-  - Prerequisites: README.md
 
 markdown_extensions:
   - pymdownx.emoji:
