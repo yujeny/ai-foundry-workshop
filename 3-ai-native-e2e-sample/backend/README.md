@@ -1,7 +1,23 @@
 # Drug Development Platform Backend 🧬
 
 ## Overview 🎯
-Backend for the Drug Development Platform, leveraging Azure AI Foundry SDKs for molecular analysis and clinical trial monitoring.
+Backend for the Drug Development Platform, leveraging Azure AI Foundry SDKs for molecular analysis, clinical trial monitoring, and event-driven AI agents. This backend powers an AI-native platform for real-time clinical research, drug discovery, and medical analysis.
+
+## Features 🌟
+
+- 💊 **Medication Analysis**: Comprehensive medication information and AI-powered analysis
+- 📊 **Clinical Trials Monitor**: Real-time monitoring with event-driven AI agents
+- 📚 **Literature Answer Engine**: Evidence-based responses from research literature
+- 👤 **Patient Response Analysis**: AI-powered predictions and monitoring
+- 🤖 **Event-Driven Agents**: Real-time analysis through Azure Event Hub
+- 🔍 **Automated Testing**: Evaluation pipelines using Azure AI Evaluation SDK
+
+## Prerequisites 📋
+
+- Python 3.9+
+- Azure subscription with access to [Azure AI Foundry](https://ai.azure.com)
+- Azure Event Hub instance
+- uv (Python package manager)
 
 ## Azure AI Integration 🤖
 
@@ -50,55 +66,56 @@ Backend for the Drug Development Platform, leveraging Azure AI Foundry SDKs for 
 
 ## Getting Started 🚀
 
-1. **Create Virtual Environment**:
+1. **Install uv** (if not already installed):
    ```bash
-   python -m venv venv
-   source venv/bin/activate  # Windows: venv\Scripts\activate
+   # Unix/Linux/macOS
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+
+   # Windows (PowerShell)
+   (Invoke-WebRequest -Uri https://astral.sh/uv/install.ps1 -UseBasicParsing).Content | pwsh
    ```
 
-2. **Install Dependencies**:
+2. **Create Virtual Environment**:
    ```bash
-   pip install -r requirements.txt
+   uv venv
+   source .venv/bin/activate  # Windows: .venv\Scripts\activate
    ```
 
-3. **Configure Environment**:
+3. **Install Dependencies**:
+   ```bash
+   uv pip install -r requirements.txt
+   ```
+
+4. **Configure Environment**:
    - Copy `.env.example` to `.env`
    - Update with your Azure credentials:
    ```env
-   # Azure Authentication (DO NOT commit actual values!)
+   # Azure Authentication
    AZURE_CLIENT_ID=your_client_id_here
    AZURE_CLIENT_SECRET=your_client_secret_here
    AZURE_TENANT_ID=your_tenant_id_here
    
-   # AI Foundry Configuration (use your project-specific values)
+   # AI Foundry Configuration
    PROJECT_CONNECTION_STRING=your_connection_string_here
    MODEL_DEPLOYMENT_NAME=your_model_name_here
    
-   # OpenTelemetry Settings (adjust based on your environment)
+   # Event Hub Configuration
+   EVENTHUB_CONNECTION_STRING=your_event_hub_connection_string
+   EVENTHUB_NAME=event-driven-agents
+   CONSUMER_GROUP=$Default
+   
+   # OpenTelemetry Settings
    OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318
    OTEL_SERVICE_NAME=drug-discovery-platform
    OTEL_RESOURCE_ATTRIBUTES=deployment.environment=development
    ```
 
-   > ⚠️ **Security Note**: Never commit real credentials or sensitive information to version control.
-   > Always use environment variables or secure secret management solutions in production.
-
-   Required Environment Variables:
-   - `AZURE_CLIENT_ID`: Azure AD application ID for authentication
-   - `AZURE_CLIENT_SECRET`: Azure AD application secret for authentication
-   - `AZURE_TENANT_ID`: Azure AD tenant ID for authentication
-   - `PROJECT_CONNECTION_STRING`: AI Foundry project connection string for agent and model access
-   - `MODEL_DEPLOYMENT_NAME`: Name of your deployed model for agent creation
-   - `OTEL_EXPORTER_OTLP_ENDPOINT`: OpenTelemetry collector endpoint for tracing
-   - `OTEL_SERVICE_NAME`: Service name for tracing (default: drug-discovery-platform)
-   - `OTEL_RESOURCE_ATTRIBUTES`: Additional tracing attributes (default: deployment.environment=development)
-
-4. **Run the Server**:
+5. **Run the Server**:
    ```bash
-   uvicorn main:app --reload
+   uvicorn main:app --reload --port 8000
    ```
 
-5. **Access API Documentation**:
+6. **Access API Documentation**:
    - OpenAPI: [http://localhost:8000/docs](http://localhost:8000/docs)
    - ReDoc: [http://localhost:8000/redoc](http://localhost:8000/redoc)
 
@@ -106,13 +123,10 @@ Backend for the Drug Development Platform, leveraging Azure AI Foundry SDKs for 
 
 ```mermaid
 flowchart TB
-    subgraph Client
-        FE[Frontend]
-    end
-    
     subgraph Backend
         API[FastAPI]
         AI[Azure AI Clients]
+        EH[Event Hub]
         TEL[OpenTelemetry]
     end
     
@@ -121,6 +135,7 @@ flowchart TB
         AGT[AI Agents]
         INF[AI Inference]
         EVAL[AI Evaluation]
+        EVP[Event Processor]
         subgraph Agents["AI Agent Tools"]
             BING[Bing Grounding]
             FUNC[Function Calling]
@@ -128,8 +143,9 @@ flowchart TB
         end
     end
     
-    FE <--> API
     API <--> AI
+    API <--> EH
+    EH <--> EVP
     AI <--> PRJ
     PRJ <--> AGT
     AGT <--> BING
@@ -140,115 +156,45 @@ flowchart TB
     API --> TEL
 ```
 
-## Endpoints 🛠️
+## Key Endpoints 🛠️
 
-### Molecular Design Endpoints
+### Medication Analysis
 
-#### 1. Analyze Molecule
+#### 1. Analyze Medication
 ```bash
-POST /molecular-design/analyze
+POST /api/molecular-design/analyze-medication
 ```
-Analyzes a drug candidate's molecular properties using Azure AI Inference.
+Analyzes medication properties using Azure AI Inference.
 
 Request:
 ```json
 {
-    "id": "DRUG-001",
-    "molecule_type": "Small Molecule",
-    "therapeutic_area": "Oncology",
-    "target_proteins": ["EGFR", "HER2"],
-    "development_stage": "Phase 1"
+    "medication": "Aspirin",
+    "notes": "Daily low-dose"
 }
 ```
 
 Response:
 ```json
 {
-    "message": "Molecular analysis complete",
-    "analysis": {
-        "efficacy_score": 0.85,
-        "safety_score": 0.92,
-        "confidence": 0.89
-    }
+    "structured_info": {
+        "category": "NSAID",
+        "common_side_effects": ["stomach irritation", "bleeding risk"],
+        "risk_rating": "low",
+        "interactions": ["blood thinners", "other NSAIDs"]
+    },
+    "ai_explanation": "Detailed analysis...",
+    "disclaimer": "Medical disclaimer..."
 }
 ```
 
-### Azure AI Agent Endpoints
+### Clinical Trials
 
-#### 1. Literature Search
+#### 1. Monitor Trial
 ```bash
-POST /agents/literature-search
+GET /api/clinical-trials/monitor/{trial_id}
 ```
-Uses Azure AI Agent's Bing grounding capability to search and analyze scientific literature.
-
-Request:
-```json
-{
-    "query": "EGFR inhibitors in lung cancer"
-}
-```
-
-Response:
-```json
-{
-    "query": "EGFR inhibitors in lung cancer",
-    "summary": "Analysis of recent publications...",
-    "agent_id": "agent-123"
-}
-```
-
-#### 2. Molecule Analysis
-```bash
-POST /agents/molecule-analysis
-```
-Uses Azure AI Agent's function calling capability to analyze molecular properties.
-
-Request:
-```json
-{
-    "smiles": "CC1=CC=C(C=C1)NC(=O)C2=CC=C(Cl)C=C2",
-    "target_proteins": ["EGFR", "HER2"],
-    "therapeutic_area": "Oncology"
-}
-```
-
-Response:
-```json
-{
-    "molecule": "CC1=CC=C(C=C1)NC(=O)C2=CC=C(Cl)C=C2",
-    "analysis": "Detailed molecular property analysis...",
-    "agent_id": "agent-456"
-}
-```
-
-#### 3. Clinical Trial Data Analysis
-```bash
-POST /agents/data-analysis
-```
-Uses Azure AI Agent's code interpreter capability to analyze trial data.
-
-Request:
-```
-multipart/form-data
-- file: trial_data.csv
-```
-
-Response:
-```json
-{
-    "filename": "trial_data.csv",
-    "analysis": "Statistical analysis and visualizations...",
-    "agent_id": "agent-789"
-}
-```
-
-### Clinical Trials Endpoints
-
-#### 1. Monitor Trials
-```bash
-GET /clinical-trials/monitor?trial_id=TRIAL-001
-```
-Real-time monitoring of clinical trial metrics and patient responses.
+Real-time monitoring of trial metrics and patient responses.
 
 Response:
 ```json
@@ -264,159 +210,12 @@ Response:
 }
 ```
 
-#### 2. Predict Patient Response
-```bash
-POST /clinical-trials/predict-response
-```
-Predicts individual patient response using biomarker analysis.
-
-Request:
-```json
-{
-    "trial_id": "TRIAL-001",
-    "patient_id": "PAT-001"
-}
-```
-
-Response:
-```json
-{
-    "predicted_response": 0.85,
-    "confidence": 0.92,
-    "recommendations": [
-        "Continue monitoring key biomarkers",
-        "Schedule follow-up in 2 weeks"
-    ]
-}
-```
-
-### Automated Testing Endpoints
-
-#### 1. Run Evaluation Demo
-
-```mermaid
-sequenceDiagram
-    participant Client
-    participant API
-    participant Evaluator
-    participant Dataset
-    
-    Client->>API: POST /evaluation/run-demo
-    API->>Dataset: Upload JSONL Data
-    API->>Evaluator: Configure Evaluation
-    Evaluator->>Evaluator: Run F1 Score
-    Evaluator->>Evaluator: Run Relevance
-    Evaluator-->>API: Results
-    API-->>Client: Metrics
-```
-
 ## OpenTelemetry Integration 📊
 
-This project uses OpenTelemetry for distributed tracing to monitor and debug the drug development pipeline. Traces help us understand:
-
-- 🔍 Performance bottlenecks
-- 🔗 Request flows through the system
-- ❌ Error patterns and their context
-- 📈 AI model inference timing
-
-### Viewing Traces
-
-1. Traces are collected by the OpenTelemetry collector at:
-   ```
-   http://localhost:4318/v1/traces
-   ```
-
-2. Key spans to monitor:
-   - `molecular_design.analyze`: Molecule analysis and AI inference
-   - `clinical_trials.monitor`: Trial monitoring and metrics
-   - `clinical_trials.predict_response`: Patient response predictions
-
-3. Important attributes in traces:
-   - `molecule.id`: Unique identifier for drug candidates
-   - `molecule.type`: Type of molecule being analyzed
-   - `therapeutic.area`: Target therapeutic area
-   - `analysis.efficacy`: Predicted efficacy score
-   - `analysis.safety`: Safety assessment score
-   - `trial.id`: Clinical trial identifier
-   - `patient.id`: Patient identifier for specific analyses
-
-### Example Trace Analysis
-
-```mermaid
-sequenceDiagram
-    participant C as Client
-    participant A as API
-    participant AI as Azure AI
-    participant DB as Database
-    
-    C->>A: POST /molecular-design/analyze
-    activate A
-    A->>AI: Analyze molecule
-    AI-->>A: Inference results
-    A->>DB: Store results
-    A-->>C: Analysis response
-    deactivate A
-```
-
-## Security 🔒
-
-1. **Environment Variables**:
-   - All secrets stored in `.env`
-   - Never commit sensitive data
-
-2. **Authentication**:
-   - Azure AD integration
-   - Role-based access control
-
-3. **Data Protection**:
-   - Encryption at rest
-   - Secure communication
-
-## Contributing 🤝
-1. Fork the repository
-2. Create a feature branch
-3. Submit a Pull Request
-
-## Setup and Running
-
-1. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-2. Start the server (runs on port 8002):
-
-   Windows (PowerShell):
-   ```powershell
-   .\start.ps1
-   ```
-   
-   Unix/Linux/MacOS:
-   ```bash
-   ./start.sh
-   ```
-
-## Environment Variables
-
-The backend server uses the following environment variables:
-
-- `PORT`: Server port (defaults to 8002)
-- `PROJECT_CONNECTION_STRING`: Azure project connection string
-- `MODEL_DEPLOYMENT_NAME`: Azure model deployment name
-- Other environment variables as specified in main.py
-
-## API Documentation
-
-Once the server is running, you can access the API documentation at:
-- http://localhost:8002/ (ReDoc interface)
-
-## Development
-
-The server includes:
-- FastAPI framework
-- OpenTelemetry instrumentation
-- CORS middleware configured for frontend at http://localhost:3000
-- Health check endpoint at /health
+Distributed tracing monitors the drug development pipeline with key spans:
+- `molecular_design.analyze`: Molecule analysis
+- `clinical_trials.monitor`: Trial monitoring
+- `clinical_trials.predict_response`: Patient predictions
 
 ## Deployment with Azure Developer CLI (azd) 🚀
 
@@ -425,31 +224,42 @@ The server includes:
    curl -fsSL https://aka.ms/install-azd.sh | bash
    ```
 
-2. **Login to Azure**:
+2. **Login and Deploy**:
    ```bash
    azd auth login
-   ```
-
-3. **Deploy from Root Directory**:
-   From the root of "3-e2e-drug-discovery-sample/", run:
-   ```bash
    azd init
    azd up
    ```
 
-This will:
-- Create Azure Container App for the backend
-- Configure environment variables from your .env
-- Deploy the backend service
-- Output the public endpoint URL
+This deploys:
+- Backend to Azure Container Apps
+- Configures Event Hub integration
+- Sets up monitoring and scaling
 
-After deployment:
-- Access API documentation at `https://<your-app>.azurecontainerapps.io/docs`
-- Use the endpoint URL in your frontend configuration
+## Security 🔒
+
+1. **Environment Variables**:
+   - All secrets stored in `.env`
+   - Use Azure Key Vault in production
+
+2. **Authentication**:
+   - Azure AD integration
+   - Role-based access control
+
+3. **Data Protection**:
+   - Encryption at rest and in transit
+   - Secure communication channels
 
 ## Learn More 📚
-- [Azure AI Projects SDK](https://learn.microsoft.com/python/api/overview/azure/ai-projects-readme?view=azure-python-preview)
-- [Azure AI Inference SDK](https://learn.microsoft.com/python/api/overview/azure/ai-inference-readme?view=azure-python-preview)
-- [Azure AI Evaluation SDK](https://learn.microsoft.com/python/api/overview/azure/ai-evaluation-readme?view=azure-python-preview)
-- [OpenTelemetry Documentation](https://opentelemetry.io/docs/)
+- [Azure AI Foundry Documentation](https://learn.microsoft.com/azure/ai-foundry)
+- [Event-Driven Architecture](https://learn.microsoft.com/azure/architecture/guide/architecture-styles/event-driven)
+- [Azure Event Hubs Documentation](https://learn.microsoft.com/azure/event-hubs/)
 - [FastAPI Documentation](https://fastapi.tiangolo.com/)
+
+## Contributing 🤝
+1. Fork the repository
+2. Create a feature branch
+3. Submit a Pull Request
+
+## License 📄
+This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.

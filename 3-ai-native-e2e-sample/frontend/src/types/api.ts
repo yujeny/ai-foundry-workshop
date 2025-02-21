@@ -68,10 +68,12 @@ export interface AnalysisResult {
 
 export interface Document {
   title: string;
-  abstract: string;
-  content: string;
+  abstract?: string;
+  content?: string;
   authors: string[];
   relevance: number;
+  journal?: string;
+  year?: number;
 }
 
 export interface SearchResponse {

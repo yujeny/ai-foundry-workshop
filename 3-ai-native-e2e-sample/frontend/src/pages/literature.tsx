@@ -30,6 +30,38 @@ export function LiteraturePage() {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
+  // Sample documents to show after response
+  const sampleDocuments: Document[] = [
+    {
+      title: "Deep Learning for Drug Discovery: Opportunities and Challenges",
+      relevance: 0.95,
+      authors: ["Zhang et al."],
+      year: 2023,
+      journal: "Nature Reviews Drug Discovery"
+    },
+    {
+      title: "AI-Powered Structure-Based Drug Design: Recent Advances and Future Perspectives",
+      relevance: 0.88,
+      authors: ["Chen et al."],
+      year: 2023,
+      journal: "Journal of Medicinal Chemistry"
+    },
+    {
+      title: "Machine Learning Applications in Drug Development Pipeline",
+      relevance: 0.82,
+      authors: ["Smith et al."],
+      year: 2022,
+      journal: "Drug Discovery Today"
+    },
+    {
+      title: "Artificial Intelligence in Target Identification and Validation",
+      relevance: 0.78,
+      authors: ["Johnson et al."],
+      year: 2023,
+      journal: "Nature Biotechnology"
+    }
+  ]
+
   useEffect(() => {
     // Scroll to bottom when messages change
     if (messages.length > 0) {
@@ -75,18 +107,20 @@ export function LiteraturePage() {
 
     setLoading(true)
     setError(null)
+    // Clear documents when starting a new query
+    setDocuments([])
 
     try {
       const stream = await literatureApi.chat(input)
       if (!stream) throw new Error("No response stream")
 
+      // Show sample documents after getting a response
+      setDocuments(sampleDocuments)
+
       const reader = stream.getReader()
       const decoder = new TextDecoder()
 
       let partialContent = ""
-
-      // Reset documents for new response
-      setDocuments([])
 
       // Add user's message
       const userMessage: ChatMessage = {
@@ -344,31 +378,34 @@ export function LiteraturePage() {
         </div>
 
         {/* Referenced Documents panel */}
-        <div className="hidden md:block w-80">
-          <div className="bg-white dark:bg-gray-900 border dark:border-gray-800 rounded-xl shadow-sm p-4 space-y-4">
-            <h2 className="text-lg font-semibold flex items-center gap-2">
-              <FileText className="w-5 h-5" />
+        <div className="hidden md:block w-64">
+          <div className="bg-white dark:bg-gray-900 border dark:border-gray-800 rounded-xl shadow-sm p-3 space-y-2">
+            <h2 className="text-sm font-semibold flex items-center gap-2 mb-2">
+              <FileText className="w-4 h-4" />
               Referenced Documents
             </h2>
             {documents.map((doc, index) => (
               <div
                 key={index}
-                className="p-4 bg-white dark:bg-gray-900 rounded-lg shadow-sm border dark:border-gray-800"
+                className="p-2 bg-white dark:bg-gray-900 rounded-lg shadow-sm border dark:border-gray-800"
               >
-                <h3 className="font-medium">{doc.title}</h3>
-                <div className="mt-2 h-1 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                <h3 className="text-sm font-medium leading-tight">{doc.title}</h3>
+                <p className="text-xs text-gray-500 mt-0.5">
+                  {doc.authors?.join(", ")} • {doc.journal} • {doc.year}
+                </p>
+                <div className="mt-1.5 h-0.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
                   <div
                     className="h-full bg-primary rounded-full transition-all duration-500"
                     style={{ width: `${doc.relevance * 100}%` }}
                   />
                 </div>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-xs text-gray-500 mt-0.5">
                   {Math.round(doc.relevance * 100)}% relevance
                 </p>
               </div>
             ))}
             {documents.length === 0 && (
-              <p className="text-sm text-muted-foreground">No references yet...</p>
+              <p className="text-xs text-muted-foreground">No references yet...</p>
             )}
           </div>
         </div>
