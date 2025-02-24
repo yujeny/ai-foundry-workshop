@@ -3,6 +3,9 @@ azure-identity                         # Azure authentication and credentials ma
 azure-ai-projects                      # Azure AI project management and orchestration
 azure-search-documents                 # Azure AI Search integration
 
+autogen-agentchat
+autogen-ext[azure]
+
 # Azure AI Services
 azure-ai-inference[opentelemetry]      # Azure AI inference with telemetry support
 azure-ai-evaluation                    # Azure AI model evaluation and testing
