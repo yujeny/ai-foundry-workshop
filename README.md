@@ -21,6 +21,11 @@ A hands-on workshop that guides you through building intelligent apps and AI age
 > **Duration**: 4-5 hours  
 > **Focus**: Hands-on exercises, interactive notebooks, practical examples, end-to-end project
 
+## 🎥 Workshop Overview Video
+
+Watch our overview video to get a comprehensive understanding of the workshop:
+[![Azure AI Foundry Workshop Overview](https://img.youtube.com/vi/0bGLgmZJ6DE/0.jpg)](https://youtu.be/0bGLgmZJ6DE)
+
 ## 📸 Visuals
 
 ### Sections Overview

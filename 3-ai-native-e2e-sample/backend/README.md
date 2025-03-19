@@ -87,37 +87,16 @@ Backend for the Drug Development Platform, leveraging Azure AI Foundry SDKs for 
    ```
 
 4. **Configure Environment**:
-   - Copy `.env.example` to `.env`
-   - Update with your Azure credentials:
-   ```env
-   # Azure Authentication
-   AZURE_CLIENT_ID=your_client_id_here
-   AZURE_CLIENT_SECRET=your_client_secret_here
-   AZURE_TENANT_ID=your_tenant_id_here
-   
-   # AI Foundry Configuration
-   PROJECT_CONNECTION_STRING=your_connection_string_here
-   MODEL_DEPLOYMENT_NAME=your_model_name_here
-   
-   # Event Hub Configuration
-   EVENTHUB_CONNECTION_STRING=your_event_hub_connection_string
-   EVENTHUB_NAME=event-driven-agents
-   CONSUMER_GROUP=$Default
-   
-   # OpenTelemetry Settings
-   OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318
-   OTEL_SERVICE_NAME=drug-discovery-platform
-   OTEL_RESOURCE_ATTRIBUTES=deployment.environment=development
-   ```
+   - Copy `.env.example` to `.env` and fill in the required values
 
 5. **Run the Server**:
    ```bash
-   uvicorn main:app --reload --port 8000
+   uvicorn main:app --reload --port 8003
    ```
 
 6. **Access API Documentation**:
-   - OpenAPI: [http://localhost:8000/docs](http://localhost:8000/docs)
-   - ReDoc: [http://localhost:8000/redoc](http://localhost:8000/redoc)
+   - OpenAPI: [http://localhost:8003/docs](http://localhost:8003/docs)
+   - ReDoc: [http://localhost:8003/redoc](http://localhost:8003/redoc)
 
 ## API Architecture 🏗️
 
