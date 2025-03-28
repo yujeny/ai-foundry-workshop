@@ -7,7 +7,7 @@
 </div>
 
 
-## 🤖 Overview
+## 🤖 개요 Overview
 
 A hands-on workshop that guides you through building intelligent apps and AI agents on top of Azure AI Foundry, with fun examples related to health and dietary advice. You will:
 - Learn Azure AI Foundry fundamentals
