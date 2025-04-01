@@ -24,6 +24,7 @@
 ## 🎥 Workshop Overview Video
 
 워크숍에 대한 포괄적인 이해를 돕기 위해 개요 동영상을 시청하세요:
+
 [![Azure AI Foundry Workshop Overview](https://img.youtube.com/vi/0bGLgmZJ6DE/0.jpg)](https://youtu.be/0bGLgmZJ6DE)
 
 ## 📸 Visuals
