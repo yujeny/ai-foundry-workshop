@@ -18,12 +18,12 @@
 - 에이전트 성능 평가 및 품질 속성 모니터링
 - 모든 기능과 디자인 패턴이 통합된 엔드투엔드 AI 네이티브 샘플 앱 배포
 
-> **Duration**: 4-5 hours  
-> **Focus**: Hands-on exercises, interactive notebooks, practical examples, end-to-end project
+> **소요 예상 시간**: 4-5 시간  
+> **Focus**: 실습, 대화형 노트북, 실용적인 예제, 엔드투엔드 프로젝트
 
 ## 🎥 Workshop Overview Video
 
-Watch our overview video to get a comprehensive understanding of the workshop:
+워크숍에 대한 포괄적인 이해를 돕기 위해 개요 동영상을 시청하세요:
 [![Azure AI Foundry Workshop Overview](https://img.youtube.com/vi/0bGLgmZJ6DE/0.jpg)](https://youtu.be/0bGLgmZJ6DE)
 
 ## 📸 Visuals
