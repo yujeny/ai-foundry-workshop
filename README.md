@@ -9,14 +9,14 @@
 
 ## 🤖 Overview
 
-A hands-on workshop that guides you through building intelligent apps and AI agents on top of Azure AI Foundry, with fun examples related to health and dietary advice. You will:
-- Learn Azure AI Foundry fundamentals
-- Set up authentication and project configuration
-- Deploy and test AI models
-- Build AI agents (health advisor examples)
-- Implement health calculations and dietary planning
-- Evaluate agent performance and monitor quality attributes
-- Deploy an end-to-end AI native sample app that incorporates all these capabilities and design patterns
+건강 및 식단 조언과 관련된 재미있는 예제를 통해 Azure AI Foundry를 기반으로 지능형 앱 및 AI 에이전트를 빌드하는 방법을 안내하는 실습 워크샵입니다. 다음의 내용을 포함합니다.
+- Azure AI Foundry 기본 사항 알아보기
+- 인증 및 프로젝트 구성 설정
+- AI 모델 배포 및 테스트
+- AI 에이전트 빌드(건강 어드바이저 예제)
+- 건강 계산 및 식단 계획 구현
+- 에이전트 성능 평가 및 품질 속성 모니터링
+- 모든 기능과 디자인 패턴이 통합된 엔드투엔드 AI 네이티브 샘플 앱 배포
 
 > **Duration**: 4-5 hours  
 > **Focus**: Hands-on exercises, interactive notebooks, practical examples, end-to-end project
