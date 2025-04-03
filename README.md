@@ -82,8 +82,8 @@
       1. [Azure AI Foundry](https://ai.azure.com)로 이동
       2. AI 파운드리 마법사를 사용하여 새 AI 허브 및 프로젝트 만들기
       3. 필요한 모델 배포:
-         - GPT models(gpt-4o, gpt-4o-mini) for chat/completion (**set TPM to max** to avoid issues with Agents notebooks)
-         - Embedding model for vector search
+         - Chat/Completion을 위한 GPT 모델(gpt-4o, gpt-4o-mini) (Agent 노트북에서 발생할 수 있는 이슈를 방지하기 위해 **TPM을 최대**로 설정)
+         - 벡터 검색을 위한 임베딩 모델
          - Ensure the model is deployed in `Global-Standard` or `DataZone-Standard`
       4. Set up connections:
          - Configure [Grounding with Bing](https://learn.microsoft.com/en-us/azure/ai-services/agents/how-to/tools/bing-grounding?view=azure-python-preview&tabs=python&pivots=overview) connection
