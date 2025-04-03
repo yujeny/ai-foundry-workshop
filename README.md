@@ -120,25 +120,25 @@
    ```
 
    > **Note**: VS Code에서 커널 오류가 발생하는 경우, 다음을 시도해보자:
-   > 1. Select kernel: Click "Select Kernel" > "Python Environments" > "Python (.venv)"
-   > 2. If kernel is not listed, run `python -m ipykernel install --user --name=.venv` again, or use the "Create New Kernel" wizard in VS Code to create a new Python environment
-   > 3. Reload VS Code if needed
+   > 1. 커널을 선택합니다: "Select Kernel" > "Python Environments" > "Python (.venv)" 을 클릭합니다.
+   > 2. 커널이 목록에 없으면, `python -m ipykernel install --user --name=.venv` 을 다시 실행하거나, VS Code의 “새 커널 만들기” 마법사를 사용하여 새 Python 환경을 생성합니다.
+   > 3. 필요한 경우 VS Code를 다시 로드합니다.
 
-6. **Choose your notebook environment**:
+6. **노트북 환경 선택**:
 
-   **Option A: VS Code**
-   - Install [VS Code Python extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
-   - Install either:
-     - [Jupyter extension](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter) for .ipynb files
-     - [Polyglot Notebooks extension](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.dotnet-interactive-vscode) for .dib files
-   - Open any notebook and select your Python kernel (.venv)
+   **옵션 A: VS Code**
+   - [VS Code Python extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python) 설치
+   - 둘 중 하나를 설치합니다.:
+     - .ipynb 파일용 [Jupyter extension](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter) 
+     - .dib 파일용 [Polyglot Notebooks extension](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.dotnet-interactive-vscode) 
+   - 아무 notebook이나 열고 Python 커널(.venv)을 선택합니다.
 
-   **Option B: GitHub Codespaces**
-   - Click "Code" > "Create codespace" on the repository
-   - Wait for environment setup
-   - Notebooks will be ready to run
+   **옵션 B: GitHub Codespaces**
+   - 리포지토리에서 "Code" > "Create codespace" 을 클릭합니다.
+   - 환경이 설정될 때까지 기다립니다.
+   - Notebooks를 실행할 준비가 됩니다.
 
-   **Option C: Jupyter Lab/Notebook**
+   **옵션 C: Jupyter Lab/Notebook**
    ```bash
    # Install Jupyter if you haven't already
    uv pip install jupyterlab notebook
