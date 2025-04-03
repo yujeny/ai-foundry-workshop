@@ -84,13 +84,13 @@
       3. 필요한 모델 배포:
          - Chat/Completion을 위한 GPT 모델(gpt-4o, gpt-4o-mini) (Agent 노트북에서 발생할 수 있는 이슈를 방지하기 위해 **TPM을 최대**로 설정)
          - 벡터 검색을 위한 임베딩 모델
-         - Ensure the model is deployed in `Global-Standard` or `DataZone-Standard`
-      4. Set up connections:
-         - Configure [Grounding with Bing](https://learn.microsoft.com/en-us/azure/ai-services/agents/how-to/tools/bing-grounding?view=azure-python-preview&tabs=python&pivots=overview) connection
-         - Configure Azure AI Search connection
-      5. Add your user account to the `Azure AI Developer` role from Azure AI Foundry Management Portal
+         - 모델이 `Global-Standard` 또는 `DataZone-Standard` 에 배포되었는지 확인하세요.
+      4. 연결을 설정합니다:
+         - [Grounding with Bing](https://learn.microsoft.com/en-us/azure/ai-services/agents/how-to/tools/bing-grounding?view=azure-python-preview&tabs=python&pivots=overview) 연결 설정
+         - Azure AI 검색 연결 구성
+      5. Azure AI 파운드리 관리 포털에서 `Azure AI Developer` 역할에 사용자 계정을 추가합니다.
 
-   b. **Configure Environment Variables**:
+   b. **환경 변수 구성**:
       ```bash
       cp .env.example .env
       ```
