@@ -102,9 +102,9 @@
       - `BING_CONNECTION_NAME`: Bing 검색 연결 이름
       - `SERVERLESS_MODEL_NAME`: 서버리스 모델 이름
 
-      > **Note**: `MODEL_DEPLOYMENT_NAME`에 지정된 모델은 Azure AI 에이전트 서비스 또는 어시스턴트 API에서 지원해야 합니다. 자세한 내용은 [지원되는 모델](https://learn.microsoft.com/en-us/azure/ai-services/agents/concepts/model-region-support?tabs=python#azure-openai-models)을 참조하세요. Bing Search를 사용한 그라운딩의 경우 `gpt-4o-mini` 모델을 사용해야 합니다. The model specified in must be supported by Azure AI Agents Service or Assistants API. See [supported models](https://learn.microsoft.com/en-us/azure/ai-services/agents/concepts/model-region-support?tabs=python#azure-openai-models) for details. For Grounding with Bing Search, you need to use `gpt-4o-mini` model.
+      > **Note**: `MODEL_DEPLOYMENT_NAME`에 지정된 모델은 Azure AI 에이전트 서비스 또는 어시스턴트 API에서 지원해야 합니다. 자세한 내용은 [지원되는 모델](https://learn.microsoft.com/en-us/azure/ai-services/agents/concepts/model-region-support?tabs=python#azure-openai-models)을 참조하세요. Bing Search를 사용한 그라운딩의 경우 `gpt-4o-mini` 모델을 사용해야 합니다.
 
-5. **Install dependencies**:
+5. **종속 요소 설치**:
    ```bash
    # Install core Azure AI SDKs and Jupyter requirements
    uv pip install azure-identity azure-ai-projects azure-ai-inference[opentelemetry] azure-search-documents azure-ai-evaluation azure-monitor-opentelemetry
