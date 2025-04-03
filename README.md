@@ -39,17 +39,17 @@
 
 ---
 
-## 📦 Prerequisites    
+## 📦 사전 준비 사항    
 
-Before starting the workshop, ensure you have:
+워크샵을 시작하기 전에 다음이 설치되어 있는지 확인하세요:
 
-- [Python 3.10](https://www.python.org/downloads/) or higher installed
-- An active Azure subscription with access to [Azure AI Foundry](https://ai.azure.com)
-- [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli) installed
-- [Git](https://git-scm.com/downloads) installed
-- [VS Code](https://code.visualstudio.com/), [GitHub Codespaces](https://github.com/features/codespaces), or [Jupyter Notebook](https://jupyter.org/install) environment
-- Basic Python programming knowledge
-- Model deployment and [AI Search](https://learn.microsoft.com/en-us/azure/search/search-what-is-azure-search) connection configured in Azure AI Foundry
+- [Python 3.10](https://www.python.org/downloads/) 이상 설치
+- [Azure AI Foundry](https://ai.azure.com 에 대한 액세스 권한이 있는 활성 Azure 구독
+- [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli) 설치
+- [Git](https://git-scm.com/downloads) 설치
+- [VS Code](https://code.visualstudio.com/), [GitHub Codespaces](https://github.com/features/codespaces), 또는 [Jupyter Notebook](https://jupyter.org/install) 환경
+- 기본 Python 프로그래밍 지식
+- Azure AI Foundry에서 모델 배포 및 [AI Search](https://learn.microsoft.com/en-us/azure/search/search-what-is-azure-search) 연결 구성
 
 ---
 
