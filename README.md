@@ -106,20 +106,20 @@
 
 5. **종속 요소 설치**:
    ```bash
-   # Install core Azure AI SDKs and Jupyter requirements
+   # Core Azure AI SDK 및 Jupyter 필요 사항 설치
    uv pip install azure-identity azure-ai-projects azure-ai-inference[opentelemetry] azure-search-documents azure-ai-evaluation azure-monitor-opentelemetry
 
-   # Install Jupyter requirements
+   # Jupyter 필요사항 설치
    uv pip install ipykernel jupyterlab notebook
 
-   # Register the kernel with Jupyter
+   # Jupyter에 커널 등록하기
    python -m ipykernel install --user --name=.venv --display-name="Python (.venv)"
 
-   # Install additional requirements (optional - for deploying repo or running mkdocs)
+   # 추가 필요사항 설치 (optional - for deploying repo or running mkdocs)
    uv pip install -r requirements.txt
    ```
 
-   > **Note**: If you encounter kernel errors in VS Code, try:
+   > **Note**: VS Code에서 커널 오류가 발생하는 경우, 다음을 시도해보자:
    > 1. Select kernel: Click "Select Kernel" > "Python Environments" > "Python (.venv)"
    > 2. If kernel is not listed, run `python -m ipykernel install --user --name=.venv` again, or use the "Create New Kernel" wizard in VS Code to create a new Python environment
    > 3. Reload VS Code if needed
