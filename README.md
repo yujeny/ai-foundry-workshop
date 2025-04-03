@@ -53,15 +53,15 @@
 
 ---
 
-## 🚀 Quick Start
+## 🚀 빠른 시작
 
-1. **Clone the repo**:
+1. **리포지토리 복제**:
    ```bash
    git clone https://github.com/Azure/ai-foundry-workshop.git
    cd ai-foundry-workshop
    ```
 
-2. **Install uv**:
+2. **uv 설치**:
    ```bash
    # Unix/Linux/macOS
    curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -70,18 +70,18 @@
    (Invoke-WebRequest -Uri https://astral.sh/uv/install.ps1 -UseBasicParsing).Content | pwsh
    ```
 
-3. **Create & activate a virtual environment**:
+3. **가상 환경 생성 및 활성화**:
    ```bash
    uv venv
    source .venv/bin/activate  # Windows: .venv\Scripts\activate
    ```
 
-4. **Set up Azure AI Foundry**:
+4. **Azure AI Foundry 설정**:
 
-   a. **Create Project and Deploy Resources**:
-      1. Go to [Azure AI Foundry](https://ai.azure.com)
-      2. Create a new AI Hub and Project using the AI Foundry Wizard
-      3. Deploy required models:
+   a. **프로젝트 생성 및 리소스 배포**:
+      1. [Azure AI Foundry](https://ai.azure.com)로 이동
+      2. AI 파운드리 마법사를 사용하여 새 AI 허브 및 프로젝트 만들기
+      3. 필요한 모델 배포:
          - GPT models(gpt-4o, gpt-4o-mini) for chat/completion (**set TPM to max** to avoid issues with Agents notebooks)
          - Embedding model for vector search
          - Ensure the model is deployed in `Global-Standard` or `DataZone-Standard`
