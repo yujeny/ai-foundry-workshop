@@ -94,15 +94,15 @@
       ```bash
       cp .env.example .env
       ```
-      Update `.env` with your Azure AI Foundry values:
-      - `PROJECT_CONNECTION_STRING`: Your project connection string from Azure ML workspace
-      - `MODEL_DEPLOYMENT_NAME`: Your model deployment name
-      - `EMBEDDING_MODEL_DEPLOYMENT_NAME`: Your embedding model deployment name
-      - `TENANT_ID`: Your tenant ID from Azure portal
-      - `BING_CONNECTION_NAME`: Your Bing search connection name
-      - `SERVERLESS_MODEL_NAME`: Your serverless model name
+      Azure AI Foundry 값으로 `.env`을 업데이트합니다:
+      - `PROJECT_CONNECTION_STRING`: Azure ML 워크스페이스의 프로젝트 연결 문자열
+      - `MODEL_DEPLOYMENT_NAME`: 모델 배포 이름
+      - `EMBEDDING_MODEL_DEPLOYMENT_NAME`: 임베딩 모델 배포 이름
+      - `TENANT_ID`: Azure 포털에서 확인한 테넌트 ID
+      - `BING_CONNECTION_NAME`: Bing 검색 연결 이름
+      - `SERVERLESS_MODEL_NAME`: 서버리스 모델 이름
 
-      > **Note**: The model specified in `MODEL_DEPLOYMENT_NAME` must be supported by Azure AI Agents Service or Assistants API. See [supported models](https://learn.microsoft.com/en-us/azure/ai-services/agents/concepts/model-region-support?tabs=python#azure-openai-models) for details. For Grounding with Bing Search, you need to use `gpt-4o-mini` model.
+      > **Note**: `MODEL_DEPLOYMENT_NAME`에 지정된 모델은 Azure AI 에이전트 서비스 또는 어시스턴트 API에서 지원해야 합니다. 자세한 내용은 [지원되는 모델](https://learn.microsoft.com/en-us/azure/ai-services/agents/concepts/model-region-support?tabs=python#azure-openai-models)을 참조하세요. Bing Search를 사용한 그라운딩의 경우 `gpt-4o-mini` 모델을 사용해야 합니다. The model specified in must be supported by Azure AI Agents Service or Assistants API. See [supported models](https://learn.microsoft.com/en-us/azure/ai-services/agents/concepts/model-region-support?tabs=python#azure-openai-models) for details. For Grounding with Bing Search, you need to use `gpt-4o-mini` model.
 
 5. **Install dependencies**:
    ```bash
