@@ -153,19 +153,19 @@
 7. **다음 과정을 차례대로 수행하세요**:
     1. **시작하기** (`1-introduction/`)
        - `1-authentication.ipynb`: SAzure 자격증명 설정
-       - `2-environment_setup.ipynb`: Configure your environment
-       - `3-quick_start.ipynb`: Learn basic operations
-
+       - `2-environment_setup.ipynb`: 환경 구성
+       - `3-quick_start.ipynb`: 기본 작업 알아보기
+         
     2. **메인 워크샵** (`2-notebooks/`)
-       - Chat Completion & RAG (`1-chat_completion/`)
-       - Agent Development (`2-agent_service/`)
+       - 채팅 완료 및 RAG (`1-chat_completion/`)
+       - 에이전트 개발 (`2-agent_service/`)
        - Quality Attributes (`3-quality_attributes/`)
 
 ---
 
 ## 📔 Workshop Learning Path
 
-Follow these notebooks in sequence to complete the workshop:
+워크샵을 완료하려면 이 노트북을 순서대로 따라하세요:
 
 ### 1. Introduction (`1-introduction/`)
 | Notebook | Description |
