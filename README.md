@@ -44,7 +44,7 @@
 워크샵을 시작하기 전에 다음이 설치되어 있는지 확인하세요:
 
 - [Python 3.10](https://www.python.org/downloads/) 이상 설치
-- [Azure AI Foundry](https://ai.azure.com 에 대한 액세스 권한이 있는 활성 Azure 구독
+- [Azure AI Foundry](https://ai.azure.com) 에 대한 액세스 권한이 있는 활성 Azure 구독
 - [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli) 설치
 - [Git](https://git-scm.com/downloads) 설치
 - [VS Code](https://code.visualstudio.com/), [GitHub Codespaces](https://github.com/features/codespaces), 또는 [Jupyter Notebook](https://jupyter.org/install) 환경
