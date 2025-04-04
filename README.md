@@ -150,13 +150,13 @@
    jupyter notebook
    ```
 
-7. **Follow the Learning Path**:
-    1. **Introduction** (`1-introduction/`)
-       - `1-authentication.ipynb`: Set up your Azure credentials
+7. **다음 과정을 차례대로 수행하세요**:
+    1. **시작하기** (`1-introduction/`)
+       - `1-authentication.ipynb`: SAzure 자격증명 설정
        - `2-environment_setup.ipynb`: Configure your environment
        - `3-quick_start.ipynb`: Learn basic operations
 
-    2. **Main Workshop** (`2-notebooks/`)
+    2. **메인 워크샵** (`2-notebooks/`)
        - Chat Completion & RAG (`1-chat_completion/`)
        - Agent Development (`2-agent_service/`)
        - Quality Attributes (`3-quality_attributes/`)
