@@ -163,22 +163,22 @@
 
 ---
 
-## 📔 Workshop Learning Path
+## 📔 워크샵 학습 경로
 
 워크샵을 완료하려면 이 노트북을 순서대로 따라하세요:
 
-### 1. Introduction (`1-introduction/`)
+### 1. 시작하기 (`1-introduction/`)
 | Notebook | Description |
 |----------|-------------|
-| [1. Authentication](1-introduction/1-authentication.ipynb) | Set up Azure credentials and access |
-| [2. Environment Setup](1-introduction/2-environment_setup.ipynb) | Configure your development environment |
-| [3. Quick Start](1-introduction/3-quick_start.ipynb) | Learn basic Azure AI Foundry operations |
+| [1. Authentication](1-introduction/1-authentication.ipynb) | Azure 자격 증명 및 액세스 설정 |
+| [2. Environment Setup](1-introduction/2-environment_setup.ipynb) | 개발 환경 구성 |
+| [3. Quick Start](1-introduction/3-quick_start.ipynb) | 기본 Azure AI Foundry 작업 알아보기 |
 
-### 2. Main Workshop (`2-notebooks/`)
+### 2. 메인 워크샵 (`2-notebooks/`)
 | Topic | Notebooks |
 |-------|-----------|
-| **Chat Completion & RAG** | • [Chat Completion & RaG](2-notebooks/1-chat_completion/) |
-| **Agent Development** | • [Agent Development](2-notebooks/2-agent_service/) |
+| **채팅 완료 및 RAG** | • [Chat Completion & RaG](2-notebooks/1-chat_completion/) |
+| **에이전트 개발** | • [Agent Development](2-notebooks/2-agent_service/) |
 | **Quality Attributes** | • [Observability & Evaluations](2-notebooks/3-quality_attributes/) |
 
 ---
